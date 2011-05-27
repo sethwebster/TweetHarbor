@@ -42,7 +42,7 @@ namespace TweetHarbor
 #if DEBUG
             Database.SetInitializer(new DropCreateDatabaseIfModelChanges<TweetHarborDbContext>());
 #else
-            Database.SetInitializer<YourDbContext>(null);
+            Database.SetInitializer<TweetHarborDbContext>(null);
 #endif
         }
     }
