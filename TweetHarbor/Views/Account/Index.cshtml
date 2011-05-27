@@ -2,7 +2,50 @@
 @{
     ViewBag.Title = "Your Account";
 }
-
-<h2>Your Account</h2>
-<p>Your unique service hook url: http://tweetharbor.apphb.com/notify/new/@Model.TwitterUserName?token=@Model.UniqueId</p>
-*Paste this link into the <a href="https://appharbor.com/application/TweetHarbor/servicehook">Service Hooks</a> section on App Harbor.
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#editEmailLink").click(function () {
+            $("#email_address_display").toggle();
+            $("#email_address_edit").toggle();
+            $("#saveEmailLink").click(function () {
+                $.post("/Account/UpdateEmail",
+                { EmailAddress: $("#email_address_text").val() },
+                function (res) {
+                    if (res.Success) {
+                        $("#email_address_display_text").text($("#email_address_text").val());
+                        $("#email_address_display").toggle();
+                        $("#email_address_edit").toggle();
+                    }
+                    else {
+                        $("#status_message").text(res.Error);
+                    }
+                }, "json");
+            });
+        });
+    });
+</script>
+<h2>
+    Your Account</h2>
+<div id="account">
+    <img src="@Model.UserProfilePicUrl" id="img_profile" />
+    <h3>@Model.TwitterUserName</h3>
+    <div id="email_address_display">
+        <span id="email_address_display_text">@Html.Raw((string.IsNullOrEmpty(Model.EmailAddress) ? "<em class='error'>No email address specified</em>" : Model.EmailAddress))</span>
+        <a href='javascript:void(0);' id="editEmailLink">
+            <img src="@Url.Content("~/Content/pencil.png")" width="15" /></a>
+    </div>
+    <div id="email_address_edit">
+        <input id="email_address_text" value="@Model.EmailAddress" />
+        <a href='javascript:void(0);' id="saveEmailLink">
+            <img src="@Url.Content("~/Content/disc.png")" width="25" /></a>
+        <div id="status_message"></div>
+    </div>
+    <div class='clear'>
+    </div>
+    <div id="link">
+        http://tweetharbor.apphb.com/notify/new/@Model.TwitterUserName?token=@Model.UniqueId</div>
+    <div id="instructions">
+        *Paste this link into the <a href="https://appharbor.com/application/TweetHarbor/servicehook">
+            Service Hooks</a> section on App Harbor.
+    </div>
+</div>

@@ -8,6 +8,7 @@ using System.Web.Security;
 using TweetHarbor.Models;
 using TweetSharp;
 using TweetHarbor.Data;
+using System.Text.RegularExpressions;
 
 namespace TweetHarbor.Controllers
 {
@@ -27,8 +28,6 @@ namespace TweetHarbor.Controllers
             if (null != HttpContext)
             {
                 ViewBag.UserName = HttpContext.User.Identity.Name;
-
-
                 var u = database.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
 
                 if (null != u)
@@ -63,7 +62,6 @@ namespace TweetHarbor.Controllers
             return new RedirectResult(uri.ToString(), false /*permanent*/);
         }
 
-        // This URL is registered as the application's callback at http://dev.twitter.com
         public ActionResult AuthorizeCallback(string oauth_token, string oauth_verifier)
         {
             var requestToken = new OAuthRequestToken { Token = oauth_token };
@@ -78,27 +76,29 @@ namespace TweetHarbor.Controllers
             ViewBag.Message = string.Format("Your username is {0}", user.ScreenName);
             FormsAuthentication.SetAuthCookie(user.ScreenName, true);
 
-            CreateOrUpdateAccountIfNeeded(accessToken, user);
+            var appUser = CreateOrUpdateAccountIfNeeded(accessToken, user);
 
             return RedirectToAction("Index");
         }
 
-        private void CreateOrUpdateAccountIfNeeded(OAuthAccessToken accessToken, TwitterUser user)
+        private User CreateOrUpdateAccountIfNeeded(OAuthAccessToken accessToken, TwitterUser user)
         {
 
-            var u = database.Users.FirstOrDefault(usr => usr.TwitterUserName == user.ScreenName);
-            if (null == u) // CREATE
+            var returnUser = database.Users.FirstOrDefault(usr => usr.TwitterUserName == user.ScreenName);
+            if (null == returnUser) // CREATE
             {
-                u = new User();
-                u.TwitterUserName = user.ScreenName;
-                u.UniqueId = u.TwitterUserName.MD5Hash(accessToken.Token);
-                database.Users.Add(u);
+                returnUser = new User();
+                returnUser.TwitterUserName = user.ScreenName;
+                returnUser.UniqueId = returnUser.TwitterUserName.MD5Hash(accessToken.Token);
+                database.Users.Add(returnUser);
             }
 
-            u.OAuthToken = accessToken.Token;
-            u.OAuthTokenSecret = accessToken.TokenSecret;
+            returnUser.UserProfilePicUrl = user.ProfileImageUrl;
+            returnUser.OAuthToken = accessToken.Token;
+            returnUser.OAuthTokenSecret = accessToken.TokenSecret;
 
             database.SaveChanges();
+            return returnUser;
         }
 
         public ActionResult LogOn()
@@ -145,6 +145,52 @@ namespace TweetHarbor.Controllers
             FormsAuthentication.SignOut();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        public JsonResult UpdateEmail(string EmailAddress)
+        {
+            if (null != HttpContext)
+            {
+                var u = database.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
+
+                if (null != u)
+                {
+                    if (TestEmailRegex(EmailAddress))
+                    {
+                        u.EmailAddress = EmailAddress;
+                        database.SaveChanges();
+                        return Json(new { Success = true });
+                    }
+                    else
+                    {
+                        return Json(new { Error = "Please supply a correctly formatted email address", Success = false });
+                    }
+                }
+                else
+                {
+                    return Json(new { Error = "User Not Found", Success = false });
+                }
+            }
+            return Json(new { Error = "Something", Success = false });
+        }
+        public bool TestEmailRegex(string emailAddress)
+        {
+            //                string patternLenient = @"\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*";
+            //                Regex reLenient = new Regex(patternLenient);
+            string patternStrict = @"^(([^<>()[\]\\.,;:\s@\""]+"
+                  + @"(\.[^<>()[\]\\.,;:\s@\""]+)*)|(\"".+\""))@"
+                  + @"((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"
+                  + @"\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+"
+                  + @"[a-zA-Z]{2,}))$";
+            Regex reStrict = new Regex(patternStrict);
+
+            //                      bool isLenientMatch = reLenient.IsMatch(emailAddress);
+            //                      return isLenientMatch;
+
+            bool isStrictMatch = reStrict.IsMatch(emailAddress);
+            return isStrictMatch;
+
         }
 
         //

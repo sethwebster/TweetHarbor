@@ -13,62 +13,71 @@ body
     color: #696969;
 }
 
-a:link {
+a:link
+{
     color: #034af3;
     text-decoration: underline;
 }
 
-a:visited {
+a:visited
+{
     color: #505abc;
 }
 
-a:hover {
+a:hover
+{
     color: #1d60ff;
     text-decoration: none;
 }
 
-a:active {
+a:active
+{
     color: #12eb87;
 }
 
-p, ul {
+p, ul
+{
     margin-bottom: 20px;
     line-height: 1.6em;
 }
 
-header,
-footer,
-nav,
-section {
+header, footer, nav, section
+{
     display: block;
 }
 
 /* HEADINGS   
 ----------------------------------------------------------*/
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6
+{
     font-size: 1.5em;
     color: #000;
 }
 
-h1 {
+h1
+{
     font-size: 2em;
     padding-bottom: 0;
     margin-bottom: 0;
 }
 
-h2 {
+h2
+{
     padding: 0 0 10px 0;
 }
 
-h3 {
+h3
+{
     font-size: 1.2em;
 }
 
-h4 {
+h4
+{
     font-size: 1.1em;
 }
 
-h5, h6 {
+h5, h6
+{
     font-size: 1em;
 }
 
@@ -77,20 +86,23 @@ h5, h6 {
 
 /* you can specify a greater or lesser percentage for the 
 page width. Or, you can specify an exact pixel width. */
-.page {
+.page
+{
     width: 60%;
     margin-left: auto;
     margin-right: auto;
 }
 
-header, #header {
+header, #header
+{
     position: relative;
     margin-bottom: 0px;
     color: #000;
     padding: 0;
 }
 
-header h1, #header h1 {
+header h1, #header h1
+{
     font-weight: bold;
     padding: 5px 0;
     margin: 0;
@@ -101,7 +113,8 @@ header h1, #header h1 {
     text-shadow: 1px 1px 2px #111;
 }
 
-#main {
+#main
+{
     padding: 30px 30px 15px 30px;
     background-color: #fff;
     border-radius: 4px 0 0 0;
@@ -109,8 +122,8 @@ header h1, #header h1 {
     -moz-border-radius: 4px 0 0 0;
 }
 
-footer, 
-#footer {
+footer, #footer
+{
     background-color: #fff;
     color: #999;
     padding: 10px 0;
@@ -125,7 +138,8 @@ footer,
 
 /* TAB MENU   
 ----------------------------------------------------------*/
-ul#menu {
+ul#menu
+{
     border-bottom: 1px #5C87B2 solid;
     padding: 0 0 2px;
     position: relative;
@@ -133,12 +147,14 @@ ul#menu {
     text-align: right;
 }
 
-ul#menu li {
+ul#menu li
+{
     display: inline;
     list-style: none;
 }
 
-ul#menu li#greeting {
+ul#menu li#greeting
+{
     padding: 10px 20px;
     font-weight: bold;
     text-decoration: none;
@@ -146,7 +162,8 @@ ul#menu li#greeting {
     color: #fff;
 }
 
-ul#menu li a {
+ul#menu li a
+{
     padding: 10px 20px;
     font-weight: bold;
     text-decoration: none;
@@ -158,17 +175,20 @@ ul#menu li a {
     -moz-border-radius: 4px 4px 0 0;
 }
 
-ul#menu li a:hover {
+ul#menu li a:hover
+{
     background-color: #fff;
     text-decoration: none;
 }
 
-ul#menu li a:active {
+ul#menu li a:active
+{
     background-color: #a6e2a6;
     text-decoration: none;
 }
 
-ul#menu li.selected a {
+ul#menu li.selected a
+{
     background-color: #fff;
     color: #000;
 }
@@ -176,23 +196,26 @@ ul#menu li.selected a {
 /* FORM LAYOUT ELEMENTS   
 ----------------------------------------------------------*/
 
-fieldset {
+fieldset
+{
     border: 1px solid #ddd;
     padding: 0 1.4em 1.4em 1.4em;
     margin: 0 0 1.5em 0;
 }
 
-legend {
+legend
+{
     font-size: 1.2em;
     font-weight: bold;
 }
 
-textarea {
+textarea
+{
     min-height: 75px;
 }
 
-input[type="text"], 
-input[type="password"] {
+input[type="text"], input[type="password"]
+{
     border: 1px solid #ccc;
     padding: 2px;
     font-size: 1.2em;
@@ -200,14 +223,16 @@ input[type="password"] {
     width: 200px;
 }
 
-select {
+select
+{
     border: 1px solid #ccc;
     padding: 2px;
     font-size: 1.2em;
     color: #444;
 }
 
-input[type="submit"] {
+input[type="submit"]
+{
     font-size: 1.2em;
     padding: 5px;
 }
@@ -215,17 +240,20 @@ input[type="submit"] {
 /* TABLE
 ----------------------------------------------------------*/
 
-table {
+table
+{
     border: solid 1px #e8eef4;
     border-collapse: collapse;
 }
 
-table td {
+table td
+{
     padding: 5px;
     border: solid 1px #e8eef4;
 }
 
-table th {
+table th
+{
     padding: 6px 5px;
     text-align: left;
     background-color: #e8eef4;
@@ -234,26 +262,30 @@ table th {
 
 /* MISC  
 ----------------------------------------------------------*/
-.clear {
+.clear
+{
     clear: both;
 }
 
-.error {
+.error
+{
     color: Red;
 }
 
-nav, 
-#menucontainer {
+nav, #menucontainer
+{
     margin-top: 40px;
 }
 
-div#title {
+div#title
+{
     display: block;
     float: left;
     text-align: left;
 }
 
-#logindisplay {
+#logindisplay
+{
     font-size: 1.1em;
     display: block;
     text-align: right;
@@ -261,65 +293,118 @@ div#title {
     color: White;
 }
 
-#logindisplay a:link {
+#logindisplay a:link
+{
     color: white;
     text-decoration: underline;
 }
 
-#logindisplay a:visited {
+#logindisplay a:visited
+{
     color: white;
     text-decoration: underline;
 }
 
-#logindisplay a:hover {
+#logindisplay a:hover
+{
     color: white;
     text-decoration: none;
 }
 
 /* Styles for validation helpers
 -----------------------------------------------------------*/
-.field-validation-error {
+.field-validation-error
+{
     color: #ff0000;
 }
 
-.field-validation-valid {
+.field-validation-valid
+{
     display: none;
 }
 
-.input-validation-error {
+.input-validation-error
+{
     border: 1px solid #ff0000;
     background-color: #ffeeee;
 }
 
-.validation-summary-errors {
+.validation-summary-errors
+{
     font-weight: bold;
     color: #ff0000;
 }
 
-.validation-summary-valid {
+.validation-summary-valid
+{
     display: none;
 }
 
 /* Styles for editor and display helpers
 ----------------------------------------------------------*/
-.display-label, 
-.editor-label {
+.display-label, .editor-label
+{
     margin: 1em 0 0 0;
 }
 
-.display-field, 
-.editor-field {
+.display-field, .editor-field
+{
     margin: 0.5em 0 0 0;
 }
 
-.text-box {
+.text-box
+{
     width: 30em;
 }
 
-.text-box.multi-line {
+.text-box.multi-line
+{
     height: 6.5em;
 }
 
-.tri-state {
+.tri-state
+{
     width: 6em;
+}
+
+#account h3
+{
+    margin:0px;
+    padding:0px;
+}
+#account #img_profile
+{
+    float: left;
+    margin: 5px;
+     border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -moz-box-shadow: 1px 1px 1px #666;
+    -webkit-box-shadow: 1px 1px 1px #666;
+    box-shadow: 1px 1px 1px #666;
+}
+
+#account #link
+{
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: block;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -moz-box-shadow: 1px 1px 1px #666;
+    -webkit-box-shadow: 1px 1px 1px #666;
+    box-shadow: 1px 1px 1px #666;
+    width:100%;
+}
+
+#account #email_address_edit
+{
+    display:none;
+}
+
+#account #email_address_edit #saveEmailLink img
+{
+    position:relative;
+    top:5px;
 }
