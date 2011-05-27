@@ -47,7 +47,11 @@ namespace TweetHarbor.Controllers
         {
             // Step 1 - Retrieve an OAuth Request Token
             TwitterService service = new TwitterService(TwitterHelper.ConsumerKey, TwitterHelper.ConsumerSecret);
+#if DEBUG
             OAuthRequestToken requestToken = service.GetRequestToken("http://localhost:9090/Account/AuthorizeCallback"); // <-- The registered callback URL
+#else
+            OAuthRequestToken requestToken = service.GetRequestToken(); // <-- The registered callback URL
+#endif
 
             // Step 2 - Redirect to the OAuth Authorization URL
             Uri uri = service.GetAuthorizationUri(requestToken);
