@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="32d342ca-7678-4e1a-91f1-a04ab7c1e695" name="Seth Webster@SETHWEBSTER-PC 2011-05-26 22:12:36" runUser="SethWebster-PC\Seth Webster" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Default Test Settings" id="8d8c0900-de96-4194-8497-f973698322a6">
+    <Deployment runDeploymentRoot="Seth Webster_SETHWEBSTER-PC 2011-05-26 22_12_36">
+      <DeploymentItem filename="E:\Users\Seth Webster\Documents\Visual Studio 2010\Projects\git\TweetHarbor\TweetHarbor\bin\TweetHarbor.dll" />
+      <DeploymentItem filename="E:\Users\Seth Webster\Documents\Visual Studio 2010\Projects\git\TweetHarbor\packages\Newtonsoft.Json.4.0.2\lib\net40\Newtonsoft.Json.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2011-05-26T22:12:36.2879619-07:00" queuing="2011-05-26T22:12:38.9761157-07:00" start="2011-05-26T22:12:39.3201354-07:00" finish="2011-05-26T22:12:55.6330684-07:00" />
+  <ResultSummary outcome="Error">
+    <Counters total="3" executed="3" passed="2" error="0" failed="0" timeout="0" aborted="1" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <RunInfos>
+      <RunInfo computerName="SETHWEBSTER-PC" outcome="Error" timestamp="2011-05-26T22:12:55.6320684-07:00">
+        <Text>Test host process exited unexpectedly.</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="TestNew" storage="e:\users\seth webster\documents\visual studio 2010\projects\git\tweetharbor\tweetharbor.tests\bin\debug\tweetharbor.tests.dll" id="e36e053a-c551-1958-94e7-1f501395cbb8">
+      <Execution id="86d90576-2edd-4716-9aea-d9f9b6686f98" />
+      <TestMethod codeBase="E:/Users/Seth Webster/Documents/Visual Studio 2010/Projects/git/TweetHarbor/TweetHarbor.Tests/bin/Debug/TweetHarbor.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TweetHarbor.Tests.Controllers.NotifyControllerTest, TweetHarbor.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestNew" />
+    </UnitTest>
+    <UnitTest name="About" storage="e:\users\seth webster\documents\visual studio 2010\projects\git\tweetharbor\tweetharbor.tests\bin\debug\tweetharbor.tests.dll" id="a56e5f2a-d1a3-1cd5-9782-35236c200f41">
+      <Execution id="086cd3e3-fb90-40f6-bec4-6d5fa169ae49" />
+      <TestMethod codeBase="E:/Users/Seth Webster/Documents/Visual Studio 2010/Projects/git/TweetHarbor/TweetHarbor.Tests/bin/Debug/TweetHarbor.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TweetHarbor.Tests.Controllers.HomeControllerTest, TweetHarbor.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="About" />
+    </UnitTest>
+    <UnitTest name="Index" storage="e:\users\seth webster\documents\visual studio 2010\projects\git\tweetharbor\tweetharbor.tests\bin\debug\tweetharbor.tests.dll" id="5e7bc824-1dca-865a-7170-6dc7b3e14080">
+      <Execution id="c2e8b184-bd74-4dc0-acf5-408d8a27736e" />
+      <TestMethod codeBase="E:/Users/Seth Webster/Documents/Visual Studio 2010/Projects/git/TweetHarbor/TweetHarbor.Tests/bin/Debug/TweetHarbor.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TweetHarbor.Tests.Controllers.HomeControllerTest, TweetHarbor.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="Index" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="5e7bc824-1dca-865a-7170-6dc7b3e14080" executionId="c2e8b184-bd74-4dc0-acf5-408d8a27736e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a56e5f2a-d1a3-1cd5-9782-35236c200f41" executionId="086cd3e3-fb90-40f6-bec4-6d5fa169ae49" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e36e053a-c551-1958-94e7-1f501395cbb8" executionId="86d90576-2edd-4716-9aea-d9f9b6686f98" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="c2e8b184-bd74-4dc0-acf5-408d8a27736e" testId="5e7bc824-1dca-865a-7170-6dc7b3e14080" testName="Index" computerName="SETHWEBSTER-PC" duration="00:00:00.3534260" startTime="2011-05-26T22:12:39.6591548-07:00" endTime="2011-05-26T22:12:42.8303361-07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c2e8b184-bd74-4dc0-acf5-408d8a27736e">
+    </UnitTestResult>
+    <UnitTestResult executionId="086cd3e3-fb90-40f6-bec4-6d5fa169ae49" testId="a56e5f2a-d1a3-1cd5-9782-35236c200f41" testName="About" computerName="SETHWEBSTER-PC" duration="00:00:00.0005163" startTime="2011-05-26T22:12:42.8453370-07:00" endTime="2011-05-26T22:12:42.8523374-07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="086cd3e3-fb90-40f6-bec4-6d5fa169ae49">
+    </UnitTestResult>
+    <UnitTestResult executionId="86d90576-2edd-4716-9aea-d9f9b6686f98" testId="e36e053a-c551-1958-94e7-1f501395cbb8" testName="TestNew" computerName="SETHWEBSTER-PC" duration="00:00:12.7737306" startTime="2011-05-26T22:12:42.8593378-07:00" endTime="2011-05-26T22:12:55.6330684-07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Aborted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86d90576-2edd-4716-9aea-d9f9b6686f98">
+    </UnitTestResult>
+  </Results>
+</TestRun>

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="d3c282ea-4c62-45d9-ab3d-0d103dbd46c1" name="Seth Webster@SETHWEBSTER-PC 2011-05-26 22:28:59" runUser="SethWebster-PC\Seth Webster" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Default Test Settings" id="d3320cdd-0a99-45ca-bc70-3048b250faaf">
+    <Deployment runDeploymentRoot="Seth Webster_SETHWEBSTER-PC 2011-05-26 22_28_59">
+      <DeploymentItem filename="E:\Users\Seth Webster\Documents\Visual Studio 2010\Projects\git\TweetHarbor\TweetHarbor\bin\TweetHarbor.dll" />
+      <DeploymentItem filename="E:\Users\Seth Webster\Documents\Visual Studio 2010\Projects\git\TweetHarbor\packages\Newtonsoft.Json.4.0.2\lib\net40\Newtonsoft.Json.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2011-05-26T22:28:59.3961925-07:00" queuing="2011-05-26T22:29:01.8903352-07:00" start="2011-05-26T22:29:02.3383608-07:00" finish="2011-05-26T22:29:19.2353272-07:00" />
+  <ResultSummary outcome="Error">
+    <Counters total="1" executed="1" error="0" failed="0" timeout="0" aborted="1" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" passed="0" completed="0" inProgress="0" pending="0" />
+    <RunInfos>
+      <RunInfo computerName="SETHWEBSTER-PC" outcome="Error" timestamp="2011-05-26T22:29:19.2333271-07:00">
+        <Text>Test host process exited unexpectedly.</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="TestNew" storage="e:\users\seth webster\documents\visual studio 2010\projects\git\tweetharbor\tweetharbor.tests\bin\debug\tweetharbor.tests.dll" id="e36e053a-c551-1958-94e7-1f501395cbb8">
+      <Execution id="50f4045d-5c58-4f72-a5dc-fd78141c344c" />
+      <TestMethod codeBase="E:/Users/Seth Webster/Documents/Visual Studio 2010/Projects/git/TweetHarbor/TweetHarbor.Tests/bin/Debug/TweetHarbor.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TweetHarbor.Tests.Controllers.NotifyControllerTest, TweetHarbor.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestNew" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="e36e053a-c551-1958-94e7-1f501395cbb8" executionId="50f4045d-5c58-4f72-a5dc-fd78141c344c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="50f4045d-5c58-4f72-a5dc-fd78141c344c" testId="e36e053a-c551-1958-94e7-1f501395cbb8" testName="TestNew" computerName="SETHWEBSTER-PC" duration="00:00:16.6009495" startTime="2011-05-26T22:29:02.6343777-07:00" endTime="2011-05-26T22:29:19.2353272-07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Aborted" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="50f4045d-5c58-4f72-a5dc-fd78141c344c">
+    </UnitTestResult>
+  </Results>
+</TestRun>

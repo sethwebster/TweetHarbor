@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<TestRun id="19b4ce15-2ed3-4e33-a9da-34bd6bb363f0" name="Seth Webster@SETHWEBSTER-PC 2011-05-26 22:35:51" runUser="SethWebster-PC\Seth Webster" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <TestSettings name="Default Test Settings" id="a8928061-1471-420e-b69c-9ed788a8a9df">
+    <Deployment runDeploymentRoot="Seth Webster_SETHWEBSTER-PC 2011-05-26 22_35_51">
+      <DeploymentItem filename="E:\Users\Seth Webster\Documents\Visual Studio 2010\Projects\git\TweetHarbor\TweetHarbor\bin\TweetHarbor.dll" />
+      <DeploymentItem filename="E:\Users\Seth Webster\Documents\Visual Studio 2010\Projects\git\TweetHarbor\packages\Newtonsoft.Json.4.0.2\lib\net40\Newtonsoft.Json.dll" />
+    </Deployment>
+    <Execution>
+      <TestTypeSpecific />
+      <AgentRule name="Execution Agents">
+      </AgentRule>
+    </Execution>
+  </TestSettings>
+  <Times creation="2011-05-26T22:35:51.1667444-07:00" queuing="2011-05-26T22:35:53.6368857-07:00" start="2011-05-26T22:35:53.9369029-07:00" finish="2011-05-26T22:36:07.4856778-07:00" />
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" error="0" failed="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+  </ResultSummary>
+  <TestDefinitions>
+    <UnitTest name="TestNew" storage="e:\users\seth webster\documents\visual studio 2010\projects\git\tweetharbor\tweetharbor.tests\bin\debug\tweetharbor.tests.dll" id="e36e053a-c551-1958-94e7-1f501395cbb8">
+      <Execution id="1c27c637-2362-4130-9326-84aa4152d53c" />
+      <TestMethod codeBase="E:/Users/Seth Webster/Documents/Visual Studio 2010/Projects/git/TweetHarbor/TweetHarbor.Tests/bin/Debug/TweetHarbor.Tests.DLL" adapterTypeName="Microsoft.VisualStudio.TestTools.TestTypes.Unit.UnitTestAdapter, Microsoft.VisualStudio.QualityTools.Tips.UnitTest.Adapter, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" className="TweetHarbor.Tests.Controllers.NotifyControllerTest, TweetHarbor.Tests, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" name="TestNew" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <TestEntries>
+    <TestEntry testId="e36e053a-c551-1958-94e7-1f501395cbb8" executionId="1c27c637-2362-4130-9326-84aa4152d53c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <Results>
+    <UnitTestResult executionId="1c27c637-2362-4130-9326-84aa4152d53c" testId="e36e053a-c551-1958-94e7-1f501395cbb8" testName="TestNew" computerName="SETHWEBSTER-PC" duration="00:00:08.8540553" startTime="2011-05-26T22:35:54.2339199-07:00" endTime="2011-05-26T22:36:05.7905809-07:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1c27c637-2362-4130-9326-84aa4152d53c">
+      <Output>
+        <DebugTrace>--REQUEST: https://api.twitter.com
+POST /1/direct_messages/new.json HTTP/1.1
+Authorization: OAuth oauth_consumer_key="1FyzswseSDa0FZCSPSXLew",oauth_nonce="ajao2p2azz7bhfps",oauth_signature="ypTjX949tQJcaS5IjseJqDvnBkM%3D",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1306474563",oauth_token="14573883-lIE24kRW6DUjJr4obBJlGFMyEAnUGQmIjyYGGFMU",oauth_version="1.0",
+Content-Type: application/x-www-form-urlencoded
+User-Agent: TweetSharp
+Accept-Encoding: gzip,deflate
+
+System.Byte[]
+screen_name=sethwebster&amp;text=Application%20Foo%20build%20succeeded%2C%20Implement%20foo&amp;include_entities=1
+
+--RESPONSE: https://api.twitter.com/1/direct_messages/new.json
+HTTP/1.1 200 OK
+Status: 200 OK
+X-Transaction: 1306474562-65029-19098
+X-Frame-Options: SAMEORIGIN
+X-Runtime: 0.75673
+X-Transaction-Mask: a6183ffa5f8ca943ff1b53b5644ef114ea516443
+Pragma: no-cache
+X-Access-Level: read-write-privatemessages
+X-Revision: DEV
+X-MID: 1aa7f382113dffb6b2cc720cc3372e9082410e2c
+Cache-Control: no-cache, no-store, must-revalidate, pre-check=0, post-check=0
+Content-Type: application/json; charset=utf-8
+Date: Fri, 27 May 2011 05:36:03 GMT
+Expires: Tue, 31 Mar 1981 05:00:00 GMT
+ETag: "c6ba4a52f2e03aed2996bfe74d165d03"-gzip
+Last-Modified: Fri, 27 May 2011 05:36:02 GMT
+Set-Cookie: k=107.4.100.247.1306474562481240; path=/; expires=Fri, 03-Jun-11 05:36:02 GMT; domain=.twitter.com,guest_id=130647456257552288; path=/; expires=Sun, 26 Jun 2011 05:36:02 GMT,lang=en; path=/,_twitter_sess=BAh7CToMY3NyZl9pZCIlMzU0OGY1YWE2ZmM3NzU2NzlkMzljZDM1ZmMwZTMz%250ANjU6D2NyZWF0ZWRfYXRsKwgZxPMvMAE6B2lkIiVjYzI0ZmE5ZTAyNGI4ZmMz%250ANGEzMDllNTdlYWUyNGMwZiIKZmxhc2hJQzonQWN0aW9uQ29udHJvbGxlcjo6%250ARmxhc2g6OkZsYXNoSGFzaHsABjoKQHVzZWR7AA%253D%253D--012485bcab69100df2459105ae5f2b7ea680e719; domain=.twitter.com; path=/; HttpOnly
+Server: hi
+Vary: Accept-Encoding
+Content-Encoding: 
+Keep-Alive: timeout=15, max=100
+Connection: Keep-Alive
+Transfer-Encoding: chunked
+</DebugTrace>
+      </Output>
+    </UnitTestResult>
+  </Results>
+</TestRun>
