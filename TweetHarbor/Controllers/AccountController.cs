@@ -27,9 +27,15 @@ namespace TweetHarbor.Controllers
                 using (var db = new TweetHarborDbContext())
                 {
                     var u = db.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
+                   
                     if (null != u)
                     {
-                        // DO something
+                        if (string.IsNullOrEmpty(u.UniqueId))
+                        {
+                            u.UniqueId = u.TwitterUserName.MD5Hash(u.OAuthToken);
+                            db.SaveChanges();
+                        }
+                        return View(u);
                     }
                     else
                     {
@@ -37,10 +43,8 @@ namespace TweetHarbor.Controllers
                     }
 
                 }
-                ViewBag.UserName = HttpContext.User.Identity.Name;
-
             }
-            return View();
+            return new EmptyResult();
         }
 
         public ActionResult Authorize()
@@ -87,6 +91,7 @@ namespace TweetHarbor.Controllers
                 {
                     u = new User();
                     u.TwitterUserName = user.ScreenName;
+                    u.UniqueId = u.TwitterUserName.MD5Hash(accessToken.Token);
                     db.Users.Add(u);
                 }
 

@@ -1,7 +1,8 @@
-﻿@{
-    ViewBag.Title = "Index";
+﻿@model TweetHarbor.Models.User
+@{
+    ViewBag.Title = "Your Account";
 }
 
-<h2>Index</h2>
-<p>Your unique service hook url: http://tweetharbor.apphb.com/notify/new/@ViewBag.UserName</p>
+<h2>Your Account</h2>
+<p>Your unique service hook url: http://tweetharbor.apphb.com/notify/new/@Model.TwitterUserName?token=@Model.UniqueId</p>
 *Paste this link into the <a href="https://appharbor.com/application/TweetHarbor/servicehook">Service Hooks</a> section on App Harbor.

@@ -13,5 +13,6 @@ namespace TweetHarbor.Models
         public string TwitterUserName { get; set; }
         public string OAuthToken { get; set; }
         public string OAuthTokenSecret { get; set; }
+        public string UniqueId { get; set; }
     }
 }
