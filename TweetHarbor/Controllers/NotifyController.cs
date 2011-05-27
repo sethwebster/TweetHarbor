@@ -10,6 +10,11 @@ namespace TweetHarbor.Controllers
 {
     public class NotifyController : Controller
     {
+        public ActionResult New()
+        {
+            return Redirect("/?f=newnotify");
+        }
+
         [HttpPost]
         public JsonResult New(string Id, Notification notification)
         {
