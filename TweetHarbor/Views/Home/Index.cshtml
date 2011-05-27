@@ -1,8 +1,16 @@
 ﻿@{
     ViewBag.Title = "Home Page";
 }
-
 <h2>@ViewBag.Message</h2>
 <p>
     A quick and dirty service to update you via Twitter about your AppHarbor builds.
 </p>
+<h3>How do I use it?</h3>
+<ol>
+    <li><a href="https://appharbor.com/application/new" target="_blank">Create a Project</a>
+        at AppHarbor</li>
+    <li><a href="/Account/Authorize">
+        <img src="@Url.Content("~/Content/sign_in_with_twitter.png")" alt="Sign in with Twitter" /></a></li>
+    <li>Save your unique <a href="/Account">Service Hook Url</a> into your AppHarbor Project's
+        <a href="https://appharbor.com/application">Service Hook's</a> section.</li>
+</ol>

@@ -3,5 +3,5 @@
     [ @Html.ActionLink("Sign Out", "LogOff", "Account") ]</text>
 }
 else {
-    @:[ @Html.ActionLink("Sign in with Twitter", "Authorize", "Account") ]
+    <a href="/Account/Authorize"><img src="@Url.Content("~/Content/sign_in_with_twitter.png")" alt="Sign in with Twitter" /></a>
 }
