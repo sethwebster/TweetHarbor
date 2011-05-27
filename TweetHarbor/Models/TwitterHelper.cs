@@ -7,8 +7,8 @@ namespace TweetHarbor.Models
 {
     public class TwitterHelper
     {
-        public static string ConsumerKey = "1FyzswseSDa0FZCSPSXLew";
-        public static string ConsumerSecret = "eLqZzHIXJPCz5FX2rjxqSxq3QSJ2vwMsGTuafFeQ";
+        public static string ConsumerKey = Properties.Settings.Default.TwitterConsumerKey;
+        public static string ConsumerSecret = Properties.Settings.Default.TwitterConsumerSecret;
 
     }
 }
