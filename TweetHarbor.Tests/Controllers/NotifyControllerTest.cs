@@ -5,6 +5,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TweetHarbor.Controllers;
 using Newtonsoft.Json;
+using TweetHarbor.Models;
 
 namespace TweetHarbor.Tests.Controllers
 {
@@ -61,12 +62,12 @@ namespace TweetHarbor.Tests.Controllers
         //
         #endregion
 
-        [TestMethod]
+       // [TestMethod]
         public void TestNew()
         {
             string testStr = "{\"application\": { \"name\": \"Foo\" },   \"build\": {    \"commit\": {      \"id\": \"77d991fe61187d205f329ddf9387d118a09fadcd\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
 
-            var o = JsonConvert.DeserializeObject(testStr);
+            var o = JsonConvert.DeserializeObject<Notification>(testStr);
             var c = new NotifyController();
             var res = c.New("sethwebster", o);
         }

@@ -11,7 +11,7 @@ namespace TweetHarbor.Controllers
     public class NotifyController : Controller
     {
         [HttpPost]
-        public JsonResult New(string Id, dynamic payload)
+        public JsonResult New(string Id, Notification notification)
         {
             using (var db = new TweetHarborDbContext())
             {
@@ -21,10 +21,9 @@ namespace TweetHarbor.Controllers
 
                     TweetSharp.TwitterService s = new TweetSharp.TwitterService(TwitterHelper.ConsumerKey, TwitterHelper.ConsumerSecret);
                     s.AuthenticateWith(u.OAuthToken, u.OAuthTokenSecret);
-                    var status = (string)payload.status;
-                    s.SendDirectMessage(Id, string.Format("Application {0} build {1}, {2}",payload.application.name,payload.build.status,payload.build.commit.message));
+                    s.SendDirectMessage(Id, string.Format("Application {0} build {1}, {2}", notification.application.name, notification.build.status, notification.build.commit.message));
 
-                    return Json(payload);
+                    return Json(notification);
                 }
                 else
                 {
