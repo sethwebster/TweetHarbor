@@ -39,7 +39,12 @@ namespace TweetHarbor
 
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
+#if DEBUG
             Database.SetInitializer(new DropCreateDatabaseIfModelChanges<TweetHarborDbContext>());
+#else
+            
+
+#endif
         }
     }
 }
