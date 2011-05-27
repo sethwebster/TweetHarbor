@@ -7,15 +7,19 @@ using System.Web.Routing;
 using System.Web.Security;
 using TweetHarbor.Models;
 using TweetSharp;
+using TweetHarbor.Data;
 
 namespace TweetHarbor.Controllers
 {
     public class AccountController : Controller
     {
 
+        ITweetHarborDbContext database;
 
-        //
-        // GET: /Account/LogOn
+        public AccountController(ITweetHarborDbContext database)
+        {
+            this.database = database;
+        }
 
         [Authorize]
         public ActionResult Index()
@@ -24,24 +28,21 @@ namespace TweetHarbor.Controllers
             {
                 ViewBag.UserName = HttpContext.User.Identity.Name;
 
-                using (var db = new TweetHarborDbContext())
-                {
-                    var u = db.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
-                   
-                    if (null != u)
-                    {
-                        if (string.IsNullOrEmpty(u.UniqueId))
-                        {
-                            u.UniqueId = u.TwitterUserName.MD5Hash(u.OAuthToken);
-                            db.SaveChanges();
-                        }
-                        return View(u);
-                    }
-                    else
-                    {
-                        return RedirectToAction("LogOn");
-                    }
 
+                var u = database.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
+
+                if (null != u)
+                {
+                    if (string.IsNullOrEmpty(u.UniqueId))
+                    {
+                        u.UniqueId = u.TwitterUserName.MD5Hash(u.OAuthToken);
+                        database.SaveChanges();
+                    }
+                    return View(u);
+                }
+                else
+                {
+                    return RedirectToAction("LogOn");
                 }
             }
             return new EmptyResult();
@@ -84,22 +85,20 @@ namespace TweetHarbor.Controllers
 
         private void CreateOrUpdateAccountIfNeeded(OAuthAccessToken accessToken, TwitterUser user)
         {
-            using (var db = new TweetHarborDbContext())
+
+            var u = database.Users.FirstOrDefault(usr => usr.TwitterUserName == user.ScreenName);
+            if (null == u) // CREATE
             {
-                var u = db.Users.FirstOrDefault(usr => usr.TwitterUserName == user.ScreenName);
-                if (null == u) // CREATE
-                {
-                    u = new User();
-                    u.TwitterUserName = user.ScreenName;
-                    u.UniqueId = u.TwitterUserName.MD5Hash(accessToken.Token);
-                    db.Users.Add(u);
-                }
-
-                u.OAuthToken = accessToken.Token;
-                u.OAuthTokenSecret = accessToken.TokenSecret;
-
-                db.SaveChanges();
+                u = new User();
+                u.TwitterUserName = user.ScreenName;
+                u.UniqueId = u.TwitterUserName.MD5Hash(accessToken.Token);
+                database.Users.Add(u);
             }
+
+            u.OAuthToken = accessToken.Token;
+            u.OAuthTokenSecret = accessToken.TokenSecret;
+
+            database.SaveChanges();
         }
 
         public ActionResult LogOn()
@@ -276,5 +275,11 @@ namespace TweetHarbor.Controllers
             }
         }
         #endregion
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            database.Dispose();
+        }
     }
 }

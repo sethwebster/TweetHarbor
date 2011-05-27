@@ -9,6 +9,7 @@ namespace TweetHarbor.Models
 {
     public class TweetHarborDbContext : DbContext, ITweetHarborDbContext
     {
+        public TweetHarborDbContext(){}
         public IDbSet<User> Users { get; set; }
         public IDbSet<Project> Projects { get; set; }
         public void Dispose()
