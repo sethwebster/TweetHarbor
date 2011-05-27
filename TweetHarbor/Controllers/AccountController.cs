@@ -50,7 +50,7 @@ namespace TweetHarbor.Controllers
 #if DEBUG
             OAuthRequestToken requestToken = service.GetRequestToken("http://localhost:9090/Account/AuthorizeCallback"); // <-- The registered callback URL
 #else
-            OAuthRequestToken requestToken = service.GetRequestToken(http://tweetharbor.apphb.com/Account/AuthorizeCallback); // <-- The registered callback URL
+            OAuthRequestToken requestToken = service.GetRequestToken("http://tweetharbor.apphb.com/Account/AuthorizeCallback"); // <-- The registered callback URL
 #endif
 
             // Step 2 - Redirect to the OAuth Authorization URL
