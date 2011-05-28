@@ -148,6 +148,36 @@ namespace TweetHarbor.Controllers
         }
 
         [Authorize]
+        [HttpPost]
+        public JsonResult UpdateTweetToggle(string TweetType, bool Value)
+        {
+            if (null != HttpContext)
+            {
+                var u = database.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
+
+                if (null != u)
+                {
+                    switch (TweetType)
+                    {
+                        case "SendPrivateTweet":
+                            u.SendPrivateTweet = Value;
+                            break;
+                        case "SendPublicTweet":
+                            u.SendPublicTweet = Value;
+                            break;
+                    }
+                    database.SaveChanges();
+                    return Json(new { Success = true });
+                }
+                else
+                {
+                    return Json(new { Error = "User Not Found", Success = false });
+                }
+            }
+            return Json(new { Error = "Something", Success = false });
+        }
+        [Authorize]
+        [HttpPost]
         public JsonResult UpdateEmail(string EmailAddress)
         {
             if (null != HttpContext)

@@ -19,5 +19,7 @@ namespace TweetHarbor.Models
         public string UniqueId { get; set; }
         public string EmailAddress { get; set; }
         public string UserProfilePicUrl { get; set; }
+        public bool SendPrivateTweet { get; set; }
+        public bool SendPublicTweet { get; set; }
     }
 }

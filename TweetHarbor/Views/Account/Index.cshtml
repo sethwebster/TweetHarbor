@@ -4,6 +4,7 @@
 }
 <script type="text/javascript">
     $(document).ready(function () {
+        // Email Edit Code
         $("#editEmailLink").click(function () {
             $("#email_address_display").toggle();
             $("#email_address_edit").toggle();
@@ -17,10 +18,24 @@
                         $("#email_address_edit").toggle();
                     }
                     else {
-                        $("#status_message").text(res.Error);
+                        $("#email_status_message").text(res.Error);
                     }
                 }, "json");
             });
+        });
+        // Pub/Priv Tweets
+        $(".tweet_toggle").click(function () {
+            var e = $(this);
+            $.post("/Account/UpdateTweetToggle/",
+            { TweetType: e.attr("id"), Value: e.is(":checked") },
+            function (res) {
+                if (res.success) {
+                }
+                else {
+                    $("#toggle_status_message").text(res.Error);
+                }
+            },
+            "json");
         });
     });
 </script>
@@ -38,14 +53,23 @@
         <input id="email_address_text" value="@Model.EmailAddress" />
         <a href='javascript:void(0);' id="saveEmailLink">
             <img src="@Url.Content("~/Content/disc.png")" width="25" /></a>
-        <div id="status_message"></div>
+        <div id="email_status_message">
+        </div>
+    </div>
+    <div id="tweet_options">
+        <input type="checkbox" @(Model.SendPrivateTweet ? "Checked" : "") id="SendPrivateTweet" class='tweet_toggle'/><label
+            for="SendPrivateTweet">Send me a DM</label>
+        <input type="checkbox" @(Model.SendPublicTweet ? "Checked" : "") id="SendPublicTweet" class='tweet_toggle'/><label
+            for="SendPublicTweet">Send a public tweet</label>
+        <div id="toggle_status_message">
+        </div>
     </div>
     <div class='clear'>
     </div>
     <div id="link">
         http://tweetharbor.apphb.com/notify/new/@Model.TwitterUserName?token=@Model.UniqueId</div>
     <div id="instructions">
-        *Paste this link into the <a href="https://appharbor.com/application">
-            Service Hooks</a> section on App Harbor.
+        *Paste this link into the <a href="https://appharbor.com/application">Service Hooks</a>
+        section on App Harbor.
     </div>
 </div>
