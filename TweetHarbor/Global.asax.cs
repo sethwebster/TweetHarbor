@@ -45,5 +45,28 @@ namespace TweetHarbor
             Database.SetInitializer<TweetHarborDbContext>(null);
 #endif
         }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            //try
+            //{
+            //    var exception = Server.GetLastError();
+            //    var logEntry = new LogEntry
+            //    {
+            //        Date = DateTime.Now,
+            //        Message = exception.Message,
+            //        StackTrace = exception.StackTrace,
+            //    };
+
+            //    var datacontext = new LogDBDataContext();
+            //    datacontext.LogEntries.InsertOnSubmit(logEntry);
+            //    datacontext.SubmitChanges();
+            //}
+            //catch (Exception)
+            //{
+            //    // failed to record exception
+            //}
+        }
+
     }
 }
