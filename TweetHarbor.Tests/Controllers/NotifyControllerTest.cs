@@ -6,6 +6,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TweetHarbor.Controllers;
 using Newtonsoft.Json;
 using TweetHarbor.Models;
+using System.Web.Mvc;
+using TweetHarbor.Tests.Helpers;
+using System.Collections.ObjectModel;
 
 namespace TweetHarbor.Tests.Controllers
 {
@@ -63,16 +66,85 @@ namespace TweetHarbor.Tests.Controllers
         #endregion
 
         [TestMethod]
-        public void TestNew()
+        public void TestBuildSuccess()
         {
             string testStr = "{\"application\": { \"name\": \"Foo\" },   \"build\": {    \"commit\": {      \"id\": \"77d991fe61187d205f329ddf9387d118a09fadcd\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
 
+            var db = new TestTweetHarborDbContext();
+            var user = new User() { 
+                EmailAddress="sethwebster@gmail.com", 
+                OAuthToken="14573883-j8T8axOgqUQWTv1fSsdyZI7zVf9AboAuBCyGKFw",
+                OAuthTokenSecret="qENzrV7vKxAgTmNkBVHjG9sMbZg8z0KAh3YF22OIg",
+                UniqueId="db7a3a64156d0b33beae93fe99ca599e",
+                SendPrivateTweet=true,
+                SendPublicTweet=false,
+                TwitterUserName = "sethwebster"
+                };
+            db.Users.Add(user);
+
+            var proj = new Project()
+                {
+                    ProjectName = "The Test Project",
+                    SendPrivateTweetOnFailure = true,
+                    SendPrivateTweetOnSuccess = true,
+                    SendPublicTweetOnFailure = false,
+                    SendPublicTweetOnSuccess = true,
+                    User = user
+                };
+
+            db.Projects.Add(proj);
+
+            user.Projects = new Collection<Project>();
+            user.Projects.Add(proj);
+
+            var controller = new NotifyController(db);
+            MvcMockHelpers.SetFakeControllerContext(controller);
+
             var o = JsonConvert.DeserializeObject<Notification>(testStr);
-            var c = new NotifyController(null);
-            var res = c.New("", "", o);
+            var res = controller.New(user.TwitterUserName, user.UniqueId, o);
 
         }
 
-        
+        [TestMethod]
+        public void TestBuildFailure()
+        {
+            string testStr = "{\"application\": { \"name\": \"Foo\" },   \"build\": {    \"commit\": {      \"id\": \"77d991fe61187d205f329ddf9387d118a09fadcd\", \"message\": \"Implement foo\"  }, \"status\": \"failed\" } }";
+
+            var db = new TestTweetHarborDbContext();
+            var user = new User()
+            {
+                EmailAddress = "sethwebster@gmail.com",
+                OAuthToken = "14573883-j8T8axOgqUQWTv1fSsdyZI7zVf9AboAuBCyGKFw",
+                OAuthTokenSecret = "qENzrV7vKxAgTmNkBVHjG9sMbZg8z0KAh3YF22OIg",
+                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
+                SendPrivateTweet = true,
+                SendPublicTweet = false,
+                TwitterUserName = "sethwebster"
+            };
+            db.Users.Add(user);
+
+            var proj = new Project()
+            {
+                ProjectName = "The Test Project",
+                SendPrivateTweetOnFailure = true,
+                SendPrivateTweetOnSuccess = true,
+                SendPublicTweetOnFailure = false,
+                SendPublicTweetOnSuccess = true,
+                User = user
+            };
+
+            db.Projects.Add(proj);
+
+            user.Projects = new Collection<Project>();
+            user.Projects.Add(proj);
+
+            var controller = new NotifyController(db);
+            MvcMockHelpers.SetFakeControllerContext(controller);
+
+            var o = JsonConvert.DeserializeObject<Notification>(testStr);
+            var res = controller.New(user.TwitterUserName, user.UniqueId, o);
+
+        }
+
     }
 }

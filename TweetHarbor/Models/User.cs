@@ -3,11 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.ObjectModel;
 
 namespace TweetHarbor.Models
 {
     public class User
     {
+        public User()
+        {
+            this.Projects = new Collection<Project>();
+        }
         [Required]
         [Key]
         [MinLength(2), MaxLength(255)]

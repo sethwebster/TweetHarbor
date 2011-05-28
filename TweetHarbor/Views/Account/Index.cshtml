@@ -2,43 +2,7 @@
 @{
     ViewBag.Title = "Your Account";
 }
-<script type="text/javascript">
-    $(document).ready(function () {
-        // Email Edit Code
-        $("#editEmailLink").click(function () {
-            $("#email_address_display").toggle();
-            $("#email_address_edit").toggle();
-            $("#saveEmailLink").click(function () {
-                $.post("/Account/UpdateEmail",
-                { EmailAddress: $("#email_address_text").val() },
-                function (res) {
-                    if (res.Success) {
-                        $("#email_address_display_text").text($("#email_address_text").val());
-                        $("#email_address_display").toggle();
-                        $("#email_address_edit").toggle();
-                    }
-                    else {
-                        $("#email_status_message").text(res.Error);
-                    }
-                }, "json");
-            });
-        });
-        // Pub/Priv Tweets
-        $(".tweet_toggle").click(function () {
-            var e = $(this);
-            $.post("/Account/UpdateTweetToggle/",
-            { TweetType: e.attr("id"), Value: e.is(":checked") },
-            function (res) {
-                if (res.success) {
-                }
-                else {
-                    $("#toggle_status_message").text(res.Error);
-                }
-            },
-            "json");
-        });
-    });
-</script>
+<script type="text/javascript" src="@Url.Content("~/Scripts/account_home.js")"></script>
 <h2>
     Your Account</h2>
 <div id="account">
@@ -57,11 +21,11 @@
         </div>
     </div>
     <div id="tweet_options">
-        <input type="checkbox" @(Model.SendPrivateTweet ? "Checked" : "") id="SendPrivateTweet" class='tweet_toggle'/><label
-            for="SendPrivateTweet">Send me a DM</label>
-        <input type="checkbox" @(Model.SendPublicTweet ? "Checked" : "") id="SendPublicTweet" class='tweet_toggle'/><label
-            for="SendPublicTweet">Send a public tweet</label>
-        <div id="toggle_status_message">
+        <input type="checkbox" @(Model.SendPrivateTweet ? "Checked" : "") id="SendPrivateTweet" class='global_notification_toggle'/><label
+            for="SendPrivateTweet">Direct Messages Enabled (Global)</label>
+        <input type="checkbox" @(Model.SendPublicTweet ? "Checked" : "") id="SendPublicTweet" class='global_notification_toggle'/><label
+            for="SendPublicTweet">Public Tweets Enabled (Global)</label>
+        <div id="global_toggle_status_message" class="error">
         </div>
     </div>
     <div class='clear'>
@@ -71,5 +35,69 @@
     <div id="instructions">
         *Paste this link into the <a href="https://appharbor.com/application">Service Hooks</a>
         section on App Harbor.
+    </div>
+    <div id="projects">
+        <h3>
+            Applications</h3>
+        <div id="toggle_status_message">
+        </div>
+        @if (Model.Projects.Count > 0)
+        {
+            <table>
+                <tr>
+                    <th>
+                        Name
+                    </th>
+                    <th>
+                        Tweet Successful Builds
+                    </th>
+                    <th>
+                        DM Successful Builds
+                    </th>
+                    <th>
+                        Tweet Failed Builds
+                    </th>
+                    <th>
+                        DM Failed Builds
+                    </th>
+                    <th>
+                        Templates
+                    </th>
+                </tr>
+                @foreach (var p in Model.Projects)
+                { 
+                    <tr>
+                        <td>
+                            <a href="https://appharbor.com/application/@p.ProjectName" target="_blank">@p.ProjectName</a>
+                        </td>
+                        <td>
+                            <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPublicTweetOnSuccess" @(p.SendPublicTweetOnSuccess ? "Checked" : "") />
+                        </td>
+                        <td>
+                            <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPrivateTweetOnSuccess" @(p.SendPrivateTweetOnSuccess ? "Checked" : "")/>
+                        </td>
+                        <td>
+                            <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPublicTweetOnFailure" @(p.SendPublicTweetOnFailure ? "Checked" : "")/>
+                        </td>
+                        <td>
+                            <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPrivateTweetOnSuccess" @(p.SendPrivateTweetOnSuccess ? "Checked" : "")/>
+                        </td>
+                        <td>
+                            <a href="javascript:void(0);" class='template_edit_button' rel="@p.ProjectName">Edit</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" id="templates_@(p.ProjectName)" style="display:none">
+                            <em>Coming Soon</em>
+                        </td>
+                    </tr>
+                }
+            </table>    
+        }
+        else
+        {
+            <em>Applications will appear here once a notification has been received from AppHarbor
+                - Set up your service hook and trigger a build to make this happen</em>
+        }
     </div>
 </div>

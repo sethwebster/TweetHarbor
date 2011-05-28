@@ -102,6 +102,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotifyController.cs" />
+    <Compile Include="Controllers\ProjectsController.cs" />
     <Compile Include="Data\ITweetHarborDbContext.cs" />
     <Compile Include="Data\QueryableExtensions.cs" />
     <Compile Include="Global.asax.cs">

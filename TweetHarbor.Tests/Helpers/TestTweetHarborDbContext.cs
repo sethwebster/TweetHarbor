@@ -9,8 +9,8 @@ namespace TweetHarbor.Tests.Helpers
 {
     public class TestTweetHarborDbContext : ITweetHarborDbContext
     {
-        public TestableDbSet<User> users { get; set; }
-        public TestableDbSet<Project> projects { get; set; }
+        TestableDbSet<User> users = new TestableDbSet<User>();
+        TestableDbSet<Project> projects = new TestableDbSet<Project>();
 
         public System.Data.Entity.IDbSet<Models.User> Users
         {

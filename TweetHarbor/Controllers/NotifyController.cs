@@ -26,30 +26,74 @@ namespace TweetHarbor.Controllers
         [HttpPost]
         public JsonResult New(string Id, string token, Notification notification)
         {
-            var u = database.Users.FirstOrDefault(usr => usr.TwitterUserName == Id && usr.UniqueId == token);
+            var u = database.Users.Include("Projects").FirstOrDefault(usr => usr.TwitterUserName == Id && usr.UniqueId == token);
             if (null != u)
             {
-                TweetSharp.TwitterService s = new TweetSharp.TwitterService(TwitterHelper.ConsumerKey, TwitterHelper.ConsumerSecret);
-                s.AuthenticateWith(u.OAuthToken, u.OAuthTokenSecret);
-                var stringUpdate = string.Format("Application {0} build {1}, {2}", notification.application.name, notification.build.status, notification.build.commit.message);
-                if (stringUpdate.Length > 140)
-                    stringUpdate = stringUpdate.Substring(0, 136) + "...";
-                if (u.SendPrivateTweet)
+                var project = u.Projects.FirstOrDefault(p => p.ProjectName == notification.application.name);
+                if (null == project)
                 {
-                    var dmRes = s.SendDirectMessage(u.TwitterUserName, stringUpdate);
+                    project = new Project()
+                    {
+                        ProjectName = notification.application.name,
+                        FailureTemplate = "",
+                        SuccessTemplate = "",
+                        SendPrivateTweetOnFailure = true,
+                        SendPrivateTweetOnSuccess = true,
+                        SendPublicTweetOnFailure = false,
+                        SendPublicTweetOnSuccess = true,
+                        User = u
+                    };
+                    u.Projects.Add(project);
+                    //TODO: Add logging to prevent these errors from being swallowed
+                    database.SaveChanges();
                 }
-                if (u.SendPublicTweet)
+                if (null != project)
                 {
-                    var pubRes = s.SendTweet(stringUpdate);
+                    TweetSharp.TwitterService s = new TweetSharp.TwitterService(TwitterHelper.ConsumerKey, TwitterHelper.ConsumerSecret);
+                    s.AuthenticateWith(u.OAuthToken, u.OAuthTokenSecret);
+                    //TODO: Update for templates
+                    var stringUpdate = string.Format("Application {0} build {1}, {2}", notification.application.name, notification.build.status, notification.build.commit.message);
+                    if (stringUpdate.Length > 140)
+                        stringUpdate = stringUpdate.Substring(0, 136) + "...";
+
+                    if (notification.build.status == "succeeded")
+                    {
+                        if (project.SendPrivateTweetOnSuccess && u.SendPrivateTweet)
+                        {
+                            var dmRes = s.SendDirectMessage(u.TwitterUserName, stringUpdate);
+                        }
+                        if (project.SendPublicTweetOnSuccess && u.SendPublicTweet)
+                        {
+                            var pubRes = s.SendTweet(stringUpdate);
+                        }
+                    }
+                    else
+                    {
+                        if (project.SendPrivateTweetOnFailure && u.SendPrivateTweet)
+                        {
+                            var dmRes = s.SendDirectMessage(u.TwitterUserName, stringUpdate);
+                        }
+                        if (project.SendPublicTweetOnFailure && u.SendPublicTweet)
+                        {
+                            var pubRes = s.SendTweet(stringUpdate);
+                        }
+                    }
+                    return Json(new { Success = true });
                 }
-                return Json(notification);
+                else
+                {
+                    return Json(new { Success = false, Error = "Unable to locate or create project" });
+                }
             }
             else
             {
-                return Json(new { Error = "NotAuthorized" });
+                return Json(new { Success = false, Error = "NotAuthorized" });
             }
 
         }
+
+
+
 
 
         protected override void Dispose(bool disposing)
