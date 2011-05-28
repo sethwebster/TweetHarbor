@@ -11,8 +11,8 @@ namespace TweetHarbor.Controllers
 {
     public class NotifyController : Controller
     {
-         ITweetHarborDbContext database;
-        
+        ITweetHarborDbContext database;
+
         public NotifyController(ITweetHarborDbContext database)
         {
             this.database = database;
@@ -31,8 +31,13 @@ namespace TweetHarbor.Controllers
             {
                 TweetSharp.TwitterService s = new TweetSharp.TwitterService(TwitterHelper.ConsumerKey, TwitterHelper.ConsumerSecret);
                 s.AuthenticateWith(u.OAuthToken, u.OAuthTokenSecret);
-                s.SendDirectMessage(Id, string.Format("Application {0} build {1}, {2}", notification.application.name, notification.build.status, notification.build.commit.message));
-
+                var stringUpdate = string.Format("Application {0} build {1}, {2}", notification.application.name, notification.build.status, notification.build.commit.message);
+                if (stringUpdate.Length > 140)
+                    stringUpdate = stringUpdate.Substring(0, 136) + "...";
+                if (u.SendPrivateTweet)
+                    s.SendDirectMessage(Id, stringUpdate);
+                if (u.SendPublicTweet)
+                    s.SendTweet(stringUpdate);
                 return Json(notification);
             }
             else
@@ -42,7 +47,7 @@ namespace TweetHarbor.Controllers
 
         }
 
-        
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
