@@ -35,9 +35,13 @@ namespace TweetHarbor.Controllers
                 if (stringUpdate.Length > 140)
                     stringUpdate = stringUpdate.Substring(0, 136) + "...";
                 if (u.SendPrivateTweet)
-                    s.SendDirectMessage(Id, stringUpdate);
+                {
+                    var dmRes = s.SendDirectMessage(u.TwitterUserName, stringUpdate);
+                }
                 if (u.SendPublicTweet)
-                    s.SendTweet(stringUpdate);
+                {
+                    var pubRes = s.SendTweet(stringUpdate);
+                }
                 return Json(notification);
             }
             else
