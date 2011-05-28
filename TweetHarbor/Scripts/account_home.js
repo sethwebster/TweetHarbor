@@ -19,7 +19,7 @@
         });
     });
     // Global Pub/Priv Tweets
-    $(".global_notification_toggle").click(function () {
+    $(".global_notification_toggle").click(function () { 
         var e = $(this);
         $.post("/Account/UpdateTweetToggle/",
             { TweetType: e.attr("id"), Value: e.is(":checked") },
