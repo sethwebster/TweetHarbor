@@ -43,7 +43,7 @@
         </div>
         @if (Model.Projects.Count > 0)
         {
-            <table>
+            <table id="projects_table">
                 <tr>
                     <th>
                         Name
@@ -88,7 +88,24 @@
                     </tr>
                     <tr>
                         <td colspan="6" id="templates_@(p.ProjectName)" style="display:none">
-                            <em>Coming Soon</em>
+                            <table id="template_table">
+                                <tr>
+                                    <th>
+                                        Successful Build Template
+                                    </th>
+                                    <th>
+                                        Failed Build Template
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @{Html.RenderPartial("_TemplateEditor", new TweetHarbor.Models.TemplateEditorModel() { Project = p, TemplateEditorType = TweetHarbor.Models.TemplateEditorTypes.Success });}
+                                    </td>
+                                    <td>
+                                        @{Html.RenderPartial("_TemplateEditor", new TweetHarbor.Models.TemplateEditorModel() { Project = p, TemplateEditorType = TweetHarbor.Models.TemplateEditorTypes.Failure });}
+                                    </td>
+                                </tr>
+                            </table>
                         </td>
                     </tr>
                 }

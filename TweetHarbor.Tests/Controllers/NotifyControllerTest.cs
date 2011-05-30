@@ -134,7 +134,7 @@ namespace TweetHarbor.Tests.Controllers
             };
 
             db.Projects.Add(proj);
-
+            
             user.Projects = new Collection<Project>();
             user.Projects.Add(proj);
 

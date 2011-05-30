@@ -54,7 +54,37 @@ namespace TweetHarbor.Controllers
                 }
                 else
                 {
-                    return Json(new { Error = "User Not Found", Success = false });
+                    return Json(new { Error = "Project Not Found", Success = false });
+                }
+            }
+            return Json(new { Error = "Something", Success = false });
+        }
+
+        [HttpPost]
+        [Authorize]
+        public JsonResult UpdateMessageTemplate(string Id, string TemplateType, string Value)
+        {
+            if (null != HttpContext)
+            {
+                var prj = database.Projects.FirstOrDefault(p => p.User.TwitterUserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
+
+                if (null != prj)
+                {
+                    switch (TemplateType)
+                    {
+                        case "Success":
+                            prj.SuccessTemplate = Value;
+                            break;
+                        case "Failure":
+                            prj.FailureTemplate = Value;
+                            break;
+                    }
+                    database.SaveChanges();
+                    return Json(new { Success = true });
+                }
+                else
+                {
+                    return Json(new { Error = "Project Not Found", Success = false });
                 }
             }
             return Json(new { Error = "Something", Success = false });

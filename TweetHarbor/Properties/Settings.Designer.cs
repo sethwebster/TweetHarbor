@@ -49,5 +49,23 @@ namespace TweetHarbor.Properties {
                 return ((string)(this["TwitterConsumerSecret"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("We just deployed a new build of {application:name} via @AppHarbor!")]
+        public string DefaultSuccessTemplate {
+            get {
+                return ((string)(this["DefaultSuccessTemplate"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("{application:name} build failed on @AppHarbor: {build:commit:message}")]
+        public string DefaultFailureTemplate {
+            get {
+                return ((string)(this["DefaultFailureTemplate"]));
+            }
+        }
     }
 }

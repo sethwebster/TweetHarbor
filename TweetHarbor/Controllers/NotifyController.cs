@@ -51,31 +51,35 @@ namespace TweetHarbor.Controllers
                 {
                     TweetSharp.TwitterService s = new TweetSharp.TwitterService(TwitterHelper.ConsumerKey, TwitterHelper.ConsumerSecret);
                     s.AuthenticateWith(u.OAuthToken, u.OAuthTokenSecret);
-                    //TODO: Update for templates
-                    var stringUpdate = string.Format("Application {0} build {1}, {2}", notification.application.name, notification.build.status, notification.build.commit.message);
-                    if (stringUpdate.Length > 140)
-                        stringUpdate = stringUpdate.Substring(0, 136) + "...";
 
                     if (notification.build.status == "succeeded")
                     {
+                        var strSuccessUpdate = string.IsNullOrEmpty(project.SuccessTemplate) ? Properties.Settings.Default.DefaultSuccessTemplate : project.SuccessTemplate;
+                        strSuccessUpdate = strSuccessUpdate.Replace("{application:name}", project.ProjectName).Replace("{build:commit:message}", notification.build.commit.message);
+                        if (strSuccessUpdate.Length > 140)
+                            strSuccessUpdate = strSuccessUpdate.Substring(0, 136) + "...";
                         if (project.SendPrivateTweetOnSuccess && u.SendPrivateTweet)
                         {
-                            var dmRes = s.SendDirectMessage(u.TwitterUserName, stringUpdate);
+                            var dmRes = s.SendDirectMessage(u.TwitterUserName, strSuccessUpdate);
                         }
                         if (project.SendPublicTweetOnSuccess && u.SendPublicTweet)
                         {
-                            var pubRes = s.SendTweet(stringUpdate);
+                            var pubRes = s.SendTweet(strSuccessUpdate);
                         }
                     }
                     else
                     {
+                        var strFailureUpdate = string.IsNullOrEmpty(project.FailureTemplate) ? Properties.Settings.Default.DefaultFailureTemplate : project.FailureTemplate;
+                        strFailureUpdate = strFailureUpdate.Replace("{application:name}", project.ProjectName).Replace("{build:commit:message}", notification.build.commit.message);
+                        if (strFailureUpdate.Length > 140)
+                            strFailureUpdate = strFailureUpdate.Substring(0, 136) + "...";
                         if (project.SendPrivateTweetOnFailure && u.SendPrivateTweet)
                         {
-                            var dmRes = s.SendDirectMessage(u.TwitterUserName, stringUpdate);
+                            var dmRes = s.SendDirectMessage(u.TwitterUserName, strFailureUpdate);
                         }
                         if (project.SendPublicTweetOnFailure && u.SendPublicTweet)
                         {
-                            var pubRes = s.SendTweet(stringUpdate);
+                            var pubRes = s.SendTweet(strFailureUpdate);
                         }
                     }
                     return Json(new { Success = true });

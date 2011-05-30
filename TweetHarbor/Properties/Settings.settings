@@ -11,5 +11,11 @@
     <Setting Name="TwitterConsumerSecret" Type="System.String" Scope="Application">
       <Value Profile="(Default)">eLqZzHIXJPCz5FX2rjxqSxq3QSJ2vwMsGTuafFeQ</Value>
     </Setting>
+    <Setting Name="DefaultSuccessTemplate" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">We just deployed a new build of {application:name} via @AppHarbor!</Value>
+    </Setting>
+    <Setting Name="DefaultFailureTemplate" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">{application:name} build failed on @AppHarbor: {build:commit:message}</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
