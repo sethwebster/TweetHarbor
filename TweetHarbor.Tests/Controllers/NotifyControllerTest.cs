@@ -69,7 +69,8 @@ namespace TweetHarbor.Tests.Controllers
         public void TestBuildSuccess()
         {
             string testStr = "{\"application\": { \"name\": \"Foo\" },   \"build\": {    \"commit\": {      \"id\": \"77d991fe61187d205f329ddf9387d118a09fadcd\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
-
+            var o = JsonConvert.DeserializeObject<Notification>(testStr);
+          
             var db = new TestTweetHarborDbContext();
             var user = new User() { 
                 EmailAddress="sethwebster@gmail.com", 
@@ -100,16 +101,20 @@ namespace TweetHarbor.Tests.Controllers
             var controller = new NotifyController(db);
             MvcMockHelpers.SetFakeControllerContext(controller);
 
-            var o = JsonConvert.DeserializeObject<Notification>(testStr);
             var res = controller.New(user.TwitterUserName, user.UniqueId, o);
 
+            Assert.IsInstanceOfType(res, typeof(JsonResult));
+            Assert.IsInstanceOfType((res as JsonResult).Data, typeof(JsonResultModel));
+
+            Assert.AreEqual(true, ((res as JsonResult).Data as JsonResultModel).Success);
         }
 
         [TestMethod]
         public void TestBuildFailure()
         {
             string testStr = "{\"application\": { \"name\": \"Foo\" },   \"build\": {    \"commit\": {      \"id\": \"77d991fe61187d205f329ddf9387d118a09fadcd\", \"message\": \"Implement foo\"  }, \"status\": \"failed\" } }";
-
+            var o = JsonConvert.DeserializeObject<Notification>(testStr);
+           
             var db = new TestTweetHarborDbContext();
             var user = new User()
             {
@@ -141,9 +146,12 @@ namespace TweetHarbor.Tests.Controllers
             var controller = new NotifyController(db);
             MvcMockHelpers.SetFakeControllerContext(controller);
 
-            var o = JsonConvert.DeserializeObject<Notification>(testStr);
             var res = controller.New(user.TwitterUserName, user.UniqueId, o);
 
+            Assert.IsInstanceOfType(res, typeof(JsonResult));
+            Assert.IsInstanceOfType((res as JsonResult).Data, typeof(JsonResultModel));
+
+            Assert.AreEqual(true, ((res as JsonResult).Data as JsonResultModel).Success);
         }
 
     }

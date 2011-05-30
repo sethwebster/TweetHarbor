@@ -167,14 +167,14 @@ namespace TweetHarbor.Controllers
                             break;
                     }
                     database.SaveChanges();
-                    return Json(new { Success = true });
+                    return Json(new JsonResultModel() { Success = true });
                 }
                 else
                 {
-                    return Json(new { Error = "User Not Found", Success = false });
+                    return Json(new JsonResultModel() { Error = "User Not Found", Success = false });
                 }
             }
-            return Json(new { Error = "Something", Success = false });
+            return Json(new JsonResultModel() { Error = "Something", Success = false });
         }
         [Authorize]
         [HttpPost]
@@ -194,15 +194,15 @@ namespace TweetHarbor.Controllers
                     }
                     else
                     {
-                        return Json(new { Error = "Please supply a correctly formatted email address", Success = false });
+                        return Json(new JsonResultModel() { Error = "Please supply a correctly formatted email address", Success = false });
                     }
                 }
                 else
                 {
-                    return Json(new { Error = "User Not Found", Success = false });
+                    return Json(new JsonResultModel() { Error = "User Not Found", Success = false });
                 }
             }
-            return Json(new { Error = "Something", Success = false });
+            return Json(new JsonResultModel() { Error = "Something", Success = false });
         }
         public bool TestEmailRegex(string emailAddress)
         {

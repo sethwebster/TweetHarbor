@@ -82,16 +82,16 @@ namespace TweetHarbor.Controllers
                             var pubRes = s.SendTweet(strFailureUpdate);
                         }
                     }
-                    return Json(new { Success = true });
+                    return Json(new JsonResultModel() { Success = true });
                 }
                 else
                 {
-                    return Json(new { Success = false, Error = "Unable to locate or create project" });
+                    return Json(new JsonResultModel() { Success = false, Error = "Unable to locate or create project" });
                 }
             }
             else
             {
-                return Json(new { Success = false, Error = "NotAuthorized" });
+                return Json(new JsonResultModel() { Success = false, Error = "NotAuthorized" });
             }
 
         }
