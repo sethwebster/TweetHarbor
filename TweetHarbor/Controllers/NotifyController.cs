@@ -32,7 +32,7 @@ namespace TweetHarbor.Controllers
                 var project = u.Projects.FirstOrDefault(p => p.ProjectName == notification.application.name);
                 if (null == project)
                 {
-                    project = new Project()
+                    project = new Project() 
                     {
                         ProjectName = notification.application.name,
                         FailureTemplate = "",
