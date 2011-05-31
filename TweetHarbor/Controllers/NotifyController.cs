@@ -51,7 +51,9 @@ namespace TweetHarbor.Controllers
                     if (notification.build.status == "succeeded")
                     {
                         var strSuccessUpdate = string.IsNullOrEmpty(project.SuccessTemplate) ? Properties.Settings.Default.DefaultSuccessTemplate : project.SuccessTemplate;
-                        strSuccessUpdate = strSuccessUpdate.Replace("{application:name}", project.ProjectName).Replace("{build:commit:message}", notification.build.commit.message);
+                        strSuccessUpdate = strSuccessUpdate.Replace("{application:name}", project.ProjectName)
+                            .Replace("{build:commit:message}", notification.build.commit.message)
+                            .Replace("{build:commit:id}", notification.build.commit.id);
                         if (strSuccessUpdate.Length > 140)
                             strSuccessUpdate = strSuccessUpdate.Substring(0, 136) + "...";
                         if (project.SendPrivateTweetOnSuccess && u.SendPrivateTweet)
