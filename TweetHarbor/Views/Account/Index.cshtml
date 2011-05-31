@@ -20,23 +20,30 @@
         <div id="email_status_message">
         </div>
     </div>
-    <div id="tweet_options">
-        <input type="checkbox" @(Model.SendPrivateTweet ? "Checked" : "") id="SendPrivateTweet" class='global_notification_toggle'/><label
-            for="SendPrivateTweet">Direct Messages Enabled (Global)</label>
-        <input type="checkbox" @(Model.SendPublicTweet ? "Checked" : "") id="SendPublicTweet" class='global_notification_toggle'/><label
-            for="SendPublicTweet">Public Tweets Enabled (Global)</label>
-        <div id="global_toggle_status_message" class="error">
-        </div>
-    </div>
     <div class='clear'>
     </div>
-    <div id="link">
-        http://tweetharbor.apphb.com/notify/new/@Model.TwitterUserName?token=@Model.UniqueId</div>
-    <div id="instructions">
-        *Paste this link into the <a href="https://appharbor.com/application">Service Hooks</a>
-        section on App Harbor.
+    <h3>
+        Service Hook Url</h3>
+    <div id="service_hook_url" class='section'>
+        <div id="link">
+            http://tweetharbor.apphb.com/notify/new/@Model.TwitterUserName?token=@Model.UniqueId</div>
+        <div id="instructions">
+            *Paste this link into the <a href="https://appharbor.com/application">Service Hooks</a>
+            section on App Harbor.
+        </div>
     </div>
-    <div id="projects">
+    <div id="projects" class='section'>
+        <div id="tweet_options">
+            <input type="checkbox" @(Model.SendPrivateTweet ? "Checked" : "") id="SendPrivateTweet" class='global_notification_toggle'/><label
+                for="SendPrivateTweet" title="(Disable to prevent any direct messages for all
+                applications)">Direct Messages Enabled
+            </label>
+            <input type="checkbox" @(Model.SendPublicTweet ? "Checked" : "") id="SendPublicTweet" class='global_notification_toggle'/><label
+                for="SendPublicTweet" title=" (Disable to prevent any public messages
+                for all applications)">Public Tweets Enabled</label>
+            <div id="global_toggle_status_message" class="error">
+            </div>
+        </div>
         <h3>
             Applications</h3>
         <div id="toggle_status_message">

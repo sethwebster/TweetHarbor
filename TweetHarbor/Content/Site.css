@@ -448,3 +448,14 @@ div#title
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
 }
+
+
+#tweet_options
+{
+    float:right;
+}
+
+.section
+{
+    margin-bottom:20px;
+}

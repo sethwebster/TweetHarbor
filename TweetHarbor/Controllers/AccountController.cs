@@ -96,8 +96,15 @@ namespace TweetHarbor.Controllers
             returnUser.UserProfilePicUrl = user.ProfileImageUrl;
             returnUser.OAuthToken = accessToken.Token;
             returnUser.OAuthTokenSecret = accessToken.TokenSecret;
+            try
+            {
+                database.SaveChanges();
+            }
+            catch (Exception e)
+            {
 
-            database.SaveChanges();
+                throw e;
+            }
             return returnUser;
         }
 
