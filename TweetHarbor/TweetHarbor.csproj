@@ -109,6 +109,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Messages.cs" />
+    <Compile Include="Messaging\ITweetHarborTwitterService.cs" />
+    <Compile Include="Messaging\TweetHarborTwitterService.cs" />
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\EmailHelper.cs" />
     <Compile Include="Models\JsonResultModel.cs" />

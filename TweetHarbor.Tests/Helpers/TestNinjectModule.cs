@@ -5,6 +5,7 @@ using System.Text;
 using Ninject.Modules;
 using TweetHarbor.Data;
 using System.Web.Mvc;
+using TweetHarbor.Messaging;
 
 namespace TweetHarbor.Tests.Helpers
 {
@@ -15,6 +16,7 @@ namespace TweetHarbor.Tests.Helpers
             Bind<ITweetHarborDbContext>().To<TestTweetHarborDbContext>();
             //Binding injection for SnipCmsAuthorize -> SQL Repository
             Bind<IActionInvoker>().To<NinjectActionInvoker>().InSingletonScope();
+            Bind<ITweetHarborTwitterService>().To<TestTweetHarborTwitterService>();
 
         }
     }

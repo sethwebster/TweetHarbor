@@ -98,7 +98,7 @@ namespace TweetHarbor.Tests.Controllers
             user.Projects = new Collection<Project>();
             user.Projects.Add(proj);
 
-            var controller = new NotifyController(db);
+            var controller = new NotifyController(db, new TestTweetHarborTwitterService());
             MvcMockHelpers.SetFakeControllerContext(controller);
 
             var res = controller.New(user.TwitterUserName, user.UniqueId, o);
@@ -143,7 +143,7 @@ namespace TweetHarbor.Tests.Controllers
             user.Projects = new Collection<Project>();
             user.Projects.Add(proj);
 
-            var controller = new NotifyController(db);
+            var controller = new NotifyController(db, new TestTweetHarborTwitterService());
             MvcMockHelpers.SetFakeControllerContext(controller);
 
             var res = controller.New(user.TwitterUserName, user.UniqueId, o);

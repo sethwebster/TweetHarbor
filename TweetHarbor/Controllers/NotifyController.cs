@@ -6,16 +6,20 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using TweetHarbor.Models;
 using TweetHarbor.Data;
+using TweetSharp;
+using TweetHarbor.Messaging;
 
 namespace TweetHarbor.Controllers
 {
     public class NotifyController : Controller
     {
         ITweetHarborDbContext database;
-
-        public NotifyController(ITweetHarborDbContext database)
+        ITweetHarborTwitterService twitter;
+        public NotifyController(ITweetHarborDbContext database, ITweetHarborTwitterService twitter)
         {
             this.database = database;
+            this.twitter = twitter;
+            
         }
 
         public ActionResult New()
@@ -45,8 +49,7 @@ namespace TweetHarbor.Controllers
                 }
                 if (null != project)
                 {
-                    TweetSharp.TwitterService s = new TweetSharp.TwitterService(TwitterHelper.ConsumerKey, TwitterHelper.ConsumerSecret);
-                    s.AuthenticateWith(u.OAuthToken, u.OAuthTokenSecret);
+                    twitter.AuthenticateWith(u.OAuthToken, u.OAuthTokenSecret);
 
                     if (notification.build.status == "succeeded")
                     {
@@ -58,11 +61,11 @@ namespace TweetHarbor.Controllers
                             strSuccessUpdate = strSuccessUpdate.Substring(0, 136) + "...";
                         if (project.SendPrivateTweetOnSuccess && u.SendPrivateTweet)
                         {
-                            var dmRes = s.SendDirectMessage(u.TwitterUserName, strSuccessUpdate);
+                            TwitterDirectMessage dmRes = twitter.SendDirectMessage(u.TwitterUserName, strSuccessUpdate);
                         }
                         if (project.SendPublicTweetOnSuccess && u.SendPublicTweet)
                         {
-                            var pubRes = s.SendTweet(strSuccessUpdate);
+                            TwitterStatus pubRes = twitter.SendTweet(strSuccessUpdate);
                         }
                     }
                     else
@@ -73,11 +76,11 @@ namespace TweetHarbor.Controllers
                             strFailureUpdate = strFailureUpdate.Substring(0, 136) + "...";
                         if (project.SendPrivateTweetOnFailure && u.SendPrivateTweet)
                         {
-                            var dmRes = s.SendDirectMessage(u.TwitterUserName, strFailureUpdate);
+                            var dmRes = twitter.SendDirectMessage(u.TwitterUserName, strFailureUpdate);
                         }
                         if (project.SendPublicTweetOnFailure && u.SendPublicTweet)
                         {
-                            var pubRes = s.SendTweet(strFailureUpdate);
+                            var pubRes = twitter.SendTweet(strFailureUpdate);
                         }
                     }
                     return Json(new JsonResultModel() { Success = true });
