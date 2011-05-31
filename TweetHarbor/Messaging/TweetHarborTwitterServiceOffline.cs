@@ -14,6 +14,7 @@ namespace TweetHarbor.Messaging
         {
             user = new TwitterUser();
             user.ScreenName = LOCAL_USER_NAME;
+            user.Status = new TwitterStatus() { Text = "This is the only status for the offline user" };
         }
         public TweetSharp.TwitterDirectMessage SendDirectMessage(string Id, string Update)
         {
