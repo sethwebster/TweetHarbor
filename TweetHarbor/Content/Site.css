@@ -459,3 +459,8 @@ div#title
 {
     margin-bottom:20px;
 }
+
+.template_field_insert
+{
+    font-size:.8em;
+}

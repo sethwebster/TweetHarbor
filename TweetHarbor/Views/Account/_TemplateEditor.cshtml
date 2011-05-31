@@ -15,7 +15,8 @@
             <img src="@Url.Content("~/Content/disc.png")" height="25"  /></a> <a href="javascript:void(0);"
                 rel="{application.name}" class='template_field_insert'>{application:name}</a>
         <a href="javascript:void(0);" rel="{build:commit:message}" class='template_field_insert'>
-            {build:commit:message}</a>
+            {build:commit:message}</a> <a href="javascript:void(0);" rel="{build:commit:id}"
+                class='template_field_insert'>{build:commit:id}</a>
     </div>
     <textarea rows="5" cols="10" class='template_edit_field'>@currentTemplateText</textarea>
 </div>
