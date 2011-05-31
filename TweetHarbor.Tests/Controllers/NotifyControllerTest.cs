@@ -9,6 +9,7 @@ using TweetHarbor.Models;
 using System.Web.Mvc;
 using TweetHarbor.Tests.Helpers;
 using System.Collections.ObjectModel;
+using TweetHarbor.Messaging;
 
 namespace TweetHarbor.Tests.Controllers
 {
@@ -74,8 +75,8 @@ namespace TweetHarbor.Tests.Controllers
             var db = new TestTweetHarborDbContext();
             var user = new User() { 
                 EmailAddress="sethwebster@gmail.com", 
-                OAuthToken="14573883-j8T8axOgqUQWTv1fSsdyZI7zVf9AboAuBCyGKFw",
-                OAuthTokenSecret="qENzrV7vKxAgTmNkBVHjG9sMbZg8z0KAh3YF22OIg",
+                OAuthToken="<FakeOauthToken>",
+                OAuthTokenSecret = "<FakeOauthTokenSecret>",
                 UniqueId="db7a3a64156d0b33beae93fe99ca599e",
                 SendPrivateTweet=true,
                 SendPublicTweet=false,
@@ -119,8 +120,8 @@ namespace TweetHarbor.Tests.Controllers
             var user = new User()
             {
                 EmailAddress = "sethwebster@gmail.com",
-                OAuthToken = "14573883-j8T8axOgqUQWTv1fSsdyZI7zVf9AboAuBCyGKFw",
-                OAuthTokenSecret = "qENzrV7vKxAgTmNkBVHjG9sMbZg8z0KAh3YF22OIg",
+                OAuthToken = "<FakeOauthToken>",
+                OAuthTokenSecret = "<FakeOauthTokenSecret>",
                 UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
                 SendPrivateTweet = true,
                 SendPublicTweet = false,
