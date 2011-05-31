@@ -22,5 +22,26 @@ namespace TweetHarbor.Tests.Helpers
         {
             
         }
+
+
+        public TweetSharp.OAuthAccessToken GetAccessToken(TweetSharp.OAuthRequestToken token, string verifier)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TweetSharp.OAuthRequestToken GetRequestToken(string callback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Uri GetAuthorizationUri(TweetSharp.OAuthRequestToken token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TweetSharp.TwitterUser VerifyCredentials()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -14,9 +14,6 @@ namespace TweetHarbor.Messaging
         {
             service = new TwitterService(ConsumerKey, ConsumerSecret);
         }
-
-
-
         public TwitterDirectMessage SendDirectMessage(string Id, string Update)
         {
             return service.SendDirectMessage(Id, Update);
@@ -30,6 +27,28 @@ namespace TweetHarbor.Messaging
         public void AuthenticateWith(string OAuthToken, string OAuthSecret)
         {
             service.AuthenticateWith(OAuthToken, OAuthSecret);
+        }
+
+
+        public OAuthAccessToken GetAccessToken(OAuthRequestToken token, string verifier)
+        {
+            return service.GetAccessToken(token, verifier);
+        }
+
+        public TwitterUser VerifyCredentials()
+        {
+            return service.VerifyCredentials();
+        }
+
+
+        public OAuthRequestToken GetRequestToken(string callback)
+        {
+            return service.GetRequestToken(callback);
+        }
+
+        public Uri GetAuthorizationUri(OAuthRequestToken token)
+        {
+            return service.GetAuthorizationUri(token);
         }
     }
 }

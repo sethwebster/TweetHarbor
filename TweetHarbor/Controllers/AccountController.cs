@@ -9,6 +9,7 @@ using TweetHarbor.Models;
 using TweetSharp;
 using TweetHarbor.Data;
 using System.Text.RegularExpressions;
+using TweetHarbor.Messaging;
 
 namespace TweetHarbor.Controllers
 {
@@ -16,10 +17,11 @@ namespace TweetHarbor.Controllers
     {
 
         ITweetHarborDbContext database;
-
-        public AccountController(ITweetHarborDbContext database)
+        ITweetHarborTwitterService twitter;
+        public AccountController(ITweetHarborDbContext database, ITweetHarborTwitterService twitter)
         {
             this.database = database;
+            this.twitter = twitter;
         }
 
         [Authorize]
@@ -50,15 +52,13 @@ namespace TweetHarbor.Controllers
         public ActionResult Authorize()
         {
             // Step 1 - Retrieve an OAuth Request Token
-            TwitterService service = new TwitterService(TwitterHelper.ConsumerKey, TwitterHelper.ConsumerSecret);
-#if DEBUG
-            OAuthRequestToken requestToken = service.GetRequestToken("http://localhost:9090/Account/AuthorizeCallback"); // <-- The registered callback URL
-#else
-            OAuthRequestToken requestToken = service.GetRequestToken(Properties.Settings.Default.TwitterAuthorizationCallbackUrl); // <-- The registered callback URL
-#endif
 
-            // Step 2 - Redirect to the OAuth Authorization URL
-            Uri uri = service.GetAuthorizationUri(requestToken);
+#if DEBUG
+            OAuthRequestToken requestToken = twitter.GetRequestToken("http://localhost:9090/Account/AuthorizeCallback"); // <-- The registered callback URL
+#else
+            OAuthRequestToken requestToken = twitter.GetRequestToken(Properties.Settings.Default.TwitterAuthorizationCallbackUrl); // <-- The registered callback URL
+#endif
+            Uri uri = twitter.GetAuthorizationUri(requestToken);
             return new RedirectResult(uri.ToString(), false /*permanent*/);
         }
 
@@ -67,12 +67,10 @@ namespace TweetHarbor.Controllers
             var requestToken = new OAuthRequestToken { Token = oauth_token };
 
             // Step 3 - Exchange the Request Token for an Access Token
-            TwitterService service = new TwitterService(TwitterHelper.ConsumerKey, TwitterHelper.ConsumerSecret);
-            OAuthAccessToken accessToken = service.GetAccessToken(requestToken, oauth_verifier);
-
+            OAuthAccessToken accessToken = twitter.GetAccessToken(requestToken, oauth_verifier);
             // Step 4 - User authenticates using the Access Token
-            service.AuthenticateWith(accessToken.Token, accessToken.TokenSecret);
-            TwitterUser user = service.VerifyCredentials();
+            twitter.AuthenticateWith(accessToken.Token, accessToken.TokenSecret);
+            TwitterUser user = twitter.VerifyCredentials();
             ViewBag.Message = string.Format("Your username is {0}", user.ScreenName);
             FormsAuthentication.SetAuthCookie(user.ScreenName, true);
 

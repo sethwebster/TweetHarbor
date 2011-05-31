@@ -54,7 +54,12 @@ namespace TweetHarbor.App_Start
             TwitterService s = new TwitterService();
             
             kernel.Bind<ITweetHarborDbContext>().To<TweetHarborDbContext>();
-            kernel.Bind<ITweetHarborTwitterService>().To<TweetHarborTwitterService>().WithConstructorArgument("ConsumerKey", TwitterHelper.ConsumerKey).WithConstructorArgument("ConsumerSecret", TwitterHelper.ConsumerSecret);
+#if OFFLINE
+            kernel.Bind<ITweetHarborTwitterService>().To<TweetHarborTwitterServiceOffline>().WithConstructorArgument("ConsumerKey", TwitterHelper.ConsumerKey).WithConstructorArgument("ConsumerSecret", TwitterHelper.ConsumerSecret);
+#else
+                   kernel.Bind<ITweetHarborTwitterService>().To<TweetHarborTwitterService>().WithConstructorArgument("ConsumerKey", TwitterHelper.ConsumerKey).WithConstructorArgument("ConsumerSecret", TwitterHelper.ConsumerSecret);
+    
+#endif
         }
     }
 }
