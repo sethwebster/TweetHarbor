@@ -8,6 +8,15 @@ namespace TweetHarbor.Models
 {
     public class Project
     {
+
+        public Project()
+        {
+            SendPrivateTweetOnFailure = true;
+            SendPrivateTweetOnSuccess = true;
+            SendPublicTweetOnFailure = false;
+            SendPublicTweetOnSuccess = false;
+        }
+
         [Required]
         [Key]
         public string ProjectName { get; set; }
@@ -16,8 +25,8 @@ namespace TweetHarbor.Models
         public bool SendPublicTweetOnSuccess { get; set; }
         public bool SendPrivateTweetOnFailure { get; set; }
         public bool SendPublicTweetOnFailure { get; set; }
-        public string  SuccessTemplate { get; set; }
+        public string SuccessTemplate { get; set; }
         public string FailureTemplate { get; set; }
-        
+
     }
 }

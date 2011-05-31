@@ -36,11 +36,7 @@ namespace TweetHarbor.Controllers
                     {
                         ProjectName = notification.application.name,
                         FailureTemplate = "",
-                        SuccessTemplate = "",
-                        SendPrivateTweetOnFailure = true,
-                        SendPrivateTweetOnSuccess = true,
-                        SendPublicTweetOnFailure = false,
-                        SendPublicTweetOnSuccess = true,
+                        SuccessTemplate = "",                       
                         User = u
                     };
                     u.Projects.Add(project);
