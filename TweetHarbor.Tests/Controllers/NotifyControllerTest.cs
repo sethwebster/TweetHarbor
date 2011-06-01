@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using TweetHarbor.Tests.Helpers;
 using System.Collections.ObjectModel;
 using TweetHarbor.Messaging;
+using System.Net;
 
 namespace TweetHarbor.Tests.Controllers
 {
@@ -65,23 +66,35 @@ namespace TweetHarbor.Tests.Controllers
         // public void MyTestCleanup() { }
         //
         #endregion
+        // 
+        //[TestMethod]
+        public void TestRemote()
+        {
+            string testStr = "{\"application\": { \"name\": \"Foo\" },   \"build\": {    \"commit\": {      \"id\": \"77d991fe61187d205f329ddf9387d118a09fadcd\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
 
+            WebClient wc = new WebClient();
+            wc.Headers.Add("Content-Type", "application/json");
+            var data = wc.UploadData("http://tweetharbor.apphb.com/notify/new/appharbor?token=27d92bb0d7a0b751d36bfe0051624b15", "POST", Encoding.ASCII.GetBytes(testStr));
+
+            var str = Encoding.ASCII.GetString(data);
+        }
         [TestMethod]
         public void TestBuildSuccess()
         {
             string testStr = "{\"application\": { \"name\": \"Foo\" },   \"build\": {    \"commit\": {      \"id\": \"77d991fe61187d205f329ddf9387d118a09fadcd\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
             var o = JsonConvert.DeserializeObject<Notification>(testStr);
-          
+
             var db = new TestTweetHarborDbContext();
-            var user = new User() { 
-                EmailAddress="sethwebster@gmail.com", 
-                OAuthToken="<FakeOauthToken>",
+            var user = new User()
+            {
+                EmailAddress = "sethwebster@gmail.com",
+                OAuthToken = "<FakeOauthToken>",
                 OAuthTokenSecret = "<FakeOauthTokenSecret>",
-                UniqueId="db7a3a64156d0b33beae93fe99ca599e",
-                SendPrivateTweet=true,
-                SendPublicTweet=false,
+                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
+                SendPrivateTweet = true,
+                SendPublicTweet = false,
                 TwitterUserName = "sethwebster"
-                };
+            };
             db.Users.Add(user);
 
             var proj = new Project()
@@ -117,7 +130,7 @@ namespace TweetHarbor.Tests.Controllers
         {
             string testStr = "{\"application\": { \"name\": \"Foo\" },   \"build\": {    \"commit\": {      \"id\": \"77d991fe61187d205f329ddf9387d118a09fadcd\", \"message\": \"Implement foo\"  }, \"status\": \"failed\" } }";
             var o = JsonConvert.DeserializeObject<Notification>(testStr);
-           
+
             var db = new TestTweetHarborDbContext();
             var user = new User()
             {
@@ -142,7 +155,7 @@ namespace TweetHarbor.Tests.Controllers
             };
 
             db.Projects.Add(proj);
-            
+
             user.Projects = new Collection<Project>();
             user.Projects.Add(proj);
 
