@@ -105,7 +105,7 @@
                     list.text("");
                     list.attr("rel", "");
                 }
-                _this.nextAll(".recipient_list").first().append("<li><a class='recipient_remove_button' project='" + proj + "' recipient='" + val + "'>x</a>" + val + "</li>");
+                _this.nextAll(".recipient_list").first().append("<li><a class='recipient_remove_button' project='" + proj + "' recipient='" + (val.toString().replace("@","")) + "'>x</a>" + val + "</li>");
                 bindRemoveHandler();
             }
             else {
