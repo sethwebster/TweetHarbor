@@ -99,6 +99,7 @@ namespace TweetHarbor.Controllers
             {
                 if (!string.IsNullOrEmpty(value.Trim()))
                 {
+                    value = value.Replace("@", "").Trim();
                     var prj = database.Projects.Include("MessageRecipients").FirstOrDefault(p => p.User.TwitterUserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
                                          
                     if (null != prj)
