@@ -13,6 +13,9 @@ using TweetHarbor.Messaging;
 
 namespace TweetHarbor.Controllers
 {
+    /// <summary>
+    /// Provides the /Account controller
+    /// </summary>
     public class AccountController : Controller
     {
 
