@@ -498,4 +498,14 @@ ul.recipient_list li:hover
 .recipient_remove_button
 {
     float:right;
+
+}
+
+#user_partial
+{
+    margin-top:5px;
+}
+#user_partial .user_partial_small_pic
+{
+    margin-right:5px;
 }

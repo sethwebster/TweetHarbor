@@ -106,6 +106,7 @@
     <Compile Include="Data\ITweetHarborDbContext.cs" />
     <Compile Include="Data\LocalDataInitializationStrategy.cs" />
     <Compile Include="Data\QueryableExtensions.cs" />
+    <Compile Include="Extensions\HtmlExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>

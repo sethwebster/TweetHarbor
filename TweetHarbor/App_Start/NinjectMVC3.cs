@@ -42,6 +42,7 @@ namespace TweetHarbor.App_Start
         {
             var kernel = new StandardKernel();
             RegisterServices(kernel);
+            MvcApplication.SharedKernel = kernel;
             return kernel;
         }
 

@@ -17,6 +17,7 @@ namespace TweetHarbor
 
     public class MvcApplication : System.Web.HttpApplication
     {
+        public static  IKernel SharedKernel { get; set; }
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
