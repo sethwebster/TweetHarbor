@@ -30,7 +30,10 @@ namespace TweetHarbor.Controllers
         [HttpPost]
         public JsonResult New(string Id, string token, Notification notification)
         {
-            var u = database.Users.Include("Projects").FirstOrDefault(usr => usr.TwitterUserName == Id && usr.UniqueId == token);
+            var u = database.Users
+                .Include("Projects")
+                .Include("Projects.MessageRecipients")
+                .FirstOrDefault(usr => usr.TwitterUserName == Id && usr.UniqueId == token);
             if (null != u)
             {
                 var project = u.Projects.FirstOrDefault(p => p.ProjectName == notification.application.name);
@@ -59,9 +62,11 @@ namespace TweetHarbor.Controllers
                             .Replace("{build:commit:id}", notification.build.commit.id);
                         if (strSuccessUpdate.Length > 140)
                             strSuccessUpdate = strSuccessUpdate.Substring(0, 136) + "...";
+
                         if (project.SendPrivateTweetOnSuccess && u.SendPrivateTweet)
                         {
-                            TwitterDirectMessage dmRes = twitter.SendDirectMessage(u.TwitterUserName, strSuccessUpdate);
+                           // TwitterDirectMessage dmRes = twitter.SendDirectMessage(u.TwitterUserName, strSuccessUpdate);
+                            SendDirectMessages(project, strSuccessUpdate);
                         }
                         if (project.SendPublicTweetOnSuccess && u.SendPublicTweet)
                         {
@@ -74,9 +79,11 @@ namespace TweetHarbor.Controllers
                         strFailureUpdate = strFailureUpdate.Replace("{application:name}", project.ProjectName).Replace("{build:commit:message}", notification.build.commit.message);
                         if (strFailureUpdate.Length > 140)
                             strFailureUpdate = strFailureUpdate.Substring(0, 136) + "...";
+
                         if (project.SendPrivateTweetOnFailure && u.SendPrivateTweet)
                         {
-                            var dmRes = twitter.SendDirectMessage(u.TwitterUserName, strFailureUpdate);
+                          //  var dmRes = twitter.SendDirectMessage(u.TwitterUserName, strFailureUpdate);
+                            SendDirectMessages(project, strFailureUpdate);
                         }
                         if (project.SendPublicTweetOnFailure && u.SendPublicTweet)
                         {
@@ -95,6 +102,14 @@ namespace TweetHarbor.Controllers
                 return Json(new JsonResultModel() { Success = false, Error = "NotAuthorized" });
             }
 
+        }
+
+        private void SendDirectMessages(Project project, string update)
+        {
+            foreach (var r in project.MessageRecipients)
+            {
+                twitter.SendDirectMessage(r.ScreenName, update);
+            }
         }
 
 

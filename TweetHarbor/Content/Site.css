@@ -367,7 +367,7 @@ div#title
     width: 6em;
 }
 
-#account h3
+#account h3, #account h4
 {
     margin:0px;
     padding:0px;
@@ -463,4 +463,39 @@ div#title
 .template_field_insert
 {
     font-size:.8em;
+}
+
+.message_recipients
+{
+ displaY:none;   
+}
+ul.recipient_list
+{
+    margin:0px;padding:0px;
+    list-style:none;
+    width:205px;
+    cursor:pointer;
+}
+
+ul.recipient_list li
+{
+    padding: 3px;
+    width: auto;
+    color:#fff;
+    border: 1px solid #ccc;
+    background-color: #DFE1FF;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+
+ul.recipient_list li:hover
+{
+    background-color: #79AEFD;
+}
+
+.recipient_remove_button
+{
+    float:right;
 }

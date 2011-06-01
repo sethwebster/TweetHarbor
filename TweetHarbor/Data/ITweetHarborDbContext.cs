@@ -12,6 +12,7 @@ namespace TweetHarbor.Data
     {
         IDbSet<User> Users { get; set; }
         IDbSet<Project> Projects { get; set; }
+        IDbSet<TwitterMessageRecipient> MessageRecipients { get; set; }
         int SaveChanges();
     }
 

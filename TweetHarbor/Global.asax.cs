@@ -7,6 +7,7 @@ using System.Web.Routing;
 using System.Data.Entity;
 using TweetHarbor.Models;
 using Devtalk.EF.CodeFirst;
+using TweetHarbor.Data;
 
 namespace TweetHarbor
 {
@@ -40,7 +41,7 @@ namespace TweetHarbor
             RegisterGlobalFilters(GlobalFilters.Filters);
             RegisterRoutes(RouteTable.Routes);
 #if DEBUG
-            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<TweetHarborDbContext>());
+            Database.SetInitializer(new LocalDataInitializationStrategy());
 #else
             Database.SetInitializer<TweetHarborDbContext>(null);
 #endif

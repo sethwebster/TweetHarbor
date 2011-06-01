@@ -3,18 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using System.Collections.ObjectModel;
 
 namespace TweetHarbor.Models
 {
     public class Project
     {
-
+       
         public Project()
         {
             SendPrivateTweetOnFailure = true;
             SendPrivateTweetOnSuccess = true;
             SendPublicTweetOnFailure = false;
             SendPublicTweetOnSuccess = false;
+            this.MessageRecipients = new Collection<TwitterMessageRecipient>();
         }
 
         [Required]
@@ -27,6 +29,7 @@ namespace TweetHarbor.Models
         public bool SendPublicTweetOnFailure { get; set; }
         public string SuccessTemplate { get; set; }
         public string FailureTemplate { get; set; }
+        public ICollection<TwitterMessageRecipient> MessageRecipients { get; set; }
 
     }
 }

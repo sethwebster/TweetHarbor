@@ -11,6 +11,7 @@ namespace TweetHarbor.Tests.Helpers
     {
         TestableDbSet<User> users = new TestableDbSet<User>();
         TestableDbSet<Project> projects = new TestableDbSet<Project>();
+        TestableDbSet<TwitterMessageRecipient> messageRecipients = new TestableDbSet<TwitterMessageRecipient>();
 
         public System.Data.Entity.IDbSet<Models.User> Users
         {
@@ -36,14 +37,26 @@ namespace TweetHarbor.Tests.Helpers
             }
         }
 
+        public System.Data.Entity.IDbSet<Models.TwitterMessageRecipient> MessageRecipients
+        {
+            get
+            {
+                return this.messageRecipients;
+            }
+            set
+            {
+                this.messageRecipients = (TestableDbSet<TwitterMessageRecipient>)value;
+            }
+        }
+
         public int SaveChanges()
         {
-            return 1;   
+            return 1;
         }
 
         public void Dispose()
         {
-            
+
         }
     }
 }

@@ -6,10 +6,10 @@
     currentTemplateText = string.IsNullOrEmpty(currentTemplateText) ?
         editorType == TweetHarbor.Models.TemplateEditorTypes.Success ? Messages.DefaultSuccessTemplate : Messages.DefaultFailureTemplate : currentTemplateText;
 }
-<div class='template_display' id="template_display_@(Model.Project.ProjectName)_@(Model.TemplateEditorType)">
+<div class='template_display' id="template_display_@(Model.Project.ProjectName.Replace(" ","_"))_@(Model.TemplateEditorType)">
     @Html.Raw(currentTemplateText)
 </div>
-<div class='template_edit' id="template_edit_@(Model.Project.ProjectName)_@(Model.TemplateEditorType)">
+<div class='template_edit' id="template_edit_@(Model.Project.ProjectName.Replace(" ","_"))_@(Model.TemplateEditorType)">
     <div class='template_edit_toolbar'>
         <a href="javascript:void(0);" title="Save Template" class='template_save_button' project="@Model.Project.ProjectName" templateType="@(Model.TemplateEditorType)">
             <img src="@Url.Content("~/Content/disc.png")" height="25"  /></a> <a href="javascript:void(0);"

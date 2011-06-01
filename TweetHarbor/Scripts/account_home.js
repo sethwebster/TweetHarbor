@@ -72,14 +72,76 @@
         { id: $(this).attr("project"), TemplateType: $(this).attr("templateType"), Value: $(this).parent().next("textarea").val() },
         function (res) {
             if (res.Success) {
-                $("#template_edit_" + _this.attr("project") + "_" + _this.attr("templateType")).hide();
-                $("#template_display_" + _this.attr("project") + "_" + _this.attr("templateType")).text(_this.parent().next("textarea").val()).show();
+                $("#template_edit_" + _this.attr("project").toString().replace(" ", "_") + "_" + _this.attr("templateType")).hide();
+                $("#template_display_" + _this.attr("project").toString().replace(" ", "_") + "_" + _this.attr("templateType")).text(_this.parent().next("textarea").val()).show();
             }
             else {
                 // error
             }
         }, "json");
     });
+
+    // Recipient Editing
+    $(".recipient_edit_button").click(function () {
+
+        $("#recipients_" + $(this).attr("rel")).toggle("fast");
+    });
+
+    $(".recipient_add_button").click(function () {
+        var proj = $(this).attr("project");
+        var val = $(this).prev("input").val();
+        var _this = $(this);
+        if ($.trim(val).length == 0) {
+            _this.prevAll(".recipients_status_message").first().text("Please enter a Twitter screen name");
+        }
+        $.post("/Projects/AddMessageRecipient",
+        { id: proj, value: val },
+        function (res) {
+            if (res.Success) {
+                _this.prevAll(".recipients_status_message").first().text("");
+                _this.prev("input").val("");
+                var list = _this.nextAll(".recipient_list").first();
+                if (null != list && list.attr("rel") == "empty") {
+                    list.text("");
+                    list.attr("rel", "");
+                }
+                _this.nextAll(".recipient_list").first().append("<li><a class='recipient_remove_button' project='" + proj + "' recipient='" + val + "'>x</a>" + val + "</li>");
+                bindRemoveHandler();
+            }
+            else {
+                //display error
+                _this.prevAll(".recipients_status_message").first().hide().text(res.Error).fadeIn("fast");
+            }
+        },
+        "json");
+    });
+
+    function bindRemoveHandler() {
+        $(".recipient_remove_button").unbind("click");
+        $(".recipient_remove_button").click(function () {
+            var proj = $(this).attr("project");
+            var val = $(this).attr("recipient");
+            var _this = $(this);
+            $.post("/Projects/RemoveMessageRecipient",
+        { id: proj, recipient: val },
+        function (res) {
+            if (res.Success) {
+                var el = _this.parent().parent();
+                _this.parent().remove();
+                if (el.children().length == 0) {
+                    el.hide().html("<li><em>No message recipients specified - <strong>No direct messages will be sent</strong></em></li>").fadeIn();
+                    el.attr('rel', 'empty');
+                }
+            }
+            else {
+                //display error
+                _this.prevAll(".recipients_status_message").first().hide().text(res.Error).fadeIn("fast");
+            }
+        },
+        "json");
+        });
+    }
+    bindRemoveHandler();
 });
 
 jQuery.fn.extend({

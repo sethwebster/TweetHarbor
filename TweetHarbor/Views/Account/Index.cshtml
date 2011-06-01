@@ -70,6 +70,9 @@
                     <th>
                         Templates
                     </th>
+                    <th>
+                        Recipients
+                    </th>
                 </tr>
                 @foreach (var p in Model.Projects)
                 { 
@@ -90,11 +93,18 @@
                             <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPrivateTweetOnSuccess" @(p.SendPrivateTweetOnSuccess ? "Checked" : "")/>
                         </td>
                         <td>
-                            <a href="javascript:void(0);" class='template_edit_button' rel="@p.ProjectName">Edit</a>
+                            <a href="javascript:void(0);" class='template_edit_button' rel="@(p.ProjectName.Replace(" ", "_"))">
+                                Edit</a>
+                        </td>
+                        <td>
+                            <a href="javascript:void(0);" class='recipient_edit_button' rel="@(p.ProjectName.Replace(" ", "_"))">
+                                Edit</a>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="6" id="templates_@(p.ProjectName)" style="display:none">
+                        <td colspan="7" id="templates_@(p.ProjectName.Replace(" ", "_"))" style="display:none">
+                            <h4>
+                                Message Templates</h4>
                             <table id="template_table">
                                 <tr>
                                     <th>
@@ -113,6 +123,38 @@
                                     </td>
                                 </tr>
                             </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" id="recipients_@(p.ProjectName.Replace(" ", "_"))" class='section message_recipients'>
+                            <h4>
+                                Direct Message Recipients</h4>
+                            <div class='error recipients_status_message'>
+                            </div>
+                            <input type="text" />
+                            <a href="javascript:void(0);" class='recipient_add_button' project="@p.ProjectName">
+                                Add</a>
+                            <div class='clear'>
+                            </div>
+                            @if (p.MessageRecipients.Count > 0)
+                            {
+                                <ul class='recipient_list'>
+                                    @foreach (var r in p.MessageRecipients)
+                                    { 
+                                        <li><a class='recipient_remove_button' project='@p.ProjectName' recipient='@r.ScreenName'>
+                                            x </a>
+                                            @r.ScreenName
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            { 
+                                <ul class='recipient_list' rel="empty">
+                                    <li><em>No message recipients specified - <strong>No direct messages will be sent</strong></em></li>
+                                </ul>
+
+                            }
                         </td>
                     </tr>
                 }

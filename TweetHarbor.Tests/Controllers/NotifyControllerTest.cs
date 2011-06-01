@@ -96,6 +96,8 @@ namespace TweetHarbor.Tests.Controllers
 
             db.Projects.Add(proj);
 
+            proj.MessageRecipients.Add(new TwitterMessageRecipient() { ScreenName = "sethwebster" });
+
             user.Projects = new Collection<Project>();
             user.Projects.Add(proj);
 
