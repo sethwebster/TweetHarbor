@@ -51,8 +51,6 @@ namespace TweetHarbor.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
-            TwitterService s = new TwitterService();
-            
             kernel.Bind<ITweetHarborDbContext>().To<TweetHarborDbContext>();
 #if OFFLINE
             kernel.Bind<ITweetHarborTwitterService>().To<TweetHarborTwitterServiceOffline>().WithConstructorArgument("ConsumerKey", TwitterHelper.ConsumerKey).WithConstructorArgument("ConsumerSecret", TwitterHelper.ConsumerSecret);
