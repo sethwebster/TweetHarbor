@@ -12,6 +12,15 @@ namespace TweetHarbor.Tests.Helpers
         TestableDbSet<User> users = new TestableDbSet<User>();
         TestableDbSet<Project> projects = new TestableDbSet<Project>();
         TestableDbSet<TwitterMessageRecipient> messageRecipients = new TestableDbSet<TwitterMessageRecipient>();
+        TestableDbSet<LogEntry> logEntries = new TestableDbSet<LogEntry>();
+
+        public System.Data.Entity.IDbSet<LogEntry> LogEntries
+        {
+            get { return logEntries; }
+            set { logEntries = (TestableDbSet<LogEntry>)value; }
+        }
+
+
 
         public System.Data.Entity.IDbSet<Models.User> Users
         {

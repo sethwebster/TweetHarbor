@@ -116,6 +116,7 @@
     <Compile Include="Models\AccountModels.cs" />
     <Compile Include="Models\EmailHelper.cs" />
     <Compile Include="Models\JsonResultModel.cs" />
+    <Compile Include="Models\LogEntry.cs" />
     <Compile Include="Models\Notification.cs" />
     <Compile Include="Models\Project.cs" />
     <Compile Include="Models\StringExtensions.cs" />
