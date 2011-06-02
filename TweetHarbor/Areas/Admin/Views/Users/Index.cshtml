@@ -1,0 +1,71 @@
+﻿@model IEnumerable<TweetHarbor.Models.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>User Name</th>
+        <th>
+            OAuthToken
+        </th>
+        <th>
+            OAuthTokenSecret
+        </th>
+        <th>
+            UniqueId
+        </th>
+        <th>
+            EmailAddress
+        </th>
+        <th>
+            UserProfilePicUrl
+        </th>
+        <th>
+            SendPrivateTweet
+        </th>
+        <th>
+            SendPublicTweet
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.TwitterUserName }) |
+            @Html.ActionLink("Details", "Details", new { id=item.TwitterUserName }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.TwitterUserName })
+        </td>*@
+        <td>@item.TwitterUserName</td>
+        <td>
+            @item.OAuthToken
+        </td>
+        <td>
+            @item.OAuthTokenSecret
+        </td>
+        <td>
+            @item.UniqueId
+        </td>
+        <td>
+            @item.EmailAddress
+        </td>
+        <td>
+            @item.UserProfilePicUrl
+        </td>
+        <td>
+            @item.SendPrivateTweet
+        </td>
+        <td>
+            @item.SendPublicTweet
+        </td>
+    </tr>
+}
+
+</table>
+
