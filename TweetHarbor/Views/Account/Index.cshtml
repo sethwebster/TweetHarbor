@@ -2,6 +2,8 @@
 @{
     ViewBag.Title = "Your Account";
 }
+<link href="@Url.Content("~/Content/iphone-style-checkboxes.css")" rel="stylesheet" type="text/css" media="screen"/>
+<script src="@Url.Content("~/scripts/iphone-style-checkboxes.js")" type="text/javascript"></script>
 <script type="text/javascript" src="@Url.Content("~/Scripts/account_home.js")"></script>
 <h2>
     Your Account</h2>
@@ -36,197 +38,196 @@
         <div id="tweet_options">
             <input type="checkbox" @(Model.SendPrivateTweet ? "Checked" : "") id="SendPrivateTweet" class='global_notification_toggle'/><label
                 for="SendPrivateTweet" title="(Disable to prevent any direct messages for all
-                applications)">Direct Messages Enabled
-            </label>
-            <input type="checkbox" @(Model.SendPublicTweet ? "Checked" : "") id="SendPublicTweet" class='global_notification_toggle'/><label
-                for="SendPublicTweet" title=" (Disable to prevent any public messages
+                applications)">
+Direct Messages Enabled </label>
+<input type="checkbox" @(Model.SendPublicTweet ? "Checked" : "") id="SendPublicTweet" class='global_notification_toggle'/><label
+    for="SendPublicTweet" title=" (Disable to prevent any public messages
                 for all applications)">Public Tweets Enabled</label>
-            <div id="global_toggle_status_message" class="error">
-            </div>
-        </div>
-        <h3>
-            Applications</h3>
-        <div id="toggle_status_message">
-        </div>
-        @if (Model.Projects.Count > 0)
+<div id="global_toggle_status_message" class="error">
+</div>
+</div>
+<h3>
+    Applications</h3>
+<div id="toggle_status_message">
+</div>
+@if (Model.Projects.Count > 0)
         {
-            <table id="projects_table">
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Tweet Successful Builds
-                    </th>
-                    <th>
-                        DM Successful Builds
-                    </th>
-                    <th>
-                        Tweet Failed Builds
-                    </th>
-                    <th>
-                        DM Failed Builds
-                    </th>
-                    <th>
-                        Templates
-                    </th>
-                    <th>
-                        Recipients
-                    </th>
-                    <th>
-                        Notifications
-                    </th>
-                </tr>
-                @foreach (var p in Model.Projects)
+    <table id="projects_table">
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Tweet Successful Builds
+            </th>
+            <th>
+                DM Successful Builds
+            </th>
+            <th>
+                Tweet Failed Builds
+            </th>
+            <th>
+                DM Failed Builds
+            </th>
+            <th>
+                Templates
+            </th>
+            <th>
+                Recipients
+            </th>
+            <th>
+                Notifications
+            </th>
+        </tr>
+        @foreach (var p in Model.Projects)
                 {
                     var statusClass = p.ProjectNotifications.Count() > 0
                         && p.ProjectNotifications.OrderByDescending(pr => pr.NotificationDate).First().Build.status == "failed" ?
                         "build_failed" : "build_succeeded";
-                    <tr>
-                        <td class='@statusClass'>
-                            <a href="https://appharbor.com/application/@p.ProjectName" target="_blank">@p.ProjectName</a>
-                        </td>
-                        <td class='@statusClass'>
-                            <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPublicTweetOnSuccess" @(p.SendPublicTweetOnSuccess ? "Checked" : "") />
-                        </td>
-                        <td class='@statusClass'>
-                            <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPrivateTweetOnSuccess" @(p.SendPrivateTweetOnSuccess ? "Checked" : "")/>
-                        </td>
-                        <td class='@statusClass'>
-                            <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPublicTweetOnFailure" @(p.SendPublicTweetOnFailure ? "Checked" : "")/>
-                        </td>
-                        <td class='@statusClass'>
-                            <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPrivateTweetOnSuccess" @(p.SendPrivateTweetOnSuccess ? "Checked" : "")/>
-                        </td>
-                        <td class='@statusClass'>
-                            <a href="javascript:void(0);" class='template_edit_button' rel="@(p.ProjectName.Replace(" ", "_"))">
-                                <img src="@Url.Content("~/Content/pencil.png")" height="25" /></a>
-                        </td>
-                        <td class='@statusClass'>
-                            <a href="javascript:void(0);" class='recipient_edit_button' rel="@(p.ProjectName.Replace(" ", "_"))">
-                                <img src="@Url.Content("~/Content/pencil.png")" height="25" /></a>
-                        </td>
-                        <td>
-                            <a href="javascript:void(0);" class='show_notifications_button' rel="@(p.ProjectName.Replace(" ", "_"))">
-                                <img src="@Url.Content("~/Content/pencil.png")" height="25" alt="Show Notifications" /></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="7" id="templates_@(p.ProjectName.Replace(" ", "_"))" style="display:none">
-                            <h4>
-                                Message Templates</h4>
-                            <table id="template_table">
-                                <tr>
-                                    <th>
-                                        Successful Build Template
-                                    </th>
-                                    <th>
-                                        Failed Build Template
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        @{Html.RenderPartial("_TemplateEditor", new TweetHarbor.Models.TemplateEditorModel() { Project = p, TemplateEditorType = TweetHarbor.Models.TemplateEditorTypes.Success });}
-                                    </td>
-                                    <td>
-                                        @{Html.RenderPartial("_TemplateEditor", new TweetHarbor.Models.TemplateEditorModel() { Project = p, TemplateEditorType = TweetHarbor.Models.TemplateEditorTypes.Failure });}
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="7" id="recipients_@(p.ProjectName.Replace(" ", "_"))" class='section message_recipients'>
-                            <h4>
-                                Direct Message Recipients</h4>
-                            <div class='error recipients_status_message'>
-                            </div>
-                            <input type="text" />
-                            <a href="javascript:void(0);" class='recipient_add_button' project="@p.ProjectName">
-                                Add</a>
-                            <div class='clear'>
-                            </div>
-                            @if (p.MessageRecipients.Count > 0)
+            <tr>
+                <td class='@statusClass'>
+                    <a href="https://appharbor.com/application/@p.ProjectName" target="_blank">@p.ProjectName</a>
+                </td>
+                <td class='@statusClass'>
+                    <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPublicTweetOnSuccess" @(p.SendPublicTweetOnSuccess ? "Checked" : "") />
+                </td>
+                <td class='@statusClass'>
+                    <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPrivateTweetOnSuccess" @(p.SendPrivateTweetOnSuccess ? "Checked" : "")/>
+                </td>
+                <td class='@statusClass'>
+                    <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPublicTweetOnFailure" @(p.SendPublicTweetOnFailure ? "Checked" : "")/>
+                </td>
+                <td class='@statusClass'>
+                    <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPrivateTweetOnSuccess" @(p.SendPrivateTweetOnSuccess ? "Checked" : "")/>
+                </td>
+                <td class='@statusClass'>
+                    <a href="javascript:void(0);" class='template_edit_button' rel="@(p.ProjectName.Replace(" ", "_"))">
+                        <img src="@Url.Content("~/Content/pencil.png")" height="25" /></a>
+                </td>
+                <td class='@statusClass'>
+                    <a href="javascript:void(0);" class='recipient_edit_button' rel="@(p.ProjectName.Replace(" ", "_"))">
+                        <img src="@Url.Content("~/Content/pencil.png")" height="25" /></a>
+                </td>
+                <td>
+                    <a href="javascript:void(0);" class='show_notifications_button' rel="@(p.ProjectName.Replace(" ", "_"))">
+                        <img src="@Url.Content("~/Content/pencil.png")" height="25" alt="Show Notifications" /></a>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7" id="templates_@(p.ProjectName.Replace(" ", "_"))" style="display:none">
+                    <h4>
+                        Message Templates</h4>
+                    <table id="template_table">
+                        <tr>
+                            <th>
+                                Successful Build Template
+                            </th>
+                            <th>
+                                Failed Build Template
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @{Html.RenderPartial("_TemplateEditor", new TweetHarbor.Models.TemplateEditorModel() { Project = p, TemplateEditorType = TweetHarbor.Models.TemplateEditorTypes.Success });}
+                            </td>
+                            <td>
+                                @{Html.RenderPartial("_TemplateEditor", new TweetHarbor.Models.TemplateEditorModel() { Project = p, TemplateEditorType = TweetHarbor.Models.TemplateEditorTypes.Failure });}
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7" id="recipients_@(p.ProjectName.Replace(" ", "_"))" class='section message_recipients'>
+                    <h4>
+                        Direct Message Recipients</h4>
+                    <div class='error recipients_status_message'>
+                    </div>
+                    <input type="text" />
+                    <a href="javascript:void(0);" class='recipient_add_button' project="@p.ProjectName">
+                        Add</a>
+                    <div class='clear'>
+                    </div>
+                    @if (p.MessageRecipients.Count > 0)
                             {
-                                <ul class='recipient_list'>
-                                    @foreach (var r in p.MessageRecipients)
+                        <ul class='recipient_list'>
+                            @foreach (var r in p.MessageRecipients)
                                     { 
-                                        <li><a class='recipient_remove_button' project='@p.ProjectName' recipient='@r.ScreenName'>
-                                            x </a>
-                                            @r.ScreenName
-                                        </li>
+                                <li><a class='recipient_remove_button' project='@p.ProjectName' recipient='@r.ScreenName'>
+                                    x </a>
+                                    @r.ScreenName
+                                </li>
                                     }
-                                </ul>
+                        </ul>
                             }
                             else
                             { 
-                                <ul class='recipient_list' rel="empty">
-                                    <li><em>No message recipients specified - <strong>No direct messages will be sent</strong></em></li>
-                                </ul>
+                        <ul class='recipient_list' rel="empty">
+                            <li><em>No message recipients specified - <strong>No direct messages will be sent</strong></em></li>
+                        </ul>
 
                             }
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="7" class='notifications_list' id="notifications_@(p.ProjectName.Replace(" ", "_"))">
-                            <h4>
-                                Notifications</h4>
-                            @if (p.ProjectNotifications.Count > 0)
+                </td>
+            </tr>
+            <tr>
+                <td colspan="7" class='notifications_list' id="notifications_@(p.ProjectName.Replace(" ", "_"))">
+                    <h4>
+                        Notifications</h4>
+                    @if (p.ProjectNotifications.Count > 0)
                             {
-                                <ul>
-                                    @foreach (var r in p.ProjectNotifications)
+                        <ul>
+                            @foreach (var r in p.ProjectNotifications)
                                     { 
-                                        <li>
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th>
-                                                            Status
-                                                        </th>
-                                                        <th>
-                                                            Message
-                                                        </th>
-                                                        <th>
-                                                            Date/Time
-                                                        </th>
-                                                        <th>
-                                                            Id
-                                                        </th>
-                                                    </tr>
-                                                </thead>
-                                                <tr>
-                                                    <td>@r.Build.status
-                                                    </td>
-                                                    <td>@r.Build.commit.message
-                                                    </td>
-                                                    <td>
-                                                        @r.NotificationDate.ToShortDateString() @r.NotificationDate.ToShortTimeString()
-                                                    </td>
-                                                    <td>
-                                                        @r.Build.commit.id
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </li>
+                                <li>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    Status
+                                                </th>
+                                                <th>
+                                                    Message
+                                                </th>
+                                                <th>
+                                                    Date/Time
+                                                </th>
+                                                <th>
+                                                    Id
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tr>
+                                            <td>@r.Build.status
+                                            </td>
+                                            <td>@r.Build.commit.message
+                                            </td>
+                                            <td>
+                                                @r.NotificationDate.ToShortDateString() @r.NotificationDate.ToShortTimeString()
+                                            </td>
+                                            <td>
+                                                @r.Build.commit.id
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </li>
                                     }
-                                </ul>
+                        </ul>
                             }
                             else
                             { 
-                                <ul class='recipient_list' rel="empty">
-                                    <li><em>No message recipients specified - <strong>No direct messages will be sent</strong></em></li>
-                                </ul>
+                        <ul class='recipient_list' rel="empty">
+                            <li><em>No message recipients specified - <strong>No direct messages will be sent</strong></em></li>
+                        </ul>
 
                             }
-                        </td>
-                    </tr>
+                </td>
+            </tr>
                 }
-            </table>    
+    </table>    
         }
         else
         {
-            <em>Applications will appear here once a notification has been received from AppHarbor
-                - Set up your service hook and trigger a build to make this happen</em>
+    <em>Applications will appear here once a notification has been received from AppHarbor
+        - Set up your service hook and trigger a build to make this happen</em>
         }
-    </div>
-</div>
+</div> </div> 

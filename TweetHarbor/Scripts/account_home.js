@@ -48,6 +48,7 @@
             "json");
     });
 
+      
 
     // Templte Editing
     $(".template_edit_button").click(function () {
@@ -149,6 +150,13 @@
         $("#notifications_" + $(this).attr("rel")).toggle("fast");
     });
 
+
+    $(':checkbox').iphoneStyle();
+
+    $('.iPhoneCheckContainer').click(function () {
+        var box = $(this).find('input:checkbox');
+        alert(box.attr('rel'));
+    });
 
 });
 

@@ -142,7 +142,14 @@
   <ItemGroup>
     <Content Include="App_Readme\glimpse.readme.txt" />
     <Content Include="Content\disc.png" />
+    <Content Include="Content\iphone-style-checkboxes\off.png" />
+    <Content Include="Content\iphone-style-checkboxes\on.png" />
+    <Content Include="Content\iphone-style-checkboxes\slider.png" />
+    <Content Include="Content\iphone-style-checkboxes\slider_center.png" />
+    <Content Include="Content\iphone-style-checkboxes\slider_left.png" />
+    <Content Include="Content\iphone-style-checkboxes\slider_right.png" />
     <Content Include="Content\pencil.png" />
+    <Content Include="Content\iphone-style-checkboxes.css" />
     <Content Include="Content\twitter.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -173,6 +180,7 @@
     <Content Include="Content\themes\base\jquery.ui.theme.css" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\account_home.js" />
+    <Content Include="Scripts\iphone-style-checkboxes.js" />
     <Content Include="Scripts\jquery-1.5.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.5.1.js" />
     <Content Include="Scripts\jquery-1.5.1.min.js" />
