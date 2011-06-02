@@ -27,7 +27,7 @@ namespace TweetHarbor.Controllers
 
         [HttpPost]
         [Authorize]
-        public JsonResult UpdateNotificationToggle(string Id, string TweetType, bool Value)
+        public JsonResult ProjectNotificationToggle(string Id, string TweetType, bool Value)
         {
             if (null != HttpContext)
             {

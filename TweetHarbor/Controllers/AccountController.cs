@@ -123,7 +123,7 @@ namespace TweetHarbor.Controllers
 
         [Authorize]
         [HttpPost]
-        public JsonResult UpdateTweetToggle(string TweetType, bool Value)
+        public JsonResult GlobalNotificationToggle(string TweetType, bool Value)
         {
             if (null != HttpContext)
             {

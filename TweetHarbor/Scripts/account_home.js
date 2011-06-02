@@ -18,37 +18,7 @@
                 }, "json");
         });
     });
-    // Global Pub/Priv Tweets
-    $(".global_notification_toggle").click(function () {
-        var e = $(this);
-        $.post("/Account/UpdateTweetToggle/",
-            { TweetType: e.attr("id"), Value: e.is(":checked") },
-            function (res) {
-                if (res.Success) {
-                }
-                else {
-                    $("#global_toggle_status_message").text(res.Error);
-                }
-            },
-            "json");
-    });
 
-    // App-Level Tweets
-    $(".notification_toggle").click(function () {
-        var e = $(this);
-        $.post("/Projects/UpdateNotificationToggle/",
-            { id: e.attr("rel"), Value: e.is(":checked"), TweetType: e.attr("nt") },
-            function (res) {
-                if (res.Success) {
-                }
-                else {
-                    $("#toggle_status_message").text(res.Error);
-                }
-            },
-            "json");
-    });
-
-      
 
     // Templte Editing
     $(".template_edit_button").click(function () {
@@ -154,8 +124,32 @@
     $(':checkbox').iphoneStyle();
 
     $('.iPhoneCheckContainer').click(function () {
-        var box = $(this).find('input:checkbox');
-        alert(box.attr('rel'));
+        var e = $(this).find('input:checkbox');
+        var url = "";
+        var data = {};
+        var statusDivId = "";
+        switch (e.attr("toggleType")) {
+            case "GlobalNotificationToggle":
+                url = "/Account/GlobalNotificationToggle";
+                data = { TweetType: e.attr("notification"), Value: e.is(":checked") };
+                statusDivId = "#global_toggle_status_message"
+                break;
+            case "ProjectNotificationToggle":
+                url = "/Projects/ProjectNotificationToggle";
+                data = { Id: e.attr("project"), TweetType: e.attr("notification"), Value: e.is(":checked") };
+                statusDivId = "#toggle_status_message"
+                break;
+        }
+        $.post(url,
+            data,
+            function (res) {
+                if (res.Success) {
+                }
+                else {
+                    $("#toggle_status_message").text(res.Error);
+                }
+            },
+            "json");
     });
 
 });
