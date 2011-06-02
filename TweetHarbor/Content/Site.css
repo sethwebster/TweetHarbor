@@ -510,6 +510,10 @@ ul.recipient_list li:hover
     margin-right: 5px;
 }
 
+.notifications_list
+{
+    display:none;
+}
 .build_succeeded
 {
     background-color: #8AFF8A;

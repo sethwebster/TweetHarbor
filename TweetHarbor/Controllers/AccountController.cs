@@ -37,6 +37,7 @@ namespace TweetHarbor.Controllers
                     .Include("Projects.MessageRecipients")
                     .Include("Projects.ProjectNotifications")
                     .Include("Projects.ProjectNotifications.Build")
+                    .Include("Projects.ProjectNotifications.Build.commit")
                     .FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
 
                 if (null != u)
