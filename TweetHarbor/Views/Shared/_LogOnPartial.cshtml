@@ -1,7 +1,8 @@
-﻿@if (Request.IsAuthenticated && null!=Html.CurrentUser())
-        <a href="/Account">
-            <img src="@Html.CurrentUser().UserProfilePicUrl" class='user_partial_small_pic' valign="middle" />@Html.CurrentUser().TwitterUserName</a>
-        @Html.ActionLink("Sign Out", "LogOff", "Account")
+﻿@if (Request.IsAuthenticated && null != Html.CurrentUser())
+{ 
+    <a href="/Account">
+        <img src="@Html.CurrentUser().UserProfilePicUrl" class='user_partial_small_pic' valign="middle" />@Html.CurrentUser().TwitterUserName</a>
+    @Html.ActionLink("Sign Out", "LogOff", "Account")
     </div>
 }
 else
