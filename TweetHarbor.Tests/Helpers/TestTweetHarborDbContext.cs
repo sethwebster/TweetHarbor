@@ -13,6 +13,17 @@ namespace TweetHarbor.Tests.Helpers
         TestableDbSet<Project> projects = new TestableDbSet<Project>();
         TestableDbSet<TwitterMessageRecipient> messageRecipients = new TestableDbSet<TwitterMessageRecipient>();
         TestableDbSet<LogEntry> logEntries = new TestableDbSet<LogEntry>();
+        TestableDbSet<ProjectNotification> projectNotifications = new TestableDbSet<ProjectNotification>();
+
+        TestableDbSet<Build> builds = new TestableDbSet<Build>();
+
+        TestableDbSet<Commit> commits = new TestableDbSet<Commit>();
+
+        public System.Data.Entity.IDbSet<Commit> Commits
+        {
+            get { return commits; }
+            set { commits = (TestableDbSet<Commit>)value; }
+        }
 
         public System.Data.Entity.IDbSet<LogEntry> LogEntries
         {
@@ -20,7 +31,17 @@ namespace TweetHarbor.Tests.Helpers
             set { logEntries = (TestableDbSet<LogEntry>)value; }
         }
 
+        public System.Data.Entity.IDbSet<ProjectNotification> ProjectNotifications
+        {
+            get { return projectNotifications; }
+            set { projectNotifications = (TestableDbSet<ProjectNotification>)value; }
+        }
 
+        public System.Data.Entity.IDbSet<Build> Builds
+        {
+            get { return builds; }
+            set { builds = (TestableDbSet<Build>)value; }
+        }
 
         public System.Data.Entity.IDbSet<Models.User> Users
         {

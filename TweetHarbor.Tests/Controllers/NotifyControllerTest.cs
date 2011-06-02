@@ -74,7 +74,7 @@ namespace TweetHarbor.Tests.Controllers
 
             WebClient wc = new WebClient();
             wc.Headers.Add("Content-Type", "application/json");
-            var data = wc.UploadData("http://tweetharbor.apphb.com/notify/new/appharbor?token=27d92bb0d7a0b751d36bfe0051624b15", "POST", Encoding.ASCII.GetBytes(testStr));
+            var data = wc.UploadData("http://localhost:9090/notify/new/localtestuser?token=e7d9b421-93cb-4ad4-9158-5f793b93ce83", "POST", Encoding.ASCII.GetBytes(testStr));
 
             var str = Encoding.ASCII.GetString(data);
         }

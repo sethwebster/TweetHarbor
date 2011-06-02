@@ -21,6 +21,9 @@ namespace TweetHarbor.Models
         public IDbSet<Project> Projects { get; set; }
         public IDbSet<TwitterMessageRecipient> MessageRecipients { get; set; }
         public IDbSet<LogEntry> LogEntries { get; set; }
+        public IDbSet<ProjectNotification> ProjectNotifications { get; set; }
+        public IDbSet<Build> Builds { get; set; }
+        public IDbSet<Commit> Commits { get; set; }
         public void Dispose()
         {
             base.Dispose();

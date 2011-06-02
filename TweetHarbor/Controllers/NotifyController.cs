@@ -44,6 +44,7 @@ namespace TweetHarbor.Controllers
                 var project = CreateProjectIfNecessary(notification, user);
                 if (null != project)
                 {
+                    SaveNotification(notification, project);
                     // start our connection to twitter
                     twitter.AuthenticateWith(user.OAuthToken, user.OAuthTokenSecret);
 
@@ -104,6 +105,15 @@ namespace TweetHarbor.Controllers
                 return Json(new JsonResultModel() { Success = false, Error = "NotAuthorized" });
             }
 
+        }
+
+        private void SaveNotification(Notification notification, Project project)
+        {
+            ProjectNotification projNotification = new ProjectNotification();
+            projNotification.NotificationDate = DateTime.Now;
+            projNotification.Build = notification.build;
+            project.ProjectNotifications.Add(projNotification);
+            database.SaveChanges();
         }
 
         // TODO: Create a richer tokenization approach (string replace isn't pretty, but worked)

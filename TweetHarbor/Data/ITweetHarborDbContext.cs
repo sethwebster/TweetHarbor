@@ -14,6 +14,9 @@ namespace TweetHarbor.Data
         IDbSet<Project> Projects { get; set; }
         IDbSet<TwitterMessageRecipient> MessageRecipients { get; set; }
         IDbSet<LogEntry> LogEntries { get; set; }
+        IDbSet<ProjectNotification> ProjectNotifications { get; set; }
+        IDbSet<Build> Builds { get; set; }
+        IDbSet<Commit> Commits { get; set; }
         int SaveChanges();
     }
 
