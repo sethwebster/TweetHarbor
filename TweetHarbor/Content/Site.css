@@ -369,14 +369,14 @@ div#title
 
 #account h3, #account h4
 {
-    margin:0px;
-    padding:0px;
+    margin: 0px;
+    padding: 0px;
 }
 #account #img_profile
 {
     float: left;
     margin: 5px;
-     border-radius: 4px;
+    border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     -moz-box-shadow: 1px 1px 1px #666;
@@ -395,23 +395,23 @@ div#title
     -moz-box-shadow: 1px 1px 1px #666;
     -webkit-box-shadow: 1px 1px 1px #666;
     box-shadow: 1px 1px 1px #666;
-    width:100%;
+    width: 100%;
 }
 
 #account #email_address_edit
 {
-    display:none;
+    display: none;
 }
 
 #account #email_address_edit #saveEmailLink img
 {
-    position:relative;
-    top:5px;
+    position: relative;
+    top: 5px;
 }
 #projects_table
 {
-    width:100%;
-     border-radius: 4px;
+    width: 100%;
+    border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     -moz-box-shadow: 1px 1px 1px #666;
@@ -421,8 +421,8 @@ div#title
 
 #template_table
 {
-    width:100%;
-     border-radius: 4px;
+    width: 100%;
+    border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     -moz-box-shadow: 1px 1px 1px #666;
@@ -432,18 +432,18 @@ div#title
 
 #template_table td
 {
-    width:50%;
+    width: 50%;
 }
 
 .template_edit
 {
-    display:none;
+    display: none;
 }
 
 .template_edit_field
 {
-    width:100%;
-    border-color:#ccc;
+    width: 100%;
+    border-color: #ccc;
     border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -452,38 +452,39 @@ div#title
 
 #tweet_options
 {
-    float:right;
+    float: right;
 }
 
 .section
 {
-    margin-bottom:20px;
+    margin-bottom: 20px;
 }
 
 .template_field_insert
 {
-    font-size:.8em;
+    font-size: .8em;
 }
 
 .message_recipients
 {
- displaY:none;   
+    display: none;
 }
 ul.recipient_list
 {
-    margin:0px;padding:0px;
-    list-style:none;
-    width:205px;
-    cursor:pointer;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    width: 205px;
+    cursor: pointer;
 }
 
 ul.recipient_list li
 {
     padding: 3px;
     width: auto;
-    color:#fff;
+    color: #fff;
     border: 1px solid #ccc;
-    background-color: #DFE1FF;
+    background-color: #A4A8FF;
     border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
@@ -497,15 +498,23 @@ ul.recipient_list li:hover
 
 .recipient_remove_button
 {
-    float:right;
-
+    float: right;
 }
 
 #user_partial
 {
-    margin-top:5px;
+    margin-top: 5px;
 }
 #user_partial .user_partial_small_pic
 {
-    margin-right:5px;
+    margin-right: 5px;
+}
+
+.build_succeeded
+{
+    background-color: #8AFF8A;
+}
+.build_failed
+{
+    background-color: #F59881;
 }

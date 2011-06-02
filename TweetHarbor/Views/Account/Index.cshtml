@@ -75,30 +75,33 @@
                     </th>
                 </tr>
                 @foreach (var p in Model.Projects)
-                { 
+                {
+                    var statusClass = p.ProjectNotifications.Count() > 0
+                        && p.ProjectNotifications.OrderByDescending(pr => pr.NotificationDate).First().Build.status == "failed" ?
+                        "build_failed" : "build_succeeded";
                     <tr>
-                        <td>
+                        <td class='@statusClass'>
                             <a href="https://appharbor.com/application/@p.ProjectName" target="_blank">@p.ProjectName</a>
-                        </td>
-                        <td>
+                        </td class='@statusClass'>
+                        <td class='@statusClass'>
                             <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPublicTweetOnSuccess" @(p.SendPublicTweetOnSuccess ? "Checked" : "") />
                         </td>
-                        <td>
+                        <td class='@statusClass'>
                             <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPrivateTweetOnSuccess" @(p.SendPrivateTweetOnSuccess ? "Checked" : "")/>
                         </td>
-                        <td>
+                        <td class='@statusClass'>
                             <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPublicTweetOnFailure" @(p.SendPublicTweetOnFailure ? "Checked" : "")/>
                         </td>
-                        <td>
+                        <td class='@statusClass'>
                             <input type="checkbox" class='notification_toggle' rel="@p.ProjectName" nt="SendPrivateTweetOnSuccess" @(p.SendPrivateTweetOnSuccess ? "Checked" : "")/>
                         </td>
-                        <td>
+                        <td class='@statusClass'>
                             <a href="javascript:void(0);" class='template_edit_button' rel="@(p.ProjectName.Replace(" ", "_"))">
-                                Edit</a>
+                                <img src="@Url.Content("~/Content/pencil.png")" height="25" /></a>
                         </td>
-                        <td>
+                        <td class='@statusClass'>
                             <a href="javascript:void(0);" class='recipient_edit_button' rel="@(p.ProjectName.Replace(" ", "_"))">
-                                Edit</a>
+                                     <img src="@Url.Content("~/Content/pencil.png")" height="25" /></a>
                         </td>
                     </tr>
                     <tr>

@@ -17,7 +17,7 @@ namespace TweetHarbor
 
     public class MvcApplication : System.Web.HttpApplication
     {
-        public static  IKernel SharedKernel { get; set; }
+        public static IKernel SharedKernel { get; set; }
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
             filters.Add(new HandleErrorAttribute());
@@ -31,7 +31,9 @@ namespace TweetHarbor
             routes.MapRoute(
                 "Default", // Route name
                 "{controller}/{action}/{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+                new { controller = "Home", action = "Index", id = UrlParameter.Optional },
+                new string[] { "TweetHarbor.Controllers" }
+                // Parameter defaults
             );
 
         }

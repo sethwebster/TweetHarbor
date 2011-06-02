@@ -35,6 +35,8 @@ namespace TweetHarbor.Controllers
                 ViewBag.UserName = HttpContext.User.Identity.Name;
                 var u = database.Users.Include("Projects")
                     .Include("Projects.MessageRecipients")
+                    .Include("Projects.ProjectNotifications")
+                    .Include("Projects.ProjectNotifications.Build")
                     .FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
 
                 if (null != u)
