@@ -1,0 +1,69 @@
+﻿@model IEnumerable<TweetHarbor.Models.Project>
+@{
+    ViewBag.Title = "Index";
+}
+<h2>
+    Index</h2>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            SendPrivateTweetOnSuccess
+        </th>
+        <th>
+            SendPublicTweetOnSuccess
+        </th>
+        <th>
+            SendPrivateTweetOnFailure
+        </th>
+        <th>
+            SendPublicTweetOnFailure
+        </th>
+        <th>
+            SuccessTemplate
+        </th>
+        <th>
+            FailureTemplate
+        </th>
+        <th>
+            User
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            @*<td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ProjectName }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ProjectName }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ProjectName })
+        </td>*@
+            <td>@item.ProjectName
+            </td>
+            <td>
+                @item.SendPrivateTweetOnSuccess
+            </td>
+            <td>
+                @item.SendPublicTweetOnSuccess
+            </td>
+            <td>
+                @item.SendPrivateTweetOnFailure
+            </td>
+            <td>
+                @item.SendPublicTweetOnFailure
+            </td>
+            <td>
+                @item.SuccessTemplate
+            </td>
+            <td>
+                @item.FailureTemplate
+            </td>
+            <td>@item.User.TwitterUserName
+            </td>
+        </tr>
+    }
+</table>
