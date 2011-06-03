@@ -26,13 +26,8 @@
         $("#templates_" + $(this).attr("rel")).toggle("fast");
     });
 
-    $(".template_display").click(function () {
-        $(this).hide().next(".template_edit").show();
-    });
-
-
     $(".template_field_insert").click(function () {
-        $(this).parent().next("textarea").insertAtCaret($(this).attr("rel"));
+        $(this).parent().next("textarea").insertAtCaret($(this).text());
     });
 
 
@@ -159,6 +154,20 @@
 
     $(':checkbox').iphoneStyle();
 
+    bindSwitches();
+    bindTemplateDisplay();
+
+});
+
+function bindTemplateDisplay() {
+    $(".template_display").click(function () {
+        $(".template_display").unbind("click");
+        $(this).hide().next(".template_edit").show();
+    });
+}
+
+function bindSwitches() {
+    $('.iPhoneCheckContainer').unbind("click");
     $('.iPhoneCheckContainer').click(function () {
         var e = $(this).find('input:checkbox');
         var url = "";
@@ -187,8 +196,150 @@
             },
             "json");
     });
+}
+
+$(document).ready(function () {
+
+    // Load Projects
+    this.ProjectManager = new ProjectsManager("projects", true);
+    this.ProjectManager.Load();
 
 });
+
+var ProjectsManager = function (targetContainerId, labelsBefore) {
+    this._targetUrl = "/Projects/UserProjects";
+    this._containerClass = "projects_list";
+    this._targetContainerId = targetContainerId;
+    this._labels = Array();
+    this._labels["SendPrivateTweetOnSuccess"] = "DM On Success";
+    this._labels["SendPublicTweetOnSuccess"] = "Tweet Success";
+    this._labels["SendPrivateTweetOnFailure"] = "DM Failure";
+    this._labels["SendPublicTweetOnFailure"] = "Tweet Failure";
+    this._labels["SendTextOnSuccess"] = "SMS Success";
+    this._labels["SendTextOnFailure"] = "SMS Failure";
+    if (labelsBefore) {
+        this._labelsBefore = true;
+    }
+    else {
+        this._labelsBefore = false;
+    }
+    this._buffer = "";
+}
+
+ProjectsManager.prototype.Load = function () {
+    var _this = this;
+    $.getJSON(this._targetUrl,
+        function (res) {
+            _this._projects = res;
+            _this.RenderProjects();
+        });
+}
+
+ProjectsManager.prototype.appendBuffer = function (s) {
+    this._buffer += s;
+}
+
+ProjectsManager.prototype.RenderProjects = function () {
+    $("#" + this._targetContainerId).html("<ul class='" + this._containerClass + "'></ul>");
+    this._container = $("#" + this._targetContainerId);
+    this._list = this._container.children().first();
+    for (var i = 0; i < this._projects.length; i++) {
+        this.RenderProject(this._projects[i]);
+    }
+
+    this._list.append(this._buffer);
+
+    $(':checkbox').iphoneStyle();
+    bindTemplateDisplay();
+    bindSwitches();
+}
+
+ProjectsManager.prototype.RenderProject = function (project) {
+
+    this.appendBuffer("<li class='list_project'>");
+    for (var k in project) {
+        switch (k) {
+            case "ProjectName":
+                this.appendBuffer("<h5>" + project[k] + "</h5>");
+                break;
+            case "SendPrivateTweetOnSuccess":
+            case "SendPublicTweetOnSuccess":
+            case "SendPrivateTweetOnFailure":
+            case "SendPublicTweetOnFailure":
+            case "SendTextOnSuccess":
+            case "SendTextOnFailure":
+                this.RenderSwitch(k, "ProjectNotificationToggle", project.ProjectName, k, project[k]);
+                break;
+            case "SuccessTemplate":
+            case "FailureTemplate":
+                this.RenderTemplateEditor(k, project.ProjectName, project[k]);
+                break;
+            default:
+                this.appendBuffer("<div class='display_" + k + "'>" + k + " " + project[k] + "</div>");
+                break;
+        }
+    }
+    this.appendBuffer("</li>");
+}
+
+ProjectsManager.prototype.RenderSwitch = function (type, toggleType, projectName, notification, checked) {
+    var label = this._labels[type];
+    var id = projectName + "_" + toggleType + "_" + notification;
+    var label = "<label id='" + id + "_label' for='" + id + "'>" + label + "</label>";
+    var s = "";
+    if (this._labelsBefore)
+        s += label;
+    s += "<input type='checkbox' id='" + id + "' class='notification_toggle' project='" + projectName + "' toggleType='" + toggleType + "' notification='" + notification + "' " + (checked ? "checked" : "") + "/>";
+    if (!this._labelsBefore) {
+        s += label;
+    }
+
+    this.appendBuffer(s);
+}
+
+/*
+*<div class='template_display' id="template_display_@(Model.Project.ProjectName.Replace(" ","_"))_@(Model.TemplateEditorType)">@Html.Raw(currentTemplateText)</div>
+<div class='template_edit' id="template_edit_@(Model.Project.ProjectName.Replace(" ","_"))_@(Model.TemplateEditorType)">
+<div class='template_edit_toolbar'>
+<a href="javascript:void(0);" title="Save Template" class='template_save_button' project="@Model.Project.ProjectName" templateType="@(Model.TemplateEditorType)">
+<img src="@Url.Content("~/Content/disc.png")" height="25"  /></a> <a href="javascript:void(0);"
+rel="{application.name}" class='template_field_insert'>{application:name}</a>
+<a href="javascript:void(0);" rel="{build:commit:message}" class='template_field_insert'>
+{build:commit:message}</a> <a href="javascript:void(0);" rel="{build:commit:id}"
+class='template_field_insert'>{build:commit:id}</a>
+</div>
+<textarea rows="5" cols="10" class='template_edit_field'>@currentTemplateText</textarea>
+</div>
+*/
+
+ProjectsManager.prototype.RenderTemplateEditor = function (type, project, currentValue) {
+    var projectId = project.replace(/ /g, "_");
+    if (currentValue == null || currentValue.length <= 0) {
+        switch (type) {
+            case "SuccessTemplate":
+                currentValue = "We just deployed another build of {application:name}  via @AppHarbor!";
+                break;
+            case "FailureTemplate":
+                currentValue = "{application:name} build failed: {build:commit:message}{build:commit:id}";
+                break;
+        }
+    }
+    var s = "";
+    s += ("<div class='template_display' id='template_display_" + projectId + "_" + type + "'>" + currentValue + "</div>");
+    s += ("<div class='template_edit' id='template_edit_" + projectId + "_" + type + "'>");
+    s += ("<div class='template_edit_toolbar'>");
+    s += ("<a href='javascript:void(0);' title='Save Template' class='template_save_button' project='" + project + "' templateType='" + type + "'>");
+    s += ("<img src='/Content/disc.png' height='25' />");
+    s += ("</a>");
+    s += ("<a class='template_field_insert'>{application:name}</a>");
+    s += ("<a class='template_field_insert'>{build:commit:message}</a>");
+    s += ("<a class='template_field_insert'>{build:commit:id}</a>");
+    s += ("</div>");
+    s += ("<textarea rows='5' cols='10' class='template_edit_field'>" + currentValue + "</textarea>");
+    s += "</div>";
+    this.appendBuffer(s);
+}
+
 
 jQuery.fn.extend({
     insertAtCaret: function (myValue) {

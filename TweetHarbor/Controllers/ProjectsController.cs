@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using TweetHarbor.Data;
 using TweetHarbor.Models;
+using Newtonsoft.Json;
 
 namespace TweetHarbor.Controllers
 {
@@ -23,6 +24,46 @@ namespace TweetHarbor.Controllers
         public ActionResult Index()
         {
             return View();
+        }
+
+        [Authorize]
+        public JsonResult UserProjects()
+        {
+            if (null != HttpContext)
+            {
+                var user = database.Users.Include("Projects")
+                 .Include("Projects.MessageRecipients")
+                 .Include("Projects.TextMessageRecipients")
+                 .Include("Projects.ProjectNotifications")
+                 .Include("Projects.ProjectNotifications.Build")
+                 .Include("Projects.ProjectNotifications.Build.commit")
+                 .FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
+                foreach (var p in user.Projects)
+                {
+                    foreach (var m in p.MessageRecipients)
+                    {
+                        m.Projects = null;
+                    }
+                    foreach (var m in p.ProjectNotifications)
+                    {
+                        m.Project = null;
+                    }
+                    foreach (var m in p.TextMessageRecipients)
+                    {
+                        m.Projects = null;
+                    }
+                    if (null != p.User)
+                    {
+                        foreach (var j in p.User.Projects)
+                        {
+                            j.User = null;
+                        }
+                    }
+                    
+                }
+                return Json(user.Projects, JsonRequestBehavior.AllowGet);
+            }
+            return Json(new { Error = "Not and Http Request" });
         }
 
         [HttpPost]
@@ -131,7 +172,7 @@ namespace TweetHarbor.Controllers
                                     var tmr = database.TextMessageRecipients.FirstOrDefault(f => f.PhoneNumber == value);
                                     if (null == tmr)
                                         tmr = new TextMessageRecipient() { PhoneNumber = value };
-                                    
+
                                     prj.TextMessageRecipients.Add(tmr);
                                     database.SaveChanges();
                                     return Json(new { Success = true });
@@ -186,7 +227,7 @@ namespace TweetHarbor.Controllers
                             if (el2 != null)
                             {
                                 database.TextMessageRecipients.Remove(el2);
-                                database.SaveChanges(); 
+                                database.SaveChanges();
                                 return Json(new { Success = true });
                             }
                             else
