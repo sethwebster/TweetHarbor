@@ -140,6 +140,9 @@ namespace TweetHarbor.Controllers
                         case "SendPublicTweet":
                             u.SendPublicTweet = Value;
                             break;
+                        case "SendSMS":
+                            u.SendSMS = Value;
+                            break;
                     }
                     database.SaveChanges();
                     return Json(new JsonResultModel() { Success = true });

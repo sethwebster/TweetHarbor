@@ -47,6 +47,11 @@
             <label for="SendPublicTweet" title=" (Disable to prevent any public messages
                 for all applications)">
                 Public Tweets Enabled</label>
+            <input type="checkbox" id="SendSMS" notification="SendSMS"  
+              toggleType="GlobalNotificationToggle" class='notification_toggle'  @(Model.SendSMS ? "Checked" : "")/>
+            <label for="SendSMS" title=" (Disable to prevent any SMS messages
+                for all applications)">
+                SMS Enabled</label>
             <div id="global_toggle_status_message" class="error">
             </div>
         </div>
@@ -194,7 +199,7 @@
                             </div>
                             @if (p.TextMessageRecipients.Count > 0)
                             {
-                                <ul class='recipient_list' >
+                                <ul class='recipient_list'>
                                     @foreach (var r in p.TextMessageRecipients)
                                     { 
                                         <li><a class='recipient_remove_button' project='@p.ProjectName' recipient='@r.PhoneNumber' recipientType="SMS">
