@@ -53,6 +53,7 @@ namespace TweetHarbor.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<ITweetHarborDbContext>().To<TweetHarborDbContext>();
+            kernel.Bind<ITweetHarborTextMessageService>().To<TweetHarborTextMessageService>();
 #if OFFLINE
             kernel.Bind<ITweetHarborTwitterService>().To<TweetHarborTwitterServiceOffline>().WithConstructorArgument("ConsumerKey", TwitterHelper.ConsumerKey).WithConstructorArgument("ConsumerSecret", TwitterHelper.ConsumerSecret);
 #else

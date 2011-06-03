@@ -31,6 +31,7 @@ namespace TweetHarbor.Models
         public string UserProfilePicUrl { get; set; }
         public bool SendPrivateTweet { get; set; }
         public bool SendPublicTweet { get; set; }
+        public bool SendSMS { get; set; }
         public ICollection<Project> Projects { get; set; }
         public bool IsAdmin { get; set; }
     }

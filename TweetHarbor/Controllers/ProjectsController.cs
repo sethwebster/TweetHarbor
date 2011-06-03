@@ -191,7 +191,7 @@ namespace TweetHarbor.Controllers
                             }
                             break;
                         default:
-                            return Json(new { Error = "Invalid Type", Success = false })
+                            return Json(new { Error = "Invalid Type", Success = false });
                             break;
 
                     }

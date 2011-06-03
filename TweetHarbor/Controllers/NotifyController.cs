@@ -15,11 +15,13 @@ namespace TweetHarbor.Controllers
     {
         ITweetHarborDbContext database;
         ITweetHarborTwitterService twitter;
+        ITweetHarborTextMessageService textMessageService;
 
-        public NotifyController(ITweetHarborDbContext database, ITweetHarborTwitterService twitter)
+        public NotifyController(ITweetHarborDbContext database, ITweetHarborTwitterService twitter, ITweetHarborTextMessageService textMessageService)
         {
             this.database = database;
             this.twitter = twitter;
+            this.textMessageService = textMessageService;
         }
 
         public ActionResult New()
@@ -71,6 +73,10 @@ namespace TweetHarbor.Controllers
                         {
                             TwitterStatus pubRes = twitter.SendTweet(strSuccessUpdate);
                         }
+                        if (project.SendTextOnSuccess && user.SendSMS)
+                        {
+                            SendSmsMessages(project, strSuccessUpdate);
+                        }
                     }
                     else
                     {
@@ -93,6 +99,10 @@ namespace TweetHarbor.Controllers
                         {
                             var pubRes = twitter.SendTweet(strFailureUpdate);
                         }
+                        if (project.SendTextOnFailure && user.SendSMS)
+                        {
+                            SendSmsMessages(project, strFailureUpdate);
+                        }
                     }
                     return Json(new JsonResultModel() { Success = true });
                 }
@@ -106,6 +116,24 @@ namespace TweetHarbor.Controllers
                 return Json(new JsonResultModel() { Success = false, Error = "NotAuthorized" });
             }
 
+        }
+
+        private void SendSmsMessages(Project project, string update)
+        {
+            if (null != project.TextMessageRecipients && project.TextMessageRecipients.Count > 0)
+            {
+                foreach (var r in project.TextMessageRecipients)
+                {
+                    try
+                    {
+                        textMessageService.SendText(r.PhoneNumber, update);
+                    }
+                    catch (Exception e)
+                    {
+                        //TODO: Log this
+                    }
+                }
+            }
         }
 
         private void SaveNotification(Notification notification, Project project)
@@ -151,7 +179,14 @@ namespace TweetHarbor.Controllers
         {
             foreach (var r in project.MessageRecipients)
             {
-                twitter.SendDirectMessage(r.ScreenName, update);
+                try
+                {
+                    twitter.SendDirectMessage(r.ScreenName, update);
+                }
+                catch (Exception e)
+                {
+                    //TODO: Log this
+                }
             }
         }
 

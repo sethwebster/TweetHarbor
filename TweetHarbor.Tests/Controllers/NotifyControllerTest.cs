@@ -11,6 +11,7 @@ using TweetHarbor.Tests.Helpers;
 using System.Collections.ObjectModel;
 using TweetHarbor.Messaging;
 using System.Net;
+using Moq;
 
 namespace TweetHarbor.Tests.Controllers
 {
@@ -70,18 +71,18 @@ namespace TweetHarbor.Tests.Controllers
         //[TestMethod]
         public void TestRemote()
         {
-            string testStr = "{\"application\": { \"name\": \"Foo\" },   \"build\": {    \"commit\": {      \"id\": \"77d991fe61187d205f329ddf9387d118a09fadcd\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
+            string testStr = "{\"application\": { \"name\": \"Test Project 1\" },   \"build\": {    \"commit\": {      \"id\": \""+Guid.NewGuid()+"\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
 
             WebClient wc = new WebClient();
             wc.Headers.Add("Content-Type", "application/json");
-            var data = wc.UploadData("http://localhost:9090/notify/new/localtestuser?token=e7d9b421-93cb-4ad4-9158-5f793b93ce83", "POST", Encoding.ASCII.GetBytes(testStr));
+            var data = wc.UploadData("http://localhost:9090/notify/new/sethwebster?token=3fcb79e66ddd994209ffb22f61618304", "POST", Encoding.ASCII.GetBytes(testStr));
 
             var str = Encoding.ASCII.GetString(data);
         }
         [TestMethod]
         public void TestBuildSuccess()
         {
-            string testStr = "{\"application\": { \"name\": \"Foo\" },   \"build\": {    \"commit\": {      \"id\": \"77d991fe61187d205f329ddf9387d118a09fadcd\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
+            string testStr = "{\"application\": { \"name\": \"Test Project 1\" },   \"build\": {    \"commit\": {      \"id\": \"" + Guid.NewGuid() + "\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
             var o = JsonConvert.DeserializeObject<Notification>(testStr);
 
             var db = new TestTweetHarborDbContext();
@@ -114,7 +115,11 @@ namespace TweetHarbor.Tests.Controllers
             user.Projects = new Collection<Project>();
             user.Projects.Add(proj);
 
-            var controller = new NotifyController(db, new TestTweetHarborTwitterService());
+            var m = new Mock<ITweetHarborTextMessageService>();
+
+            m.Setup(a => a.SendText("", ""));
+
+            var controller = new NotifyController(db, new TestTweetHarborTwitterService(), m.Object);
             MvcMockHelpers.SetFakeControllerContext(controller);
 
             var res = controller.New(user.TwitterUserName, user.UniqueId, o);
@@ -128,7 +133,7 @@ namespace TweetHarbor.Tests.Controllers
         [TestMethod]
         public void TestBuildFailure()
         {
-            string testStr = "{\"application\": { \"name\": \"Foo\" },   \"build\": {    \"commit\": {      \"id\": \"77d991fe61187d205f329ddf9387d118a09fadcd\", \"message\": \"Implement foo\"  }, \"status\": \"failed\" } }";
+            string testStr = "{\"application\": { \"name\": \"Test Project 1\" },   \"build\": {    \"commit\": {      \"id\": \"" + Guid.NewGuid() + "\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
             var o = JsonConvert.DeserializeObject<Notification>(testStr);
 
             var db = new TestTweetHarborDbContext();
@@ -159,7 +164,12 @@ namespace TweetHarbor.Tests.Controllers
             user.Projects = new Collection<Project>();
             user.Projects.Add(proj);
 
-            var controller = new NotifyController(db, new TestTweetHarborTwitterService());
+            var m = new Mock<ITweetHarborTextMessageService>();
+
+            m.Setup(a => a.SendText("", ""));
+
+            var controller = new NotifyController(db, new TestTweetHarborTwitterService(), m.Object); 
+            
             MvcMockHelpers.SetFakeControllerContext(controller);
 
             var res = controller.New(user.TwitterUserName, user.UniqueId, o);
