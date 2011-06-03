@@ -49,6 +49,12 @@ namespace TweetHarbor.Controllers
                         case "SendPrivateTweetOnFailure":
                             prj.SendPrivateTweetOnFailure = Value;
                             break;
+                        case "SendTextOnSuccess":
+                            prj.SendTextOnSuccess = Value;
+                            break;
+                        case "SendTextOnFailure":
+                            prj.SendTextOnFailure = Value;
+                            break;
                     }
                     database.SaveChanges();
                     return Json(new { Success = true });
@@ -93,26 +99,44 @@ namespace TweetHarbor.Controllers
 
         [HttpPost]
         [Authorize]
-        public JsonResult AddMessageRecipient(string Id, string value)
+        public JsonResult AddMessageRecipient(string Id, string value, string Type)
         {
             if (null != HttpContext)
             {
                 if (!string.IsNullOrEmpty(value.Trim()))
                 {
-                    value = value.Replace("@", "").Trim();
-                    var prj = database.Projects.Include("MessageRecipients").FirstOrDefault(p => p.User.TwitterUserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
-                                         
+                    var prj = database.Projects.Include("MessageRecipients").Include("TextMessageRecipients").FirstOrDefault(p => p.User.TwitterUserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
+
                     if (null != prj)
                     {
-                        if (prj.MessageRecipients.FirstOrDefault(m => m.ScreenName == value) == null)
+                        switch (Type)
                         {
-                            prj.MessageRecipients.Add(new TwitterMessageRecipient() { ScreenName = value });
-                            database.SaveChanges();
-                            return Json(new { Success = true });
-                        }
-                        else
-                        {
-                            return Json(new JsonResultModel() { Success = false, Error = "That user is already a message recipient" });
+                            case "Twitter":
+                                value = value.Replace("@", "").Trim();
+                                if (prj.MessageRecipients.FirstOrDefault(m => m.ScreenName == value) == null)
+                                {
+                                    prj.MessageRecipients.Add(new TwitterMessageRecipient() { ScreenName = value });
+                                    database.SaveChanges();
+                                    return Json(new { Success = true });
+                                }
+                                else
+                                {
+                                    return Json(new JsonResultModel() { Success = false, Error = "That user is already a message recipient" });
+                                }
+                                break;
+                            case "SMS":
+                                value = value.Replace("-", "").Trim();
+                                if (prj.TextMessageRecipients.FirstOrDefault(m => m.PhoneNumber == value) == null)
+                                {
+                                    prj.TextMessageRecipients.Add(new TextMessageRecipient() { PhoneNumber = value });
+                                    database.SaveChanges();
+                                    return Json(new { Success = true });
+                                }
+                                else
+                                {
+                                    return Json(new JsonResultModel() { Success = false, Error = "That number is already an SMS recipient" });
+                                }
+                                break;
                         }
 
                     }
@@ -130,24 +154,46 @@ namespace TweetHarbor.Controllers
         }
         [HttpPost]
         [Authorize]
-        public JsonResult RemoveMessageRecipient(string Id, string recipient)
+        public JsonResult RemoveMessageRecipient(string Id, string recipient, string Type)
         {
             if (null != HttpContext)
             {
-                var prj = database.Projects.Include("MessageRecipients").FirstOrDefault(p => p.User.TwitterUserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
+                var prj = database.Projects.Include("MessageRecipients").Include("TextMessageRecipients").FirstOrDefault(p => p.User.TwitterUserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
 
                 if (null != prj)
                 {
-                    var el = prj.MessageRecipients.FirstOrDefault(m => m.ScreenName == recipient);
-                    if (el != null)
+                    switch (Type)
                     {
-                        database.MessageRecipients.Remove(el);
-                        database.SaveChanges();
-                        return Json(new { Success = true });
-                    }
-                    else
-                    {
-                        return Json(new JsonResultModel() { Success = false, Error = "That user is not a valid message recipient" });
+                        case "Twitter":
+                            var el = prj.MessageRecipients.FirstOrDefault(m => m.ScreenName == recipient);
+                            if (el != null)
+                            {
+                                database.MessageRecipients.Remove(el);
+                                database.SaveChanges();
+                                return Json(new { Success = true });
+                            }
+                            else
+                            {
+                                return Json(new JsonResultModel() { Success = false, Error = "That user is not a valid message recipient" });
+                            }
+                            break;
+                        case "SMS":
+                            var el2 = prj.TextMessageRecipients.FirstOrDefault(m => m.PhoneNumber == recipient);
+                            if (el2 != null)
+                            {
+                                database.TextMessageRecipients.Remove(el2);
+                                database.SaveChanges(); 
+                                return Json(new { Success = true });
+                            }
+                            else
+                            {
+                                return Json(new JsonResultModel() { Success = false, Error = "That user is not a valid SMS message recipient" });
+                            }
+                            break;
+                        default:
+                            return Json(new { Error = "Invalid Type", Success = false })
+                            break;
+
                     }
 
                 }

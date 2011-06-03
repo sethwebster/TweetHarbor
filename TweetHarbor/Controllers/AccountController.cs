@@ -35,6 +35,7 @@ namespace TweetHarbor.Controllers
                 ViewBag.UserName = HttpContext.User.Identity.Name;
                 var u = database.Users.Include("Projects")
                     .Include("Projects.MessageRecipients")
+                    .Include("Projects.TextMessageRecipients")
                     .Include("Projects.ProjectNotifications")
                     .Include("Projects.ProjectNotifications.Build")
                     .Include("Projects.ProjectNotifications.Build.commit")

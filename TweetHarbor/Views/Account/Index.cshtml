@@ -62,16 +62,22 @@
                         Name
                     </th>
                     <th>
-                        Tweet Successful Builds
+                        Tweet Success
                     </th>
                     <th>
-                        DM Successful Builds
+                        DM Success
                     </th>
                     <th>
-                        Tweet Failed Builds
+                        Tweet Failure
                     </th>
                     <th>
-                        DM Failed Builds
+                        DM Failure
+                    </th>
+                    <th>
+                        Text Success
+                    </th>
+                    <th>
+                        Text Failure
                     </th>
                     <th>
                         Templates
@@ -103,6 +109,12 @@
                         </td>
                         <td class='@statusClass'>
                             <input type="checkbox" class='notification_toggle' project="@p.ProjectName" toggleType="ProjectNotificationToggle" notification="SendPrivateTweetOnSuccess" @(p.SendPrivateTweetOnSuccess ? "Checked" : "")/>
+                        </td>
+                        <td class='@statusClass'>
+                            <input type="checkbox" class='notification_toggle' project="@p.ProjectName" toggleType="ProjectNotificationToggle"  notification="SendTextOnSuccess" @(p.SendTextOnSuccess ? "Checked" : "")/>
+                        </td>
+                        <td class='@statusClass'>
+                            <input type="checkbox" class='notification_toggle' project="@p.ProjectName" toggleType="ProjectNotificationToggle" notification="SendTextOnFailure" @(p.SendTextOnFailure ? "Checked" : "")/>
                         </td>
                         <td class='@statusClass'>
                             <a href="javascript:void(0);" class='template_edit_button' rel="@(p.ProjectName.Replace(" ", "_"))">
@@ -157,7 +169,7 @@
                                 <ul class='recipient_list'>
                                     @foreach (var r in p.MessageRecipients)
                                     { 
-                                        <li><a class='recipient_remove_button' project='@p.ProjectName' recipient='@r.ScreenName'>
+                                        <li><a class='recipient_remove_button' project='@p.ProjectName' recipient='@r.ScreenName' recipientType="Twitter">
                                             x </a>
                                             @r.ScreenName
                                         </li>
@@ -168,6 +180,34 @@
                             { 
                                 <ul class='recipient_list' rel="empty">
                                     <li><em>No message recipients specified - <strong>No direct messages will be sent</strong></em></li>
+                                </ul>
+
+                            }
+                            <h4>
+                                SMS Recipients</h4>
+                            <div class='error text_recipients_status_message'>
+                            </div>
+                            <input type="text" />
+                            <a href="javascript:void(0);" class='text_recipient_add_button' project="@p.ProjectName">
+                                Add</a>
+                            <div class='clear'>
+                            </div>
+                            @if (p.TextMessageRecipients.Count > 0)
+                            {
+                                <ul class='recipient_list' >
+                                    @foreach (var r in p.TextMessageRecipients)
+                                    { 
+                                        <li><a class='recipient_remove_button' project='@p.ProjectName' recipient='@r.PhoneNumber' recipientType="SMS">
+                                            x </a>
+                                            @r.PhoneNumber @r.Name
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            { 
+                                <ul class='recipient_list' rel="empty">
+                                    <li><em>No SMS recipients specified - <strong>No direct messages will be sent</strong></em></li>
                                 </ul>
 
                             }

@@ -116,7 +116,10 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Messages.cs" />
+    <Compile Include="Messaging\ITweetHarborTextMessageService.cs" />
     <Compile Include="Messaging\ITweetHarborTwitterService.cs" />
+    <Compile Include="Messaging\TweetHarborTextMessageService.cs" />
+    <Compile Include="Messaging\Twilio\TwilioRest.cs" />
     <Compile Include="Models\TextMessageRecipient.cs" />
     <Compile Include="Messaging\TweetHarborTwitterServiceOffline.cs" />
     <Compile Include="Messaging\TweetHarborTwitterService.cs" />

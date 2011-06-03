@@ -35,6 +35,7 @@ namespace TweetHarbor.Controllers
             var user = database.Users
                 .Include("Projects")
                 .Include("Projects.MessageRecipients")
+                .Include("Projects.TextMessageRecipients")
                 .FirstOrDefault(usr => usr.TwitterUserName == Id && usr.UniqueId == token);
             // If Id or Token is invalid, user will not be found
             // TODO: Allow users to reset the token
