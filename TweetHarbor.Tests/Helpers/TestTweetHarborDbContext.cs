@@ -13,6 +13,7 @@ namespace TweetHarbor.Tests.Helpers
         TestableDbSet<Project> projects = new TestableDbSet<Project>();
         TestableDbSet<TwitterMessageRecipient> messageRecipients = new TestableDbSet<TwitterMessageRecipient>();
         TestableDbSet<LogEntry> logEntries = new TestableDbSet<LogEntry>();
+        TestableDbSet<TextMessageRecipient> textMessageRecipients = new TestableDbSet<TextMessageRecipient>();
         TestableDbSet<ProjectNotification> projectNotifications = new TestableDbSet<ProjectNotification>();
 
         TestableDbSet<Build> builds = new TestableDbSet<Build>();
@@ -76,6 +77,17 @@ namespace TweetHarbor.Tests.Helpers
             set
             {
                 this.messageRecipients = (TestableDbSet<TwitterMessageRecipient>)value;
+            }
+        }
+        public System.Data.Entity.IDbSet<Models.TextMessageRecipient> TextMessageRecipients
+        {
+            get
+            {
+                return this.textMessageRecipients;
+            }
+            set
+            {
+                this.textMessageRecipients = (TestableDbSet<TextMessageRecipient>)value;
             }
         }
 

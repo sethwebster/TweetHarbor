@@ -21,7 +21,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;OFFLINE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -117,6 +117,7 @@
     </Compile>
     <Compile Include="Helpers\Messages.cs" />
     <Compile Include="Messaging\ITweetHarborTwitterService.cs" />
+    <Compile Include="Models\TextMessageRecipient.cs" />
     <Compile Include="Messaging\TweetHarborTwitterServiceOffline.cs" />
     <Compile Include="Messaging\TweetHarborTwitterService.cs" />
     <Compile Include="Models\AccountModels.cs" />

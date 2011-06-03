@@ -20,6 +20,7 @@ namespace TweetHarbor.Models
         public IDbSet<User> Users { get; set; }
         public IDbSet<Project> Projects { get; set; }
         public IDbSet<TwitterMessageRecipient> MessageRecipients { get; set; }
+        public IDbSet<TextMessageRecipient> TextMessageRecipients { get; set; }
         public IDbSet<LogEntry> LogEntries { get; set; }
         public IDbSet<ProjectNotification> ProjectNotifications { get; set; }
         public IDbSet<Build> Builds { get; set; }

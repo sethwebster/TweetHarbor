@@ -18,6 +18,7 @@ namespace TweetHarbor.Models
             SendPublicTweetOnSuccess = false;
             this.MessageRecipients = new Collection<TwitterMessageRecipient>();
             this.ProjectNotifications = new Collection<ProjectNotification>();
+            this.TextMessageRecipients = new Collection<TextMessageRecipient>();
         }
 
         [Required]
@@ -32,6 +33,7 @@ namespace TweetHarbor.Models
         public string FailureTemplate { get; set; }
         public ICollection<TwitterMessageRecipient> MessageRecipients { get; set; }
         public ICollection<ProjectNotification> ProjectNotifications { get; set; }
+        public ICollection<TextMessageRecipient> TextMessageRecipients { get; set; }
 
     }
 }
