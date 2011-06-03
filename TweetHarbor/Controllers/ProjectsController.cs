@@ -128,7 +128,11 @@ namespace TweetHarbor.Controllers
                                 value = value.Replace("-", "").Trim();
                                 if (prj.TextMessageRecipients.FirstOrDefault(m => m.PhoneNumber == value) == null)
                                 {
-                                    prj.TextMessageRecipients.Add(new TextMessageRecipient() { PhoneNumber = value });
+                                    var tmr = database.TextMessageRecipients.FirstOrDefault(f => f.PhoneNumber == value);
+                                    if (null == tmr)
+                                        tmr = new TextMessageRecipient() { PhoneNumber = value };
+                                    
+                                    prj.TextMessageRecipients.Add(tmr);
                                     database.SaveChanges();
                                     return Json(new { Success = true });
                                 }
