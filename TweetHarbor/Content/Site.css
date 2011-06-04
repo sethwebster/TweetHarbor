@@ -469,6 +469,7 @@ ul.recipient_list
 .template_field_insert
 {
     font-size: .8em;
+      cursor: pointer;
 }
 
 ul.projects_list
@@ -477,7 +478,6 @@ ul.projects_list
     padding: 0px;
     list-style: none;
     width: 100%;
-    cursor: pointer;
 }
 
 ul.projects_list li.list_project
@@ -542,6 +542,7 @@ ul.projects_list li.list_project .template
     box-shadow: 1px 1px 1px #666;
     padding: 5px;
     margin: 5px;
+      cursor: pointer;
 }
 
 .recipients
