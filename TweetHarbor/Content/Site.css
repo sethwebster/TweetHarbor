@@ -408,32 +408,7 @@ div#title
     position: relative;
     top: 5px;
 }
-#projects_table
-{
-    width: 100%;
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    -moz-box-shadow: 1px 1px 1px #666;
-    -webkit-box-shadow: 1px 1px 1px #666;
-    box-shadow: 1px 1px 1px #666;
-}
 
-#template_table
-{
-    width: 100%;
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    -moz-box-shadow: 1px 1px 1px #666;
-    -webkit-box-shadow: 1px 1px 1px #666;
-    box-shadow: 1px 1px 1px #666;
-}
-
-#template_table td
-{
-    width: 50%;
-}
 
 .template_edit
 {
@@ -460,46 +435,7 @@ div#title
     margin-bottom: 20px;
 }
 
-.template_field_insert
-{
-    font-size: .8em;
-}
 
-.message_recipients
-{
-    display: none;
-}
-ul.recipient_list
-{
-    margin: 0px;
-    padding: 0px;
-    list-style: none;
-    width: 205px;
-    cursor: pointer;
-}
-
-ul.recipient_list li
-{
-    padding: 3px;
-    width: auto;
-    color: #fff;
-    border: 1px solid #ccc;
-    background-color: #A4A8FF;
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-}
-
-
-ul.recipient_list li:hover
-{
-    background-color: #79AEFD;
-}
-
-.recipient_remove_button
-{
-    float: right;
-}
 
 #user_partial
 {
@@ -510,10 +446,6 @@ ul.recipient_list li:hover
     margin-right: 5px;
 }
 
-.notifications_list
-{
-    display:none;
-}
 .build_succeeded
 {
     background-color: #8AFF8A;
@@ -521,4 +453,118 @@ ul.recipient_list li:hover
 .build_failed
 {
     background-color: #F59881;
+}
+
+
+ul.recipient_list
+{
+    list-style: none;
+}
+
+
+.template_field_insert
+{
+    font-size: .8em;
+}
+
+ul.projects_list
+{
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    width: 100%;
+    cursor: pointer;
+}
+
+ul.projects_list li.list_project
+{
+    width: 100%;
+    padding:10px;
+    display: block;
+    clear: both;
+    margin-bottom: 125px;
+    border: 1px dotted #ccc;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+ul.projects_list li.list_project h5
+{
+    margin: 0px;
+    padding: 0px;
+    margin-top: 20px;
+}
+
+ul.projects_list li.list_project h6
+{
+    margin: 0px;
+    padding: 0px;
+}
+
+ul.projects_list li.list_project .switch
+{
+    float: left;
+    border: 1px dotted #ccc;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -moz-box-shadow: 1px 1px 1px #666;
+    -webkit-box-shadow: 1px 1px 1px #666;
+    box-shadow: 1px 1px 1px #666;
+}
+ul.projects_list li.list_project .template
+{
+    border: 1px dotted #ccc;
+    clear: both;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -moz-box-shadow: 1px 1px 1px #666;
+    -webkit-box-shadow: 1px 1px 1px #666;
+    box-shadow: 1px 1px 1px #666;
+    padding: 5px;
+    margin: 5px;
+}
+
+.recipients
+{
+    display: block;
+    margin-left: 25px;
+    float: left;
+}
+ul.recipient_list
+{
+    width: 200px;
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+ul.recipient_list li
+{
+    padding: 3px;
+    width: 200px;
+    color: #fff;
+    border: 1px solid #ccc;
+    background-color: #A4A8FF;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+}
+
+.messageRecipientsWrapper
+{
+    width:200px;
+    height:300px;
+}
+
+ul.recipient_list li:hover
+{
+    background-color: #79AEFD;
+}
+.recipient_remove_button
+{
+    float: right;
 }

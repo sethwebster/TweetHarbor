@@ -56,40 +56,30 @@ ProjectsManager.prototype.RenderProjects = function () {
 ProjectsManager.prototype.RenderProject = function (project) {
 
     this.appendBuffer("<li class='list_project'>");
-    for (var k in project) {
-        switch (k) {
-            case "ProjectName":
-                this.appendBuffer("<h5>" + project[k] + "</h5>");
-                break;
-            case "SendPrivateTweetOnSuccess":
-            case "SendPublicTweetOnSuccess":
-            case "SendPrivateTweetOnFailure":
-            case "SendPublicTweetOnFailure":
-            case "SendTextOnSuccess":
-            case "SendTextOnFailure":
-                this.RenderSwitch(k, "ProjectNotificationToggle", project.ProjectName, k, project[k]);
-                break;
-            case "SuccessTemplate":
-            case "FailureTemplate":
-                this.RenderTemplateEditor(k, project.ProjectName, project[k]);
-                break;
-            case "MessageRecipients":
-            case "TextMessageRecipients":
-                this.RenderMessageRecipients(k, project.ProjectName, project[k]);
-                break;
-            case "ProjectNotifications":
-                break;
-            default:
-                this.appendBuffer("<div class='display_" + k + "'>" + k + " " + project[k] + "</div>");
-                break;
-        }
-    }
+    this.appendBuffer("<h5>" + project.ProjectName + "</h5>");
+    this.RenderSwitch("SendPrivateTweetOnSuccess", "ProjectNotificationToggle", project.ProjectName, "SendPrivateTweetOnSuccess", project.SendPrivateTweetOnSuccess);
+    this.RenderSwitch("SendPublicTweetOnSuccess", "ProjectNotificationToggle", project.ProjectName, "SendPublicTweetOnSuccess", project.SendPublicTweetOnSuccess);
+    this.RenderSwitch("SendPrivateTweetOnFailure", "ProjectNotificationToggle", project.ProjectName, "SendPrivateTweetOnFailure", project.SendPrivateTweetOnFailure);
+    this.RenderSwitch("SendPublicTweetOnFailure", "ProjectNotificationToggle", project.ProjectName, "SendPublicTweetOnFailure", project.SendPublicTweetOnFailure);
+    this.RenderSwitch("SendTextOnSuccess", "ProjectNotificationToggle", project.ProjectName, "SendTextOnSuccess", project.SendTextOnSuccess);
+    this.RenderSwitch("SendTextOnFailure", "ProjectNotificationToggle", project.ProjectName, "SendTextOnFailure", project.SendTextOnFailure);
+    this.appendBuffer("<div class='clear'></div><h5>Templates</h5>");
+    this.RenderTemplateEditor("SuccessTemplate", project.ProjectName, project.SuccessTemplate);
+    this.RenderTemplateEditor("FailureTemplate", project.ProjectName, project.FailureTemplate);
+    this.appendBuffer("<div class='clear'></div><h5>Message Recipients</h5>");
+    this.appendBuffer("<div class='messagageRecipientsWrapper'>");
+    this.RenderMessageRecipients("MessageRecipients", project.ProjectName, project.MessageRecipients);
+    this.RenderMessageRecipients("TextMessageRecipients", project.ProjectName, project.TextMessageRecipients);
+    this.appendBuffer("</div>");
+    //TODO: Project Notifications
     this.appendBuffer("</li>");
 }
 
 ProjectsManager.prototype.RenderMessageRecipients = function (type, projectName, recipients) {
     var statusDivClass = "recipients_status_message";
     var fillerText = type == "MessageRecipients" ? "Direct" : "SMS";
+    var title = type == "MessageRecipients" ? "Twitter DM Recipients" : "SMS Text Recipients";
+    this.appendBuffer("<div class='recipients'><h6>" + title + "</h6>");
     this.appendBuffer("<div class='error " + statusDivClass + "'></div>");
     this.appendBuffer("<input type='text' /><a href='javascript:void(0);' class='recipient_add_button' project='" + projectName + "' type='" + type + "'>Add</a><div class='clear'></div>");
     this.appendBuffer("<ul class='recipient_list'>");
@@ -99,9 +89,10 @@ ProjectsManager.prototype.RenderMessageRecipients = function (type, projectName,
         }
     }
     else {
-        this.appendBuffer("<li><em>No " + fillerText + " recipients specified. <strong>No " + fillerText + " messages will be sent</strong></em></li>");
+        this.appendBuffer("<li class='empty'><em>No " + fillerText + " recipients specified. <strong>No " + fillerText + " messages will be sent</strong></em></li>");
     }
     this.appendBuffer("</ul>");
+    this.appendBuffer("</div>");
 }
 
 ProjectsManager.prototype.RenderMessageRecipient = function (type, projectName, recipient) {
@@ -116,18 +107,19 @@ ProjectsManager.prototype.RenderSwitch = function (type, toggleType, projectName
     var label = this._labels[type];
     var id = projectName + "_" + toggleType + "_" + notification;
     var label = "<label id='" + id + "_label' for='" + id + "'>" + label + "</label>";
-    var s = "";
+    this.appendBuffer("<div class='switch'>");
     if (this._labelsBefore)
-        s += label;
-    s += "<input type='checkbox' id='" + id + "' class='notification_toggle' project='" + projectName + "' toggleType='" + toggleType + "' notification='" + notification + "' " + (checked ? "checked" : "") + "/>";
+        this.appendBuffer(label);
+    this.appendBuffer("<input type='checkbox' id='" + id + "' class='notification_toggle' project='" + projectName + "' toggleType='" + toggleType + "' notification='" + notification + "' " + (checked ? "checked" : "") + "/>");
     if (!this._labelsBefore) {
-        s += label;
+        this.appendBuffer(label);
     }
+    this.appendBuffer("</div>");
 
-    this.appendBuffer(s);
 }
 
 ProjectsManager.prototype.RenderTemplateEditor = function (type, project, currentValue) {
+    this.appendBuffer("<div class='template'>");
     var projectId = project.replace(/ /g, "_");
     if (currentValue == null || currentValue.length <= 0) {
         switch (type) {
@@ -153,6 +145,7 @@ ProjectsManager.prototype.RenderTemplateEditor = function (type, project, curren
     s += ("<textarea rows='5' cols='10' class='template_edit_field'>" + currentValue + "</textarea>");
     s += "</div>";
     this.appendBuffer(s);
+    this.appendBuffer("</div>");
 }
 
 
@@ -181,10 +174,10 @@ ProjectsManager.prototype.bindRemoveHandler = function () {
                 _this.parent().remove();
                 if (el.children().length == 0) {
                     if (type == "TextMessageRecipients") {
-                        el.hide().html("<li><em>No message recipients specified - <strong>No SMS messages will be sent</strong></em></li>").fadeIn();
+                        el.hide().html("<li class='empty'><em>No message recipients specified - <strong>No SMS messages will be sent</strong></em></li>").fadeIn();
                     }
                     else {
-                        el.hide().html("<li><em>No message recipients specified - <strong>No direct messages will be sent</strong></em></li>").fadeIn();
+                        el.hide().html("<li class='empty'><em>No message recipients specified - <strong>No direct messages will be sent</strong></em></li>").fadeIn();
                     }
                     el.attr('rel', 'empty');
                 }
@@ -199,14 +192,16 @@ ProjectsManager.prototype.bindRemoveHandler = function () {
 }
 
 ProjectsManager.prototype.bindRecipientAddButton = function () {
+    var _this = this;
+
     $(".recipient_add_button").unbind("click");
     $(".recipient_add_button").click(function () {
         var proj = $(this).attr("project");
         var val = $.trim($(this).prev("input").val());
         var type = $(this).attr("type");
-        var _this = $(this);
+        var _el = $(this);
         if (val.length == 0) {
-            _this.prevAll(".recipients_status_message").first().text(
+            _el.prevAll(".recipients_status_message").first().text(
                 type == "MessageRecipients" ?
                     "Please enter a twitter screen name" :
                     "Please enter a valid telephone number including area code"
@@ -217,19 +212,19 @@ ProjectsManager.prototype.bindRecipientAddButton = function () {
         { id: proj, value: val, type: type },
         function (res) {
             if (res.Success) {
-                _this.prevAll(".recipients_status_message").first().text("");
-                _this.prev("input").val("");
-                var list = _this.nextAll(".recipient_list").first();
-                if (null != list && list.attr("rel") == "empty") {
+                _el.prevAll(".recipients_status_message").first().text("");
+                _el.prev("input").val("");
+                var list = _el.nextAll(".recipient_list").first();
+                if (null != list && list.children().length > 0 && list.children().first().attr('class') == 'empty') {
                     list.text("");
                     list.attr("rel", "");
                 }
-                _this.nextAll(".recipient_list").first().append("<li><a class='recipient_remove_button' project='" + proj + "' recipient='" + (val.toString().replace("@", "")) + "' recipientType='Twitter'>x</a>" + val + "</li>");
+                _el.nextAll(".recipient_list").first().append("<li><a class='recipient_remove_button' project='" + proj + "' recipient='" + (val.toString().replace("@", "")) + "' recipientType='" + type + "'>x</a>" + val + "</li>");
                 _this.bindRemoveHandler();
             }
             else {
                 //display error
-                _this.prevAll(".recipients_status_message").first().hide().text(res.Error).fadeIn("fast");
+                _el.prevAll(".recipients_status_message").first().hide().text(res.Error).fadeIn("fast");
             }
         },
         "json");
@@ -245,8 +240,8 @@ ProjectsManager.prototype.bindTemplateSaveButton = function () {
         { id: $(this).attr("project"), TemplateType: $(this).attr("templateType"), Value: $(this).parent().next("textarea").val() },
         function (res) {
             if (res.Success) {
-                $("#template_edit_" + _this.attr("project").toString().replace(" ", "_") + "_" + _this.attr("templateType")).hide();
-                $("#template_display_" + _this.attr("project").toString().replace(" ", "_") + "_" + _this.attr("templateType")).text(_this.parent().next("textarea").val()).show();
+                $("#template_edit_" + _this.attr("project").toString().replace(/ /g, "_") + "_" + _this.attr("templateType")).hide();
+                $("#template_display_" + _this.attr("project").toString().replace(/ /g, "_") + "_" + _this.attr("templateType")).text(_this.parent().next("textarea").val()).show();
             }
             else {
                 // error
