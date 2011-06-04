@@ -27,7 +27,6 @@ namespace TweetHarbor.Models
         [Required]
         [Key]
         public string ProjectName { get; set; }
-        public string ProjectName2 { get; set; }
         public User User { get; set; }
         public bool SendPrivateTweetOnSuccess { get; set; }
         public bool SendPublicTweetOnSuccess { get; set; }
