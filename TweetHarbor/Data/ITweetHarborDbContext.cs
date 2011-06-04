@@ -18,6 +18,7 @@ namespace TweetHarbor.Data
         IDbSet<ProjectNotification> ProjectNotifications { get; set; }
         IDbSet<Build> Builds { get; set; }
         IDbSet<Commit> Commits { get; set; }
+        IDbSet<OutboundNotification> OutboundNotifications { get; set; }
         int SaveChanges();
     }
 

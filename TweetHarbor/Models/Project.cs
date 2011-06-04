@@ -21,11 +21,13 @@ namespace TweetHarbor.Models
             this.MessageRecipients = new Collection<TwitterMessageRecipient>();
             this.ProjectNotifications = new Collection<ProjectNotification>();
             this.TextMessageRecipients = new Collection<TextMessageRecipient>();
+            this.OutboundNotifications = new Collection<OutboundNotification>();
         }
 
         [Required]
         [Key]
         public string ProjectName { get; set; }
+        public string ProjectName2 { get; set; }
         public User User { get; set; }
         public bool SendPrivateTweetOnSuccess { get; set; }
         public bool SendPublicTweetOnSuccess { get; set; }
@@ -38,6 +40,7 @@ namespace TweetHarbor.Models
         public ICollection<TwitterMessageRecipient> MessageRecipients { get; set; }
         public ICollection<ProjectNotification> ProjectNotifications { get; set; }
         public ICollection<TextMessageRecipient> TextMessageRecipients { get; set; }
+        public ICollection<OutboundNotification> OutboundNotifications { get; set; }
 
     }
 }

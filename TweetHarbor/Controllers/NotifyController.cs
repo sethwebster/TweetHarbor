@@ -126,7 +126,21 @@ namespace TweetHarbor.Controllers
                 {
                     try
                     {
+                        OutboundNotification n = new OutboundNotification()
+                        {
+                            DateCreated = DateTime.Now,
+                            Message = update,
+                            NotificationType = "SMS",
+                            Recipient = r.PhoneNumber,
+                            SentSuccessfully = false,
+                            DateSent = DateTime.MaxValue
+                        };
+                        project.OutboundNotifications.Add(n);
+                        database.SaveChanges();
                         textMessageService.SendText(r.PhoneNumber, update);
+                        n.SentSuccessfully = true;
+                        n.DateSent = DateTime.Now;
+                        database.SaveChanges();
                     }
                     catch (Exception e)
                     {
@@ -181,7 +195,21 @@ namespace TweetHarbor.Controllers
             {
                 try
                 {
+                    OutboundNotification n = new OutboundNotification()
+                    {
+                        DateCreated = DateTime.Now,
+                        Message = update,
+                        NotificationType = "Twitter",
+                        Recipient = r.ScreenName,
+                        SentSuccessfully = false,
+                        DateSent = DateTime.MaxValue
+                    };
+                    project.OutboundNotifications.Add(n);
+                    database.SaveChanges();
                     twitter.SendDirectMessage(r.ScreenName, update);
+                    n.SentSuccessfully = true;
+                    n.DateSent = DateTime.Now;
+                    database.SaveChanges();
                 }
                 catch (Exception e)
                 {

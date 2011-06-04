@@ -15,15 +15,20 @@ namespace TweetHarbor.Tests.Helpers
         TestableDbSet<LogEntry> logEntries = new TestableDbSet<LogEntry>();
         TestableDbSet<TextMessageRecipient> textMessageRecipients = new TestableDbSet<TextMessageRecipient>();
         TestableDbSet<ProjectNotification> projectNotifications = new TestableDbSet<ProjectNotification>();
-
         TestableDbSet<Build> builds = new TestableDbSet<Build>();
-
         TestableDbSet<Commit> commits = new TestableDbSet<Commit>();
+        TestableDbSet<OutboundNotification> outboundNotifications = new TestableDbSet<OutboundNotification>();
 
         public System.Data.Entity.IDbSet<Commit> Commits
         {
             get { return commits; }
             set { commits = (TestableDbSet<Commit>)value; }
+        }
+
+        public System.Data.Entity.IDbSet<OutboundNotification> OutboundNotifications
+        {
+            get { return outboundNotifications; }
+            set { outboundNotifications = (TestableDbSet<OutboundNotification>)value; }
         }
 
         public System.Data.Entity.IDbSet<LogEntry> LogEntries

@@ -120,6 +120,7 @@
     <Compile Include="Messaging\ITweetHarborTwitterService.cs" />
     <Compile Include="Messaging\TweetHarborTextMessageService.cs" />
     <Compile Include="Messaging\Twilio\TwilioRest.cs" />
+    <Compile Include="Models\OutboundNotification.cs" />
     <Compile Include="Models\TextMessageRecipient.cs" />
     <Compile Include="Messaging\TweetHarborTwitterServiceOffline.cs" />
     <Compile Include="Messaging\TweetHarborTwitterService.cs" />
