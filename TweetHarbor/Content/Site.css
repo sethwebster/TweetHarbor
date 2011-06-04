@@ -424,7 +424,11 @@ div#title
     -moz-border-radius: 4px;
 }
 
-
+#service_hook
+{
+    margin-top: 20px;
+    width: 75%;
+}
 #tweet_options
 {
     float: right;
@@ -479,14 +483,25 @@ ul.projects_list
 ul.projects_list li.list_project
 {
     width: 100%;
-    padding:10px;
+    padding: 10px;
     display: block;
     clear: both;
     margin-bottom: 125px;
-    border: 1px dotted #ccc;
     border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
+}
+
+ul.projects_list li.list_project h3
+{
+    border: 1px solid #ccc;
+    padding: 12px !important;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -moz-box-shadow: 1px 1px 1px #666;
+    -webkit-box-shadow: 1px 1px 1px #666;
+    box-shadow: 1px 1px 1px #666;
 }
 
 ul.projects_list li.list_project h5
@@ -502,7 +517,7 @@ ul.projects_list li.list_project h6
     padding: 0px;
 }
 
-ul.projects_list li.list_project .switch
+.switch
 {
     float: left;
     border: 1px dotted #ccc;
@@ -556,8 +571,8 @@ ul.recipient_list li
 
 .messageRecipientsWrapper
 {
-    width:200px;
-    height:300px;
+    width: 200px;
+    height: 300px;
 }
 
 ul.recipient_list li:hover

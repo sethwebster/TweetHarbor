@@ -7,6 +7,7 @@ using TweetHarbor.Data;
 using TweetHarbor.Models;
 using Newtonsoft.Json;
 using System.Data.Entity.Validation;
+using System.Collections.ObjectModel;
 
 namespace TweetHarbor.Controllers
 {
@@ -60,7 +61,7 @@ namespace TweetHarbor.Controllers
                             j.User = null;
                         }
                     }
-
+                    p.ProjectNotifications = new Collection<ProjectNotification>(p.ProjectNotifications.OrderByDescending(n => n.NotificationDate).ToList());
                 }
                 return Json(user.Projects, JsonRequestBehavior.AllowGet);
             }
