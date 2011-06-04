@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using TweetHarbor.Data;
 using TweetHarbor.Models;
 using Newtonsoft.Json;
+using System.Data.Entity.Validation;
 
 namespace TweetHarbor.Controllers
 {
@@ -59,7 +60,7 @@ namespace TweetHarbor.Controllers
                             j.User = null;
                         }
                     }
-                    
+
                 }
                 return Json(user.Projects, JsonRequestBehavior.AllowGet);
             }
@@ -121,10 +122,15 @@ namespace TweetHarbor.Controllers
                     switch (TemplateType)
                     {
                         case "Success":
+                        case "SuccessTemplate":
                             prj.SuccessTemplate = Value;
                             break;
                         case "Failure":
+                        case "FailureTemplate":
                             prj.FailureTemplate = Value;
+                            break;
+                        default:
+                            return Json(new JsonResultModel() { Success = false, Error = "Invalid Template Type (SuccessTemplate, FailureTemplate)" });
                             break;
                     }
                     database.SaveChanges();
@@ -153,6 +159,7 @@ namespace TweetHarbor.Controllers
                         switch (Type)
                         {
                             case "Twitter":
+                            case "MessageRecipients":
                                 value = value.Replace("@", "").Trim();
                                 if (prj.MessageRecipients.FirstOrDefault(m => m.ScreenName == value) == null)
                                 {
@@ -166,6 +173,7 @@ namespace TweetHarbor.Controllers
                                 }
                                 break;
                             case "SMS":
+                            case "TextMessageRecipients":
                                 value = value.Replace("-", "").Trim();
                                 if (prj.TextMessageRecipients.FirstOrDefault(m => m.PhoneNumber == value) == null)
                                 {
@@ -174,7 +182,14 @@ namespace TweetHarbor.Controllers
                                         tmr = new TextMessageRecipient() { PhoneNumber = value };
 
                                     prj.TextMessageRecipients.Add(tmr);
-                                    database.SaveChanges();
+                                    try
+                                    {
+                                        database.SaveChanges();
+                                    }
+                                    catch (DbEntityValidationException e)
+                                    {
+                                        return Json(new JsonResultModel() { Error = e.EntityValidationErrors.First().ValidationErrors.First().ErrorMessage, Success = false });
+                                    }
                                     return Json(new { Success = true });
                                 }
                                 else
@@ -192,7 +207,14 @@ namespace TweetHarbor.Controllers
                 }
                 else
                 {
-                    return Json(new JsonResultModel() { Success = false, Error = "Please provide a Twitter screen name" });
+                    if (Type == "MessageRecipients")
+                    {
+                        return Json(new JsonResultModel() { Success = false, Error = "Please provide a Twitter screen name" });
+                    }
+                    else
+                    {
+                        return Json(new JsonResultModel() { Success = false, Error = "Please provide a valid phone number including area code" });
+                    }
                 }
             }
             return Json(new { Error = "Something", Success = false });
@@ -210,6 +232,7 @@ namespace TweetHarbor.Controllers
                     switch (Type)
                     {
                         case "Twitter":
+                        case "MessageRecipients":
                             var el = prj.MessageRecipients.FirstOrDefault(m => m.ScreenName == recipient);
                             if (el != null)
                             {
@@ -223,6 +246,7 @@ namespace TweetHarbor.Controllers
                             }
                             break;
                         case "SMS":
+                        case "TextMessageRecipients":
                             var el2 = prj.TextMessageRecipients.FirstOrDefault(m => m.PhoneNumber == recipient);
                             if (el2 != null)
                             {

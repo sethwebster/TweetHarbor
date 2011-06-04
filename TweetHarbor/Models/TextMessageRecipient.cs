@@ -9,7 +9,7 @@ namespace TweetHarbor.Models
     public class TextMessageRecipient
     {
         [Key]
-        [MinLength(10),MaxLength(10)]
+        [MinLength(10, ErrorMessage = "The phone number must be a 10 digit phone number including area code"), MaxLength(10, ErrorMessage = "The phone number must be a 10 digit phone number including area code")]
         public string PhoneNumber { get; set; }
         public string Name { get; set; }
         public ICollection<Project> Projects { get; set; }
