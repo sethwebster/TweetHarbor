@@ -68,7 +68,7 @@ namespace TweetHarbor.Tests.Controllers
         //
         #endregion
         // 
-        [TestMethod]
+       // [TestMethod]
         public void TestRemote()
         {
             string testStr = "{\"application\": { \"name\": \"Test Project 1\" },   \"build\": {    \"commit\": {      \"id\": \""+Guid.NewGuid()+"\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
