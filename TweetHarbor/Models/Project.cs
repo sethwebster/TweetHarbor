@@ -22,6 +22,7 @@ namespace TweetHarbor.Models
             this.ProjectNotifications = new Collection<ProjectNotification>();
             this.TextMessageRecipients = new Collection<TextMessageRecipient>();
             this.OutboundNotifications = new Collection<OutboundNotification>();
+            this.DateCreated = DateTime.Now;
         }
 
         [Required]
@@ -40,6 +41,7 @@ namespace TweetHarbor.Models
         public ICollection<ProjectNotification> ProjectNotifications { get; set; }
         public ICollection<TextMessageRecipient> TextMessageRecipients { get; set; }
         public ICollection<OutboundNotification> OutboundNotifications { get; set; }
+        public DateTime DateCreated { get; set; }
 
     }
 }

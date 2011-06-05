@@ -12,6 +12,7 @@ namespace TweetHarbor.Models
         public User()
         {
             this.Projects = new Collection<Project>();
+            this.DateCreated = DateTime.Now;
         }
         [Required]
         [Key]
@@ -34,5 +35,6 @@ namespace TweetHarbor.Models
         public bool SendSMS { get; set; }
         public ICollection<Project> Projects { get; set; }
         public bool IsAdmin { get; set; }
+        public DateTime DateCreated { get; set; }
     }
 }
