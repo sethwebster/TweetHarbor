@@ -169,7 +169,7 @@ ul#menu li a
     text-decoration: none;
     line-height: 2.8em;
     background-color: #e8eef4;
-    color: #034af3;
+    color: #444;
     border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
     -moz-border-radius: 4px 4px 0 0;
@@ -311,6 +311,17 @@ div#title
     text-decoration: none;
 }
 
+#logindisplay img
+{
+    margin-right:10px;
+    height:35px;
+    border:1px solid #eee;
+     border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+
+
 /* Styles for validation helpers
 -----------------------------------------------------------*/
 .field-validation-error
@@ -396,6 +407,7 @@ div#title
     -webkit-box-shadow: 1px 1px 1px #666;
     box-shadow: 1px 1px 1px #666;
     width: 100%;
+    font-size:.95em;
 }
 
 #account #email_address_edit

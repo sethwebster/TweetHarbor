@@ -17,6 +17,10 @@
             </div>
             <div id="menucontainer">
                 <ul id="menu">
+                    @if (Html.CurrentUser() != null && Request.IsAuthenticated)
+                    { 
+                        <li>@Html.ActionLink("Dashboard", "Index", new { Controller = "Account" })</li>
+                    }
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     @if (Html.CurrentUser() != null && Html.CurrentUser().IsAdmin)
