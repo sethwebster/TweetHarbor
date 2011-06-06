@@ -25,7 +25,7 @@ namespace TweetHarbor.Areas.Admin.Controllers
                 var user = database.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
                 if (user.IsAdmin)
                 {
-                    var users = database.Users.Include("Projects").OrderBy(u => u.TwitterUserName);
+                    var users = database.Users.Include("Projects").OrderBy(u => u.TwitterUserName).OrderByDescending(y => y.DateCreated);
                     return View(users);
                 }
                 else

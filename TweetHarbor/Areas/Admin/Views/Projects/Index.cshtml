@@ -13,16 +13,16 @@
             Name
         </th>
         <th>
-            SendPrivateTweetOnSuccess
+            DM Success
         </th>
         <th>
-            SendPublicTweetOnSuccess
+            Tweet Success
         </th>
         <th>
-            SendPrivateTweetOnFailure
+            DM Failure
         </th>
         <th>
-            SendPublicTweetOnFailure
+            Tweet Failure
         </th>
         <th>
             SuccessTemplate
@@ -32,6 +32,9 @@
         </th>
         <th>
             User
+        </th>
+        <th>
+            Date Created
         </th>
     </tr>
     @foreach (var item in Model)
@@ -63,6 +66,8 @@
                 @item.FailureTemplate
             </td>
             <td>@item.User.TwitterUserName
+            </td>
+            <td>@item.DateCreated
             </td>
         </tr>
     }

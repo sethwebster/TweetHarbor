@@ -27,6 +27,9 @@
         <th>
             Projects
         </th>
+        <th>
+            Date Joined
+        </th>
     </tr>
     @foreach (var item in Model)
     {
@@ -42,7 +45,14 @@
                 @item.EmailAddress
             </td>
             <td>
+            @if (!string.IsNullOrEmpty(item.UserProfilePicUrl))
+            { 
                 <img src="@item.UserProfilePicUrl" />
+            }
+            else
+            { 
+                <text>[none]</text>
+            }
             </td>
             <td>
                 @item.SendPrivateTweet
@@ -57,6 +67,7 @@
                 }
 
             </td>
+            <td>@item.DateCreated</td>
         </tr>
     }
 </table>
