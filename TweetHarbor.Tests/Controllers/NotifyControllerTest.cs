@@ -68,10 +68,10 @@ namespace TweetHarbor.Tests.Controllers
         //
         #endregion
         // 
-       [TestMethod]
+        //[TestMethod]
         public void TestRemote()
         {
-            string testStr = "{\"application\": { \"name\": \"Test Project 1\" },   \"build\": {    \"commit\": {      \"id\": \""+Guid.NewGuid()+"\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
+            string testStr = "{\"application\": { \"name\": \"Test Project 1\" },   \"build\": {    \"commit\": {      \"id\": \"" + Guid.NewGuid() + "\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
 
             WebClient wc = new WebClient();
             wc.Headers.Add("Content-Type", "application/json");
@@ -168,8 +168,8 @@ namespace TweetHarbor.Tests.Controllers
 
             m.Setup(a => a.SendText("", ""));
 
-            var controller = new NotifyController(db, new TestTweetHarborTwitterService(), m.Object); 
-            
+            var controller = new NotifyController(db, new TestTweetHarborTwitterService(), m.Object);
+
             MvcMockHelpers.SetFakeControllerContext(controller);
 
             var res = controller.New(user.TwitterUserName, user.UniqueId, o);
