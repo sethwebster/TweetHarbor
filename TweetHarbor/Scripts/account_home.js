@@ -133,6 +133,7 @@ ProjectsManager.prototype.RenderTemplateEditor = function (type, project, curren
         }
     }
     var s = "";
+    s += ("<h4>" + (type == "SuccessTemplate" ? "Success Template" : "Failure Template") + "</h4>");
     s += ("<div class='template_display' id='template_display_" + projectId + "_" + type + "'>" + currentValue + "</div>");
     s += ("<div class='template_edit' id='template_edit_" + projectId + "_" + type + "'>");
     s += ("<div class='template_edit_toolbar'>");
