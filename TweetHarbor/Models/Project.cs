@@ -9,7 +9,7 @@ namespace TweetHarbor.Models
 {
     public class Project
     {
-       
+
         public Project()
         {
             SendPrivateTweetOnFailure = true;
@@ -26,14 +26,16 @@ namespace TweetHarbor.Models
 
         [Required]
         [Key]
+        public int ProjectId { get; set; }
+        [MinLength(1), MaxLength(255), Required]
         public string ProjectName { get; set; }
         public User User { get; set; }
         public bool SendPrivateTweetOnSuccess { get; set; }
         public bool SendPublicTweetOnSuccess { get; set; }
         public bool SendPrivateTweetOnFailure { get; set; }
         public bool SendPublicTweetOnFailure { get; set; }
-        public bool SendTextOnSuccess {get;set;}
-        public bool SendTextOnFailure {get;set;}
+        public bool SendTextOnSuccess { get; set; }
+        public bool SendTextOnFailure { get; set; }
         public string SuccessTemplate { get; set; }
         public string FailureTemplate { get; set; }
         public ICollection<TwitterMessageRecipient> MessageRecipients { get; set; }
