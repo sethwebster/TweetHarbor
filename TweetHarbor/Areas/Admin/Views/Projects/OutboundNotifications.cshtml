@@ -1,0 +1,63 @@
+﻿@model IEnumerable<TweetHarbor.Models.OutboundNotification>
+
+@{
+    ViewBag.Title = "OutboundNotifications";
+}
+
+<h2>OutboundNotifications</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            NotificationType
+        </th>
+        <th>
+            Recipient
+        </th>
+        <th>
+            Message
+        </th>
+        <th>
+            SentSuccessfully
+        </th>
+        <th>
+            DateCreated
+        </th>
+        <th>
+            DateSent
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.NotificationType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Recipient)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Message)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.SentSuccessfully)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateCreated)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DateSent)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.NotificationId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.NotificationId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.NotificationId })
+        </td>
+    </tr>
+}
+
+</table>
