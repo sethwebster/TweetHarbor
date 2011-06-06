@@ -1,0 +1,46 @@
+﻿@model IEnumerable<TweetHarbor.Models.ProjectNotification>
+
+@{
+    ViewBag.Title = "ProjectNotifications";
+}
+
+<h2>ProjectNotifications</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            NotificationDate
+        </th>
+        <th>Project</th>
+        <th>Message</th>
+        <th>Status</th>
+        <th>User</th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.NotificationDate)
+        </td>
+        <td>
+            @item.Project.ProjectName
+        </td>
+        <td>
+            @item.Build.commit.message        </td>
+        <td>
+            @item.Build.status</td>
+        <td>
+            @item.Project.User.TwitterUserName</td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ProjectNotificationId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ProjectNotificationId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ProjectNotificationId })
+        </td>
+    </tr>
+}
+
+</table>

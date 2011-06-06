@@ -37,6 +37,25 @@ namespace TweetHarbor.Areas.Admin.Controllers
             return new EmptyResult();
         }
 
+        public ActionResult ProjectNotifications()
+        {
+            if (null != HttpContext)
+            {
+                var user = database.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
+                if (user.IsAdmin)
+                {
+                    var projectNotifications = database.ProjectNotifications.Include("Build").Include("Project.user").Include("Build.commit").OrderByDescending(pn => pn.NotificationDate);
+                    return View(projectNotifications);
+                }
+                else
+                {
+                    //TODO: Create better authorization strategy
+                    return new RedirectResult("/?f=notauthorized");
+                }
+            }
+            return new EmptyResult();
+        }
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
