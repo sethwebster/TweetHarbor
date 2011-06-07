@@ -245,6 +245,62 @@ namespace TweetHarbor.Tests.Controllers
         }
 
         [TestMethod]
+        public void TestSendSmsMessages_InboundNotificationCreated()
+        {
+            string testStr = "{\"application\": { \"name\": \"Test Project 1\" },   \"build\": {    \"commit\": {      \"id\": \"" + Guid.NewGuid() + "\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
+            var o = JsonConvert.DeserializeObject<Notification>(testStr);
+
+            TestTweetHarborDbContext db = new TestTweetHarborDbContext();
+
+            var m = new Mock<ITweetHarborTextMessageService>();
+            m.Setup(a => a.SendText("", ""));
+
+            var user = new User()
+            {
+                EmailAddress = "sethwebster@gmail.com",
+                OAuthToken = "<FakeOauthToken>",
+                OAuthTokenSecret = "<FakeOauthTokenSecret>",
+                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
+                SendPrivateTweet = true,
+                SendPublicTweet = false,
+                TwitterUserName = "sethwebster",
+                SendSMS = true
+            };
+            db.Users.Add(user);
+
+            var proj = new Project()
+            {
+                ProjectName = o.application.name,
+                SendPrivateTweetOnFailure = true,
+                SendPrivateTweetOnSuccess = true,
+                SendPublicTweetOnFailure = false,
+                SendPublicTweetOnSuccess = true,
+                SendTextOnSuccess = true,
+                SendTextOnFailure = false,
+                User = user
+            };
+            user.Projects.Add(proj);
+            db.Projects.Add(proj);
+            proj.TextMessageRecipients.Add(new TextMessageRecipient()
+            {
+                Name = "App Test",
+                PhoneNumber = "5201235678",
+            });
+
+            var controller = new NotifyController(db, new TestTweetHarborTwitterService(), m.Object);
+
+            var res = controller.New(user.TwitterUserName, user.UniqueId, o);
+
+            Assert.IsInstanceOfType(res, typeof(JsonResult));
+            Assert.IsInstanceOfType((res as JsonResult).Data, typeof(JsonResultModel));
+
+            Assert.AreEqual(true, ((res as JsonResult).Data as JsonResultModel).Success);
+
+            Assert.AreNotEqual(0, proj.ProjectNotifications.Count);
+            Assert.AreNotEqual(0, proj.ProjectNotifications.First().Build.commit.message.Length);
+            }
+
+        [TestMethod]
         public void TestDeTokenizeString()
         {
             string Input = "{application:name} is being tested on @TweetHarbor 'cause it rocks the {build:commit:id} magic {build:commit:message}";
