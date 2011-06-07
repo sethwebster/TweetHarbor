@@ -137,14 +137,22 @@ namespace TweetHarbor.Controllers
                         };
                         project.OutboundNotifications.Add(n);
                         database.SaveChanges();
-                        textMessageService.SendText(r.PhoneNumber, update);
-                        n.SentSuccessfully = true;
-                        n.DateSent = DateTime.Now;
+                        try
+                        {
+                            textMessageService.SendText(r.PhoneNumber, update);
+                            n.SentSuccessfully = true;
+                            n.DateSent = DateTime.Now;
+                        }
+                        catch (Exception sx)
+                        {
+                            n.SentSuccessfully = false;
+                        }
                         database.SaveChanges();
                     }
                     catch (Exception e)
                     {
                         //TODO: Log this
+                        throw e;
                     }
                 }
             }
@@ -161,7 +169,7 @@ namespace TweetHarbor.Controllers
 
         // TODO: Create a richer tokenization approach (string replace isn't pretty, but worked)
         [NonAction]
-        string DeTokenizeString(string input, Project project, Notification notification)
+        public static string DeTokenizeString(string input, Project project, Notification notification)
         {
 
             return input.Replace("{application:name}", project.ProjectName)
