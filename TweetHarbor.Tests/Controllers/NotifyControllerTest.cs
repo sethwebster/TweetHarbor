@@ -72,7 +72,7 @@ namespace TweetHarbor.Tests.Controllers
         /// Method used for testing actual web call -- not to be used when in actual test mode (breaks)
         /// </summary>
 #if !TEST
-        [TestMethod]
+      //  [TestMethod]
         public void TestRemote()
         {
             string testStr = "{\"application\": { \"name\": \"Test Project 1\" },   \"build\": {    \"commit\": {      \"id\": \"" + Guid.NewGuid() + "\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
