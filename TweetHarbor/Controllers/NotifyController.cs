@@ -215,9 +215,16 @@ namespace TweetHarbor.Controllers
                     };
                     project.OutboundNotifications.Add(n);
                     database.SaveChanges();
-                    twitter.SendDirectMessage(r.ScreenName, update);
-                    n.SentSuccessfully = true;
-                    n.DateSent = DateTime.Now;
+                    try
+                    {
+                        twitter.SendDirectMessage(r.ScreenName, update);
+                        n.SentSuccessfully = true;
+                        n.DateSent = DateTime.Now;
+                    }
+                    catch (Exception sx)
+                    {
+                        n.SentSuccessfully = false;
+                    }
                     database.SaveChanges();
                 }
                 catch (Exception e)
