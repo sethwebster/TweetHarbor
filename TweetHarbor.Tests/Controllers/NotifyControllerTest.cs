@@ -72,7 +72,7 @@ namespace TweetHarbor.Tests.Controllers
         /// Method used for testing actual web call -- not to be used when in actual test mode (breaks)
         /// </summary>
 #if !TEST
-      //  [TestMethod]
+        //  [TestMethod]
         public void TestRemote()
         {
             string testStr = "{\"application\": { \"name\": \"Test Project 1\" },   \"build\": {    \"commit\": {      \"id\": \"" + Guid.NewGuid() + "\", \"message\": \"Implement foo\"  }, \"status\": \"succeeded\" } }";
@@ -223,11 +223,19 @@ namespace TweetHarbor.Tests.Controllers
                 };
             user.Projects.Add(proj);
             db.Projects.Add(proj);
-            proj.TextMessageRecipients.Add(new TextMessageRecipient()
+            var tmr = new TextMessageRecipient()
             {
                 Name = "App Test",
                 PhoneNumber = "5201235678",
-            });
+            };
+            proj.TextMessageRecipients.Add(tmr);
+
+            var dmr = new TwitterMessageRecipient()
+            {
+                ScreenName = "testuser",
+            };
+
+            proj.MessageRecipients.Add(dmr);
 
             var controller = new NotifyController(db, new TestTweetHarborTwitterService(), m.Object);
 
@@ -240,8 +248,15 @@ namespace TweetHarbor.Tests.Controllers
 
             Assert.AreNotEqual(0, proj.OutboundNotifications.Count);
             Assert.AreNotEqual(0, proj.OutboundNotifications.First().Message.Length);
-            Assert.AreEqual("SMS", proj.OutboundNotifications.First().NotificationType);
-            Assert.AreEqual("5201235678", proj.OutboundNotifications.First().Recipient);
+            Assert.AreEqual(2, proj.OutboundNotifications.Count);
+
+            var nots = proj.OutboundNotifications.OrderBy(pj => pj.NotificationType);
+
+            Assert.AreEqual("SMS", nots.First().NotificationType);
+            Assert.AreEqual("5201235678", nots.First().Recipient);
+
+            Assert.AreEqual("Twitter", nots.ElementAt(1).NotificationType);
+            Assert.AreEqual(dmr.ScreenName, nots.ElementAt(1).Recipient);
         }
 
         [TestMethod]
@@ -281,11 +296,12 @@ namespace TweetHarbor.Tests.Controllers
             };
             user.Projects.Add(proj);
             db.Projects.Add(proj);
-            proj.TextMessageRecipients.Add(new TextMessageRecipient()
+            var tmr = new TextMessageRecipient()
             {
                 Name = "App Test",
                 PhoneNumber = "5201235678",
-            });
+            };
+            proj.TextMessageRecipients.Add(tmr);
 
             var controller = new NotifyController(db, new TestTweetHarborTwitterService(), m.Object);
 
@@ -298,7 +314,8 @@ namespace TweetHarbor.Tests.Controllers
 
             Assert.AreNotEqual(0, proj.ProjectNotifications.Count);
             Assert.AreNotEqual(0, proj.ProjectNotifications.First().Build.commit.message.Length);
-            }
+
+        }
 
         [TestMethod]
         public void TestDeTokenizeString()
