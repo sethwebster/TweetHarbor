@@ -596,3 +596,24 @@ ul.recipient_list li:hover
 {
     float: right;
 }
+
+#project_instructions
+{
+        display:none;
+}
+
+#project_instructions #steps
+{
+    list-style:none;
+    margin:0px;padding:0px;
+    width:90%;
+    margin:0 auto 0 auto;
+
+}
+
+#project_instructions #steps li
+{
+    float:left;
+    width:175px;
+    padding:10px;
+}

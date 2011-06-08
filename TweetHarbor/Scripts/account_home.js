@@ -314,8 +314,12 @@ $(document).ready(function () {
     });
 
     // Load Projects
+    _this = this;
     this.ProjectManager = new ProjectsManager("projects", true);
     this.ProjectManager.Load(function () {
+        if (_this.ProjectManager._projects.length <= 0) {
+            $("#project_instructions").show();
+        }
     });
 
 
