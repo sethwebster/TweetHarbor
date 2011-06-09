@@ -382,26 +382,6 @@ namespace TweetHarbor.Tests.Controllers
         }
 
         [TestMethod]
-        public void LogOff_Test()
-        {
-            //var db = new TestTweetHarborDbContext();
-
-            //var controller = new AccountController(db, null);
-
-            //var ident = new GenericIdentity("localtestusermissing");
-            //System.Security.Principal.GenericPrincipal c = new System.Security.Principal.GenericPrincipal(ident, new string[] { });
-
-            //controller.SetFakeControllerContext(c);
-            //Assert.IsTrue(controller.Request.IsAuthenticated);
-
-            //controller.LogOff();
-
-            //Assert.IsFalse(controller.Request.IsAuthenticated);
-
-        }
-
-
-        [TestMethod]
         public void AuthorizeCallback_NewUser()
         {
             var db = new TestTweetHarborDbContext();
