@@ -53,6 +53,13 @@ namespace TweetHarbor.Tests.Helpers
             var httpContext = FakeHttpContext();
             Mock.Get(httpContext).Setup(c => c.User).Returns(Principal);
 
+            var rq = new Mock<HttpRequestBase>();
+            rq.Setup(ctx => ctx.IsAuthenticated).Returns(true);
+
+            HttpCookieCollection col = new HttpCookieCollection();
+
+            rq.Setup(ctx => ctx.Cookies).Returns(col);
+            Mock.Get(httpContext).Setup(c => c.Request).Returns(rq.Object);
             ControllerContext context = new ControllerContext(new RequestContext(httpContext, new RouteData()), controller);
             controller.ControllerContext = context;
         }

@@ -20,11 +20,13 @@ namespace TweetHarbor.Controllers
     {
         ITweetHarborDbContext database;
         ITweetHarborTwitterService twitter;
+        IFormsAuthenticationWrapper authentication;
 
-        public AccountController(ITweetHarborDbContext database, ITweetHarborTwitterService twitter)
+        public AccountController(ITweetHarborDbContext database, ITweetHarborTwitterService twitter, IFormsAuthenticationWrapper Authentication)
         {
             this.database = database;
             this.twitter = twitter;
+            this.authentication = Authentication;
         }
 
         [Authorize]
@@ -81,7 +83,7 @@ namespace TweetHarbor.Controllers
             twitter.AuthenticateWith(accessToken.Token, accessToken.TokenSecret);
             TwitterUser user = twitter.VerifyCredentials();
             ViewBag.Message = string.Format("Your username is {0}", user.ScreenName);
-            FormsAuthentication.SetAuthCookie(user.ScreenName, true);
+            authentication.SetAuthCookie(user.ScreenName, true);
 
             var appUser = CreateOrUpdateAccountIfNeeded(accessToken, user);
 
@@ -118,7 +120,7 @@ namespace TweetHarbor.Controllers
 
         public ActionResult LogOff()
         {
-            FormsAuthentication.SignOut();
+            authentication.SignOut();
             return RedirectToAction("Index", "Home");
         }
 
@@ -145,7 +147,7 @@ namespace TweetHarbor.Controllers
                             break;
                     }
                     database.SaveChanges();
-                    return Json(new JsonResultModel() { Success = true });
+                    return Json(new JsonResultModel() { Success = true, Message = "Value has been updated" });
                 }
                 else
                 {

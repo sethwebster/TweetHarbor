@@ -120,6 +120,7 @@
     <Compile Include="Messaging\ITweetHarborTwitterService.cs" />
     <Compile Include="Messaging\TweetHarborTextMessageService.cs" />
     <Compile Include="Messaging\Twilio\TwilioRest.cs" />
+    <Compile Include="Models\IFormsAuthenticationWrapper.cs" />
     <Compile Include="Models\OutboundNotification.cs" />
     <Compile Include="Models\TextMessageRecipient.cs" />
     <Compile Include="Messaging\TweetHarborTwitterServiceOffline.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="Models\TemplateEditorModel.cs" />
     <Compile Include="Models\TemplateEditorTypes.cs" />
     <Compile Include="Models\TweetHarborDbContext.cs" />
+    <Compile Include="Models\TweetHarborFormsAuthentication.cs" />
     <Compile Include="Models\TwitterHelper.cs" />
     <Compile Include="Models\TwitterMessageRecipient.cs" />
     <Compile Include="Models\User.cs" />

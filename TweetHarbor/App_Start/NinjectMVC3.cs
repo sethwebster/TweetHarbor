@@ -54,6 +54,7 @@ namespace TweetHarbor.App_Start
         {
             kernel.Bind<ITweetHarborDbContext>().To<TweetHarborDbContext>();
             kernel.Bind<ITweetHarborTextMessageService>().To<TweetHarborTextMessageService>();
+            kernel.Bind<IFormsAuthenticationWrapper>().To<TweetHarborFormsAuthentication>();
 #if OFFLINE
             kernel.Bind<ITweetHarborTwitterService>().To<TweetHarborTwitterServiceOffline>().WithConstructorArgument("ConsumerKey", TwitterHelper.ConsumerKey).WithConstructorArgument("ConsumerSecret", TwitterHelper.ConsumerSecret);
 #else
