@@ -12,10 +12,11 @@
                 <h1>
                     TweetHarbor</h1>
             </div>
-            <div id="logindisplay">
-                @Html.Partial("_LogOnPartial")
-            </div>
+            <div class='clear'></div>
             <div id="menucontainer">
+                <div id="logindisplay">
+                    @Html.Partial("_LogOnPartial")
+                </div>
                 <ul id="menu">
                     @if (Html.CurrentUser() != null && Request.IsAuthenticated)
                     { 

@@ -3,9 +3,16 @@ The base color for this template is #5c87b2. If you'd like
 to use a different color start by replacing all instances of
 #5c87b2 with your new color.
 ----------------------------------------------------------*/
+html
+{
+    background: url(backgroundsprite.jpg) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
 body
 {
-    background-color: #E6E6E6;
     font-size: .85em;
     font-family: "Trebuchet MS" , Verdana, Helvetica, Sans-Serif;
     margin: 0;
@@ -88,7 +95,7 @@ h5, h6
 page width. Or, you can specify an exact pixel width. */
 .page
 {
-    width: 60%;
+    width: 1024px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -135,16 +142,22 @@ footer, #footer
     -webkit-border-radius: 0 0 4px 4px;
     -moz-border-radius: 0 0 4px 4px;
 }
+/* LOGIN PARTIAL */
+
+#logon_status
+{
+}
+
 
 /* TAB MENU   
 ----------------------------------------------------------*/
 ul#menu
 {
-    border-bottom: 1px #5C87B2 solid;
     padding: 0 0 2px;
     position: relative;
     margin: 0;
-    text-align: right;
+    text-align: left;
+    width:500px;
 }
 
 ul#menu li
@@ -274,7 +287,7 @@ table th
 
 nav, #menucontainer
 {
-    margin-top: 40px;
+    margin-top: 10px;
 }
 
 div#title
@@ -286,37 +299,42 @@ div#title
 
 #logindisplay
 {
+    width: 250px;
+    float: right;
     font-size: 1.1em;
     display: block;
-    text-align: right;
-    margin: 10px;
-    color: White;
+    padding: 2px 5px 2px 5px;
+    border-radius: 0 0 4px 4px;
+    -webkit-border-radius: 0 0 4px 4px;
+    -moz-border-radius: 0 0 4px 4px;
+    background-color: #fff;
+    color: #111;
 }
 
 #logindisplay a:link
 {
-    color: white;
+    color: #111;
     text-decoration: underline;
 }
 
 #logindisplay a:visited
 {
-    color: white;
+    color: #111;
     text-decoration: underline;
 }
 
 #logindisplay a:hover
 {
-    color: white;
+    color: #111;
     text-decoration: none;
 }
 
 #logindisplay img
 {
-    margin-right:10px;
-    height:35px;
-    border:1px solid #eee;
-     border-radius: 2px;
+    margin-right: 10px;
+    height: 35px;
+    border: 1px solid #eee;
+    border-radius: 2px;
     -webkit-border-radius: 2px;
     -moz-border-radius: 2px;
 }
@@ -407,7 +425,7 @@ div#title
     -webkit-box-shadow: 1px 1px 1px #666;
     box-shadow: 1px 1px 1px #666;
     width: 100%;
-    font-size:.95em;
+    font-size: .95em;
 }
 
 #account #email_address_edit
@@ -481,7 +499,7 @@ ul.recipient_list
 .template_field_insert
 {
     font-size: .8em;
-      cursor: pointer;
+    cursor: pointer;
 }
 
 ul.projects_list
@@ -554,7 +572,7 @@ ul.projects_list li.list_project .template
     box-shadow: 1px 1px 1px #666;
     padding: 5px;
     margin: 5px;
-      cursor: pointer;
+    cursor: pointer;
 }
 
 .recipients
@@ -577,11 +595,7 @@ ul.recipient_list li
     color: #fff;
     border: 1px solid #ccc;
     background-color: #A4A8FF;
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
 }
-
 .messageRecipientsWrapper
 {
     width: 200px;
@@ -599,21 +613,46 @@ ul.recipient_list li:hover
 
 #project_instructions
 {
-        display:none;
+    display: none;
+}
+
+#project_instructions #steps li.step
+{
+    padding: 10px;
+    margin: 10px;
+    background-color: #F9F9F9;
+    float: left;
+    width: 255px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    overflow: hidden;
+}
+
+#project_instructions .step-by-step
+{
+    text-indent: 0px;
+    list-style-position: inside;
+    margin: 0px;
+    padding: 0px;
+}
+
+#project_instructions ol li
+{
+    margin:0px;
+    padding:0px;
+    background-color: #E7E7E7;
+    margin:5px;
+    padding:4px; border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
 }
 
 #project_instructions #steps
 {
-    list-style:none;
-    margin:0px;padding:0px;
-    width:90%;
-    margin:0 auto 0 auto;
-
-}
-
-#project_instructions #steps li
-{
-    float:left;
-    width:175px;
-    padding:10px;
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    width: 98%;
+    margin: 0 auto 0 auto;
 }

@@ -322,6 +322,12 @@ $(document).ready(function () {
         }
     });
 
+    $(".copy_link").click(function () {
 
+        $.clippy("text");
+        alert("Service Url is in your clipboard. Ctrl (Cmd) V to paste." + $(this).attr("rel"));
+        return false;
+
+    });
 });
 
