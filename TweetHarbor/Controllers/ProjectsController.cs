@@ -274,6 +274,49 @@ namespace TweetHarbor.Controllers
             }
             return Json(new { Error = "Something", Success = false });
         }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult ImportFromAppHarbor(string Username, string Password)
+        {
+            if (null != HttpContext)
+            {
+                var user = database.Users.First(u => u.TwitterUserName == HttpContext.User.Identity.Name);
+                ApplicationImporter a = new ApplicationImporter();
+                var ret = a.GetProjects(Username, Password);
+                foreach (var p in ret)
+                {
+                    user.Projects.Add(p);
+                }
+                database.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Authorize", new { Controller = "Account" });
+
+        }
+        [HttpPost]
+        [Authorize]
+        public ActionResult Create(User user, string ProjectName)
+        {
+            var projects = database.Projects.Where(p => p.ProjectName == ProjectName && p.User.TwitterUserName == user.TwitterUserName);
+            if (projects.Count() == 0)
+            {
+                var project = new Project()
+                {
+                    ProjectName = ProjectName
+                };
+                user = database.Users.FirstOrDefault(u => u.TwitterUserName == user.TwitterUserName);
+                if (null != user)
+                {
+                    user.Projects.Add(project);
+                }
+                database.SaveChanges();
+            }
+            return RedirectToAction("Index");
+
+        }
+
+
         protected override void Dispose(bool disposing)
         {
             base.Dispose(disposing);
