@@ -34,6 +34,10 @@ namespace TweetHarbor.Controllers
         {
             if (null != HttpContext)
             {
+                if (!string.IsNullOrEmpty(Request["error"]) && Request["error"]=="ImportNotAuthorized")
+                {
+                    ViewBag.import_error = "Unable to sign in with those credentials";
+                }
                 ViewBag.UserName = HttpContext.User.Identity.Name;
                 var u = database.Users.Include("Projects")
                     .Include("Projects.MessageRecipients")

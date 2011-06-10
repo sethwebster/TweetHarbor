@@ -321,13 +321,8 @@ $(document).ready(function () {
             $("#project_instructions").show();
         }
     });
-
-    $(".copy_link").click(function () {
-
-        $.clippy("text");
-        alert("Service Url is in your clipboard. Ctrl (Cmd) V to paste." + $(this).attr("rel"));
-        return false;
-
+    $("#app_import").click(function () {
+        $("#appharbor_credentials").toggle();
     });
 });
 

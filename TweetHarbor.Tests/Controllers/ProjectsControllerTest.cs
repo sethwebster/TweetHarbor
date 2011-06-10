@@ -17,7 +17,7 @@ namespace TweetHarbor.Tests.Controllers
         public void TestApplicationImport()
         {
             ApplicationImporter a = new ApplicationImporter();
-            a.GetProjects("sethwebster@gmail.com", "Mi55ion!");
+            a.GetProjects("sethwebster@gmail.com", "Mi55ion!", new User());
         }
     }
 }
