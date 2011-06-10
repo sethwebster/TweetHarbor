@@ -7,6 +7,11 @@ namespace TweetHarbor.Models
 {
     public interface IApplicationImporter
     {
-        ICollection<Project> GetProjects(string Username, string Password, User user);
+        bool AuthenticateAs(string Username, string Password);
+        ICollection<Project> GetProjects();
+        bool SetProjectServiceHook(string ProjectUrl, string ServiceHookUrl);
+        bool DeleteProjectServiceHook(string ProjectUrl, string ServiceHookUrl);
+        bool SetAllProjectServiceHooks(string ServiceHookUrl);
+        bool DeleteAllServiceHooks();
     }
 }

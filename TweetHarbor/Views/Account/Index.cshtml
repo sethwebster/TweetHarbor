@@ -49,7 +49,7 @@
         <h3 id="">
             Service Hook Url</h3>
         <div id="service_hook_url" class='section'>
-            <input id="link" type="text" readonly value="http://tweetharbor.apphb.com/notify/new/@Model.TwitterUserName?token=@Model.UniqueId" />
+            <input id="link" type="text" readonly value="@Model.GetServiceHookUrl()" />
             <div id="instructions">
                 *Paste this link into the <a href="https://appharbor.com/application">Service Hooks</a>
                 section on App Harbor.
@@ -62,61 +62,69 @@
     <div id="project_instructions">
         <h3>
             Getting Started</h3>
-        <ul id="steps">
-            <li class='step'>
-                <h4>
-                    First, create an AppHarbor Application &gt;&gt;</h4>
-                <ol class='step-by-step'>
-                    <li>Log in to your <a href="http://appharbor.com/session/new" target="_blank">AppHarbor
-                        Account</a>. </li>
-                    <li>Next you will <a href="http://appharbor.com/application/new" target="_blank">Create
-                        an App</a>. </li>
-                </ol>
-                <p>
-                    Already have apps? <a href="#" id="app_import">Import</a> them.
-                    <div id="appharbor_credentials" style="@(ViewBag.import_error != null ? "display:block" : "")">
-                        <div class='notice'>
-                            <em>This will automate the setup process -- service hooks and all.</em>
-                        </div>
-                        <div id="import_error" class='error'>@ViewBag.import_error</div>
-                        @using (Html.BeginForm(new { Controller = "Projects", Action = "ImportFromAppHarbor" }))
-                        { 
-                            @Html.Label("Username", "AppHarbor Username")
-                            @Html.TextBox("Username")
-                            @Html.Label("Password", "AppHarbor Password")
-                            @Html.Password("Password")
-                            <input type="submit" value="Import" />
-                        }
-                        *Note - we do <strong>not</strong> store any of your AppHarbor credential information.
+        <div class="section">
+            <h4>
+                The easy way</h4>
+            <p>
+                Already have apps? <a href="#" id="app_import">Import</a> them.
+                <div id="appharbor_credentials" style="@(ViewBag.import_error != null ? "display:block" : "")">
+                    <div class='notice'>
+                        <em>This will automate the setup process -- service hooks and all.</em>
                     </div>
-                </p>
-            </li>
-            <li class='step'>
-                <h4>
-                    Second, copy & Paste your Service Hook</h4>
-                <ol class='step-by-step'>
-                    <li>Copy your Service Hook Url into your clipboard.</li>
-                    <li>Next, <a href="http://appharbor.com/application" target="_blank">visit your new
-                        application</a> and click "Service Hooks" (in the menu).</li>
-                    <li>Then, Click "Add service hook"</li>
-                    <li>Now, paste the link you copied in step 1, and save.</li>
-                </ol>
-                <p>
-                </p>
-            </li>
-            <li class='step'>
-                <h4>
-                    Third, Trigger a Build & Configure</h4>
-                <ol class='step-by-step'>
-                    <li>Now, change some code!</li>
-                    <li>Push to your AppHarbor Git repository.</li>
-                    <li>Refresh this page, these instructions will go away.</li>
-                    <li>Configure your app.</li>
-                </ol>
-                <p>
-                </p>
-            </li>
-        </ul>
+                    <div id="import_error" class='error'>@ViewBag.import_error</div>
+                    @using (Html.BeginForm(new { Controller = "Projects", Action = "ImportFromAppHarbor" }))
+                    { 
+                        @Html.Label("Username", "AppHarbor Username")
+                        @Html.TextBox("Username")
+                        @Html.Label("Password", "AppHarbor Password")
+                        @Html.Password("Password")
+                        <input type="submit" value="Import" />
+                    }
+                    *Note - we do <strong>not</strong> store any of your AppHarbor credential information.
+                </div>
+            </p>
+        </div>
+        <div class="section">
+            <h4>
+                The other way</h4>
+            <ul id="steps">
+                <li class='step'>
+                    <h4>
+                        First, create an AppHarbor Application &gt;&gt;</h4>
+                    <ol class='step-by-step'>
+                        <li>Log in to your <a href="http://appharbor.com/session/new" target="_blank">AppHarbor
+                            Account</a>. </li>
+                        <li>Next you will <a href="http://appharbor.com/application/new" target="_blank">Create
+                            an App</a>. </li>
+                    </ol>
+                </li>
+                <li class='step'>
+                    <h4>
+                        Second, copy & Paste your Service Hook</h4>
+                    <ol class='step-by-step'>
+                        <li>Copy your Service Hook Url into your clipboard.</li>
+                        <li>Next, <a href="http://appharbor.com/application" target="_blank">visit your new
+                            application</a> and click "Service Hooks" (in the menu).</li>
+                        <li>Then, Click "Add service hook"</li>
+                        <li>Now, paste the link you copied in step 1, and save.</li>
+                    </ol>
+                    <p>
+                    </p>
+                </li>
+                <li class='step'>
+                    <h4>
+                        Third, Trigger a Build & Configure</h4>
+                    <ol class='step-by-step'>
+                        <li>Now, change some code!</li>
+                        <li>Push to your AppHarbor Git repository.</li>
+                        <li>Refresh this page, these instructions will go away.</li>
+                        <li>Configure your app.</li>
+                    </ol>
+                    <p>
+                    </p>
+                </li>
+            </ul>
+        </div>
         <div class='clear'>
         </div>
     </div>
