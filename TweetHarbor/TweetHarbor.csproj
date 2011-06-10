@@ -52,6 +52,9 @@
     <Reference Include="Hammock.ClientProfile">
       <HintPath>..\packages\TweetSharp.2.0.6\lib\4.0\Hammock.ClientProfile.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack">
+      <HintPath>..\packages\HtmlAgilityPack.1.4.0\lib\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Moq">
@@ -120,6 +123,8 @@
     <Compile Include="Messaging\ITweetHarborTwitterService.cs" />
     <Compile Include="Messaging\TweetHarborTextMessageService.cs" />
     <Compile Include="Messaging\Twilio\TwilioRest.cs" />
+    <Compile Include="Models\ApplicationImporter.cs" />
+    <Compile Include="Models\IApplicationImporter.cs" />
     <Compile Include="Models\IFormsAuthenticationWrapper.cs" />
     <Compile Include="Models\OutboundNotification.cs" />
     <Compile Include="Models\TextMessageRecipient.cs" />

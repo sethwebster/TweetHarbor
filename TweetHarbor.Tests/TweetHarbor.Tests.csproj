@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountControllerTest.cs" />
     <Compile Include="App_Start\NinjectMVC3.cs" />
+    <Compile Include="Controllers\ProjectsControllerTest.cs" />
     <Compile Include="Controllers\NotifyControllerTest.cs" />
     <Compile Include="Helpers\TestableDbSet.cs" />
     <Compile Include="Helpers\InjectableFilterProvider.cs" />
