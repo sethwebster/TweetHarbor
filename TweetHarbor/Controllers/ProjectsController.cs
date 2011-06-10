@@ -8,6 +8,7 @@ using TweetHarbor.Models;
 using Newtonsoft.Json;
 using System.Data.Entity.Validation;
 using System.Collections.ObjectModel;
+using System.Security;
 
 namespace TweetHarbor.Controllers
 {
@@ -285,9 +286,11 @@ namespace TweetHarbor.Controllers
                 ApplicationImporter a = new ApplicationImporter();
                 try
                 {
-                    var ret = a.GetProjects(Username, Password, user);
+                    a.AuthenticateAs(Username, Password);
+                    var ret = a.GetProjects();
                     foreach (var p in ret)
                     {
+                        a.SetProjectServiceHook(p.AppHarborProjectUrl, user.GetServiceHookUrl());
                         user.Projects.Add(p);
                     }
                     database.SaveChanges();
@@ -302,6 +305,54 @@ namespace TweetHarbor.Controllers
             return RedirectToAction("Authorize", new { Controller = "Account" });
 
         }
+
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult VerifyServiceHooks(string Username, string Password)
+        {
+            if (null != HttpContext)
+            {
+                var user = database.Users.First(u => u.TwitterUserName == HttpContext.User.Identity.Name);
+                ApplicationImporter a = new ApplicationImporter();
+                try
+                {
+                    a.AuthenticateAs(Username, Password);
+                    var ret = a.GetProjects();
+                    foreach (var p in ret)
+                    {
+                        a.SetProjectServiceHook(p.AppHarborProjectUrl, user.GetServiceHookUrl());
+                    }
+                    return RedirectToAction("Index", "Account");
+                }
+                catch (Exception e)
+                {
+                    ViewData["import_error"] = e.Message == "NotAuthorized" ? "We could not log you in with those credentials" : "An error occurred.  Please try again";
+                    return RedirectToAction("Index", new { Action = "Index", Controller = "Account", error = "Import" + e.Message });
+                }
+            }
+            return RedirectToAction("Authorize", new { Controller = "Account" });
+
+        }
+
+        [Authorize]
+        public ActionResult DeleteAllServiceHooks(string Username, string Password)
+        {
+            if (null != HttpContext)
+            {
+                var user = database.Users.First(u => u.TwitterUserName == HttpContext.User.Identity.Name);
+                if (!user.IsAdmin)
+                {
+                    throw new SecurityException("Not authorized");
+                }
+
+                ApplicationImporter a = new ApplicationImporter();
+                a.AuthenticateAs(Username, Password);
+                a.DeleteAllServiceHooks();
+            }
+            return new EmptyResult();
+        }
+
         [HttpPost]
         [Authorize]
         public ActionResult Create(User user, string ProjectName)

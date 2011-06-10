@@ -44,6 +44,8 @@ namespace TweetHarbor.Models
         public ICollection<TextMessageRecipient> TextMessageRecipients { get; set; }
         public ICollection<OutboundNotification> OutboundNotifications { get; set; }
         public DateTime DateCreated { get; set; }
+        [MaxLength(400)]
+        public string AppHarborProjectUrl { get; set; }
 
     }
 }
