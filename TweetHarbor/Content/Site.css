@@ -656,3 +656,9 @@ ul.recipient_list li:hover
     width: 98%;
     margin: 0 auto 0 auto;
 }
+
+
+#appharbor_credentials
+{
+    display:none;
+}

@@ -283,13 +283,21 @@ namespace TweetHarbor.Controllers
             {
                 var user = database.Users.First(u => u.TwitterUserName == HttpContext.User.Identity.Name);
                 ApplicationImporter a = new ApplicationImporter();
-                var ret = a.GetProjects(Username, Password);
-                foreach (var p in ret)
+                try
                 {
-                    user.Projects.Add(p);
+                    var ret = a.GetProjects(Username, Password, user);
+                    foreach (var p in ret)
+                    {
+                        user.Projects.Add(p);
+                    }
+                    database.SaveChanges();
+                    return RedirectToAction("Index", "Account");
                 }
-                database.SaveChanges();
-                return RedirectToAction("Index");
+                catch (Exception e)
+                {
+                    ViewData["import_error"] = e.Message == "NotAuthorized" ? "We could not log you in with those credentials" : "An error occurred.  Please try again";
+                    return RedirectToAction("Index", new { Action = "Index", Controller = "Account", error = "Import" + e.Message });
+                }
             }
             return RedirectToAction("Authorize", new { Controller = "Account" });
 

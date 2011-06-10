@@ -7,6 +7,6 @@ namespace TweetHarbor.Models
 {
     public interface IApplicationImporter
     {
-        ICollection<Project> GetProjects(string Username, string Password);
+        ICollection<Project> GetProjects(string Username, string Password, User user);
     }
 }
