@@ -347,7 +347,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var result = NotifyController.DeTokenizeString(Input, p, n);
 
-            Assert.AreEqual("TestApp is being tested on @TweetHarbor 'cause it rocks the " + n.build.commit.id.Substring(0, 5) + " magic Some testin' goin' on", result);
+            Assert.AreEqual("TestApp is being tested on @TweetHarbor 'cause it rocks the " + n.build.commit.id.Substring(0, 7) + " magic Some testin' goin' on", result);
 
         }
 
