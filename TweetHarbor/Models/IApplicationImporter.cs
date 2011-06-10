@@ -13,5 +13,6 @@ namespace TweetHarbor.Models
         bool DeleteProjectServiceHook(string ProjectUrl, string ServiceHookUrl);
         bool SetAllProjectServiceHooks(string ServiceHookUrl);
         bool DeleteAllServiceHooks();
+        bool DoesServiceHookExist(string projectUrl, string ServiceHookUrl);
     }
 }

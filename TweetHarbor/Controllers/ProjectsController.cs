@@ -69,6 +69,30 @@ namespace TweetHarbor.Controllers
             return Json(new { Error = "Not and Http Request" });
         }
 
+        [Authorize]
+        public JsonResult CheckServiceHookUrlStatus(string Id, string Username, string Password)
+        {
+            if (null != HttpContext)
+            {
+                var user = database.Users.FirstOrDefault(f => f.TwitterUserName == HttpContext.User.Identity.Name);
+                ApplicationImporter a = new ApplicationImporter();
+                a.AuthenticateAs(Username, Password);
+                var projects = a.GetProjects();
+                foreach (var p in projects)
+                {
+                    if (a.DoesServiceHookExist(p.AppHarborProjectUrl, user.GetServiceHookUrl()))
+                    {
+                        return Json(new JsonResultModel() { Success = true, Message = "OK" });
+                    }
+                    else
+                    {
+                        return Json(new JsonResultModel() { Success = true, Message = "NOT SET" });
+                    }
+                }
+            }
+            return Json(new { Error = "Not and Http Request" });
+        }
+
         [HttpPost]
         [Authorize]
         public JsonResult ProjectNotificationToggle(string Id, string TweetType, bool Value)

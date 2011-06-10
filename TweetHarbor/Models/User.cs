@@ -36,7 +36,6 @@ namespace TweetHarbor.Models
         public ICollection<Project> Projects { get; set; }
         public bool IsAdmin { get; set; }
         public DateTime DateCreated { get; set; }
-
         public string GetServiceHookUrl()
         {
             return string.Format("http://tweetharbor.apphb.com/notify/new/{0}?token={1}", this.TwitterUserName, this.UniqueId);

@@ -201,8 +201,9 @@ namespace TweetHarbor.Models
             }
         }
 
-        private bool DoesServiceHookExist(string projectUrl, string ServiceHookUrl)
+        public bool DoesServiceHookExist(string projectUrl, string ServiceHookUrl)
         {
+            ThrowIfNotAuthenticated();
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(projectUrl + "/servicehook");
             req.AllowAutoRedirect = false;
             req.ContentType = "application/x-www-form-urlencoded";
