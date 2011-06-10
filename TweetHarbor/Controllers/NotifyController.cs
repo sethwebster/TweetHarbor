@@ -174,7 +174,7 @@ namespace TweetHarbor.Controllers
 
             return input.Replace("{application:name}", project.ProjectName)
                             .Replace("{build:commit:message}", notification.build.commit.message)
-                            .Replace("{build:commit:id}", notification.build.commit.id.Substring(0, 5));
+                            .Replace("{build:commit:id}", notification.build.commit.id.Substring(0, 7));
         }
 
         [NonAction]
