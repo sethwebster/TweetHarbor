@@ -40,7 +40,7 @@ namespace TweetHarbor.Controllers
                  .Include("Projects.ProjectNotifications")
                  .Include("Projects.ProjectNotifications.Build")
                  .Include("Projects.ProjectNotifications.Build.commit")
-                 .FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
+                 .FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
                 foreach (var p in user.Projects)
                 {
                     foreach (var m in p.MessageRecipients)
@@ -74,7 +74,7 @@ namespace TweetHarbor.Controllers
         {
             if (null != HttpContext)
             {
-                var user = database.Users.FirstOrDefault(f => f.TwitterUserName == HttpContext.User.Identity.Name);
+                var user = database.Users.FirstOrDefault(f => f.UserName == HttpContext.User.Identity.Name);
                 ApplicationImporter a = new ApplicationImporter();
                 a.AuthenticateAs(Username, Password);
                 var projects = a.GetProjects();
@@ -99,7 +99,7 @@ namespace TweetHarbor.Controllers
         {
             if (null != HttpContext)
             {
-                var prj = database.Projects.FirstOrDefault(p => p.User.TwitterUserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
+                var prj = database.Projects.FirstOrDefault(p => p.User.UserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
 
                 if (null != prj)
                 {
@@ -141,7 +141,7 @@ namespace TweetHarbor.Controllers
         {
             if (null != HttpContext)
             {
-                var prj = database.Projects.FirstOrDefault(p => p.User.TwitterUserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
+                var prj = database.Projects.FirstOrDefault(p => p.User.UserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
 
                 if (null != prj)
                 {
@@ -178,7 +178,7 @@ namespace TweetHarbor.Controllers
             {
                 if (!string.IsNullOrEmpty(value.Trim()))
                 {
-                    var prj = database.Projects.Include("MessageRecipients").Include("TextMessageRecipients").FirstOrDefault(p => p.User.TwitterUserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
+                    var prj = database.Projects.Include("MessageRecipients").Include("TextMessageRecipients").FirstOrDefault(p => p.User.UserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
 
                     if (null != prj)
                     {
@@ -251,7 +251,7 @@ namespace TweetHarbor.Controllers
         {
             if (null != HttpContext)
             {
-                var prj = database.Projects.Include("MessageRecipients").Include("TextMessageRecipients").FirstOrDefault(p => p.User.TwitterUserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
+                var prj = database.Projects.Include("MessageRecipients").Include("TextMessageRecipients").FirstOrDefault(p => p.User.UserName == HttpContext.User.Identity.Name && p.ProjectName == Id);
 
                 if (null != prj)
                 {
@@ -306,7 +306,7 @@ namespace TweetHarbor.Controllers
         {
             if (null != HttpContext)
             {
-                var user = database.Users.First(u => u.TwitterUserName == HttpContext.User.Identity.Name);
+                var user = database.Users.First(u => u.UserName == HttpContext.User.Identity.Name);
                 ApplicationImporter a = new ApplicationImporter();
                 try
                 {
@@ -337,7 +337,7 @@ namespace TweetHarbor.Controllers
         {
             if (null != HttpContext)
             {
-                var user = database.Users.First(u => u.TwitterUserName == HttpContext.User.Identity.Name);
+                var user = database.Users.First(u => u.UserName == HttpContext.User.Identity.Name);
                 ApplicationImporter a = new ApplicationImporter();
                 try
                 {
@@ -364,7 +364,7 @@ namespace TweetHarbor.Controllers
         {
             if (null != HttpContext)
             {
-                var user = database.Users.First(u => u.TwitterUserName == HttpContext.User.Identity.Name);
+                var user = database.Users.First(u => u.UserName == HttpContext.User.Identity.Name);
                 if (!user.IsAdmin)
                 {
                     throw new SecurityException("Not authorized");
@@ -381,14 +381,14 @@ namespace TweetHarbor.Controllers
         [Authorize]
         public ActionResult Create(User user, string ProjectName)
         {
-            var projects = database.Projects.Where(p => p.ProjectName == ProjectName && p.User.TwitterUserName == user.TwitterUserName);
+            var projects = database.Projects.Where(p => p.ProjectName == ProjectName && p.User.UserName == user.UserName);
             if (projects.Count() == 0)
             {
                 var project = new Project()
                 {
                     ProjectName = ProjectName
                 };
-                user = database.Users.FirstOrDefault(u => u.TwitterUserName == user.TwitterUserName);
+                user = database.Users.FirstOrDefault(u => u.UserName == user.UserName);
                 if (null != user)
                 {
                     user.Projects.Add(project);

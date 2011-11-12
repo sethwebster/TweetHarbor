@@ -38,7 +38,7 @@ namespace TweetHarbor.Controllers
                 .Include("Projects")
                 .Include("Projects.MessageRecipients")
                 .Include("Projects.TextMessageRecipients")
-                .FirstOrDefault(usr => usr.TwitterUserName == Id && usr.UniqueId == token);
+                .FirstOrDefault(usr => usr.UserName == Id && usr.UniqueId == token);
             // If Id or Token is invalid, user will not be found
             // TODO: Allow users to reset the token
             if (null != user)
@@ -49,7 +49,9 @@ namespace TweetHarbor.Controllers
                 {
                     SaveNotification(notification, project);
                     // start our connection to twitter
-                    twitter.AuthenticateWith(user.OAuthToken, user.OAuthTokenSecret);
+                    var twitterAccount = user.AuthenticationAccounts.FirstOrDefault(a => a.AccountProvider.ToLower() == "twitter");
+                    //TODO: Ensure we HAVE a twitter account
+                    twitter.AuthenticateWith(twitterAccount.OAuthToken, twitterAccount.OAuthTokenSecret);
 
                     // Format and send appropriate messages
                     if (notification.build.status == "succeeded")
