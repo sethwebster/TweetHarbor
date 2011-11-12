@@ -1,0 +1,16 @@
+﻿@model TweetHarbor.Models.User
+@{
+    ViewBag.Title = "AccountSetup";
+}
+<fieldset>
+    <legend>Account Setup</legend>
+    @using (Html.BeginForm())
+    {
+        @Html.ValidationSummary()
+        @Html.LabelFor(a => a.UserName)
+        @Html.TextBoxFor(a => a.UserName) <br />
+        @Html.LabelFor(a => a.EmailAddress)
+        @Html.TextBoxFor(a => a.EmailAddress)
+        <input type="submit" />
+    }
+</fieldset>

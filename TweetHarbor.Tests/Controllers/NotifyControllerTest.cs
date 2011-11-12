@@ -92,16 +92,7 @@ namespace TweetHarbor.Tests.Controllers
             var o = JsonConvert.DeserializeObject<Notification>(testStr);
 
             var db = new TestTweetHarborDbContext();
-            var user = new User()
-            {
-                EmailAddress = "sethwebster@gmail.com",
-                OAuthToken = "<FakeOauthToken>",
-                OAuthTokenSecret = "<FakeOauthTokenSecret>",
-                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
-                SendPrivateTweet = true,
-                SendPublicTweet = false,
-                TwitterUserName = "sethwebster"
-            };
+            var user = UserHelper.ArrangeNewUserDefault();
             db.Users.Add(user);
 
             var proj = new Project()
@@ -128,7 +119,7 @@ namespace TweetHarbor.Tests.Controllers
             var controller = new NotifyController(db, new TestTweetHarborTwitterService(), m.Object);
             MvcMockHelpers.SetFakeControllerContext(controller);
 
-            var res = controller.New(user.TwitterUserName, user.UniqueId, o);
+            var res = controller.New(user.UserName, user.UniqueId, o);
 
             Assert.IsInstanceOfType(res, typeof(JsonResult));
             Assert.IsInstanceOfType((res as JsonResult).Data, typeof(JsonResultModel));
@@ -143,16 +134,7 @@ namespace TweetHarbor.Tests.Controllers
             var o = JsonConvert.DeserializeObject<Notification>(testStr);
 
             var db = new TestTweetHarborDbContext();
-            var user = new User()
-            {
-                EmailAddress = "sethwebster@gmail.com",
-                OAuthToken = "<FakeOauthToken>",
-                OAuthTokenSecret = "<FakeOauthTokenSecret>",
-                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
-                SendPrivateTweet = true,
-                SendPublicTweet = false,
-                TwitterUserName = "sethwebster"
-            };
+            var user = UserHelper.ArrangeNewUserDefault();
             db.Users.Add(user);
 
             var proj = new Project()
@@ -178,7 +160,7 @@ namespace TweetHarbor.Tests.Controllers
 
             MvcMockHelpers.SetFakeControllerContext(controller);
 
-            var res = controller.New(user.TwitterUserName, user.UniqueId, o);
+            var res = controller.New(user.UserName, user.UniqueId, o);
 
             Assert.IsInstanceOfType(res, typeof(JsonResult));
             Assert.IsInstanceOfType((res as JsonResult).Data, typeof(JsonResultModel));
@@ -197,17 +179,7 @@ namespace TweetHarbor.Tests.Controllers
             var m = new Mock<ITweetHarborTextMessageService>();
             m.Setup(a => a.SendText("", ""));
 
-            var user = new User()
-            {
-                EmailAddress = "sethwebster@gmail.com",
-                OAuthToken = "<FakeOauthToken>",
-                OAuthTokenSecret = "<FakeOauthTokenSecret>",
-                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
-                SendPrivateTweet = true,
-                SendPublicTweet = false,
-                TwitterUserName = "sethwebster",
-                SendSMS = true
-            };
+            var user = UserHelper.ArrangeNewUserDefault();
             db.Users.Add(user);
 
             var proj = new Project()
@@ -239,7 +211,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var controller = new NotifyController(db, new TestTweetHarborTwitterService(), m.Object);
 
-            var res = controller.New(user.TwitterUserName, user.UniqueId, o);
+            var res = controller.New(user.UserName, user.UniqueId, o);
 
             Assert.IsInstanceOfType(res, typeof(JsonResult));
             Assert.IsInstanceOfType((res as JsonResult).Data, typeof(JsonResultModel));
@@ -270,17 +242,7 @@ namespace TweetHarbor.Tests.Controllers
             var m = new Mock<ITweetHarborTextMessageService>();
             m.Setup(a => a.SendText("", ""));
 
-            var user = new User()
-            {
-                EmailAddress = "sethwebster@gmail.com",
-                OAuthToken = "<FakeOauthToken>",
-                OAuthTokenSecret = "<FakeOauthTokenSecret>",
-                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
-                SendPrivateTweet = true,
-                SendPublicTweet = false,
-                TwitterUserName = "sethwebster",
-                SendSMS = true
-            };
+            var user = UserHelper.ArrangeNewUserDefault();
             db.Users.Add(user);
 
             var proj = new Project()
@@ -305,7 +267,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var controller = new NotifyController(db, new TestTweetHarborTwitterService(), m.Object);
 
-            var res = controller.New(user.TwitterUserName, user.UniqueId, o);
+            var res = controller.New(user.UserName, user.UniqueId, o);
 
             Assert.IsInstanceOfType(res, typeof(JsonResult));
             Assert.IsInstanceOfType((res as JsonResult).Data, typeof(JsonResultModel));

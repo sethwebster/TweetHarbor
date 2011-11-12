@@ -18,6 +18,7 @@ namespace TweetHarbor.Tests.Helpers
         TestableDbSet<Build> builds = new TestableDbSet<Build>();
         TestableDbSet<Commit> commits = new TestableDbSet<Commit>();
         TestableDbSet<OutboundNotification> outboundNotifications = new TestableDbSet<OutboundNotification>();
+        TestableDbSet<UserAuthenticationAccount> userAuthenticationAccounts = new TestableDbSet<UserAuthenticationAccount>();
 
         public System.Data.Entity.IDbSet<Commit> Commits
         {
@@ -95,6 +96,19 @@ namespace TweetHarbor.Tests.Helpers
                 this.textMessageRecipients = (TestableDbSet<TextMessageRecipient>)value;
             }
         }
+
+        public System.Data.Entity.IDbSet<UserAuthenticationAccount> UserAuthenticationAccounts
+        {
+            get
+            {
+                return this.userAuthenticationAccounts;
+            }
+            set
+            {
+                this.userAuthenticationAccounts = (TestableDbSet<UserAuthenticationAccount>)value;
+            }
+        }
+
 
         public int SaveChanges()
         {
