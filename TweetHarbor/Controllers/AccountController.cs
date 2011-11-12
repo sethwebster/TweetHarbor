@@ -135,7 +135,11 @@ namespace TweetHarbor.Controllers
                 case "appharbor":
                     var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
                     var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
-                    return new AppHarborClient(clientId, secret).RedirectToAuthorizationResult();
+                    string redirect = Request.Url.Scheme + "://" +
+                        Request.Url.Host +
+                        (Request.Url.Host == "localhost" ? ":" + Request.Url.Port : "") + "/Account/OAuthComplete?Client=appharbor";
+
+                    return new AppHarborClient(clientId, secret).RedirectToAuthorizationResult(redirect);
                     break;
                 default:
                     throw new ArgumentNullException("Client must be specified");
@@ -228,7 +232,7 @@ namespace TweetHarbor.Controllers
                     }
                     break;
                 default:
-                    throw new InvalidOperationException("That is not a recognized OAuth client: "+Client);
+                    throw new InvalidOperationException("That is not a recognized OAuth client: " + Client);
                     break;
             }
         }
