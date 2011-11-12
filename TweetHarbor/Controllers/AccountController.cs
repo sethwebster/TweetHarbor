@@ -11,6 +11,7 @@ using TweetHarbor.Data;
 using System.Text.RegularExpressions;
 using TweetHarbor.Messaging;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace TweetHarbor.Controllers
 {
@@ -203,7 +204,7 @@ namespace TweetHarbor.Controllers
             }
             catch (Exception e)
             {
-
+                Trace.WriteLine("Exception: " + e.Message);
                 throw e;
             }
             return returnUser;

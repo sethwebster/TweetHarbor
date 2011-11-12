@@ -5,6 +5,7 @@ using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.ObjectModel;
 using DataAnnotationsExtensions;
+using TweetHarbor.CustomAttributes;
 
 namespace TweetHarbor.Models
 {
@@ -25,7 +26,7 @@ namespace TweetHarbor.Models
         public string UniqueId { get; set; }
         [MaxLength(255)]
         [Display(Name = "Email Address")]
-        [Email]
+        [EmailOrEmpty]
         public string EmailAddress { get; set; }
         public string UserProfilePicUrl { get; set; }
         public bool SendPrivateTweet { get; set; }
