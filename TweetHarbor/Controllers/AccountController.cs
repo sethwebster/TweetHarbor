@@ -10,7 +10,6 @@ using TweetSharp;
 using TweetHarbor.Data;
 using System.Text.RegularExpressions;
 using TweetHarbor.Messaging;
-using System.Collections.ObjectModel;
 
 namespace TweetHarbor.Controllers
 {
@@ -35,7 +34,7 @@ namespace TweetHarbor.Controllers
         {
             if (null != HttpContext)
             {
-                if (!string.IsNullOrEmpty(Request["error"]) && Request["error"] == "ImportNotAuthorized")
+                if (!string.IsNullOrEmpty(Request["error"]) && Request["error"]=="ImportNotAuthorized")
                 {
                     ViewBag.import_error = "Unable to sign in with those credentials";
                 }
@@ -46,14 +45,13 @@ namespace TweetHarbor.Controllers
                     .Include("Projects.ProjectNotifications")
                     .Include("Projects.ProjectNotifications.Build")
                     .Include("Projects.ProjectNotifications.Build.commit")
-                    .FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
+                    .FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
 
                 if (null != u)
                 {
                     if (string.IsNullOrEmpty(u.UniqueId))
                     {
-                        //TODO: Make this much more secure
-                        u.UpdateUniqueId();
+                        u.UniqueId = u.TwitterUserName.MD5Hash(u.OAuthToken);
                         database.SaveChanges();
                     }
                     return View(u);
@@ -64,53 +62,6 @@ namespace TweetHarbor.Controllers
                 }
             }
             return new EmptyResult();
-        }
-
-        public ActionResult AccountSetup(string Id)
-        {
-            var user = database.Users.FirstOrDefault(u => u.UniqueId == Id);
-            if (null != user)
-            {
-                return View(user);
-            }
-            else
-            {
-                //TODO: better to redirect to failed login page?
-                return RedirectToAction("Index");
-            }
-        }
-
-        [HttpPost]
-        public ActionResult AccountSetup(string Id, User user)
-        {
-            var dbUser = database.Users.FirstOrDefault(u => u.UniqueId == Id);
-            if (null != user)
-            {
-                user.UserName = user.UserName != null ? user.UserName.Trim() : null;
-                user.EmailAddress = user.EmailAddress != null ? user.EmailAddress.Trim() : null;
-                if (string.IsNullOrEmpty(user.UserName))
-                    ModelState.AddModelError("UserName", "UserName must not be empty");
-                if (string.IsNullOrEmpty(user.EmailAddress))
-                    ModelState.AddModelError("EmailAddress", "Please enter an email address");
-                if (ModelState.IsValid)
-                {
-                    dbUser.UserName = user.UserName;
-                    dbUser.EmailAddress = user.EmailAddress;
-                    database.SaveChanges();
-                    //TODO: Add a status update
-                    FormsAuthentication.SetAuthCookie(user.UserName, true);
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    return View(user);
-                }
-            }
-            else
-            {
-                //TODO: better to redirect to failed login page?
-                return RedirectToAction("Index");
-            }
         }
 
         public ActionResult Authorize()
@@ -134,69 +85,31 @@ namespace TweetHarbor.Controllers
             OAuthAccessToken accessToken = twitter.GetAccessToken(requestToken, oauth_verifier);
             // Step 4 - User authenticates using the Access Token
             twitter.AuthenticateWith(accessToken.Token, accessToken.TokenSecret);
-
             TwitterUser user = twitter.VerifyCredentials();
-            if (null != user)
-            {
-                var appUser = TwitterCreateOrUpdateAccountIfNeeded(accessToken, user);
-                if (string.IsNullOrEmpty(appUser.UserName) || string.IsNullOrEmpty(appUser.EmailAddress))
-                {
-                    if (string.IsNullOrEmpty(appUser.UniqueId))
-                    {
-                        appUser.UpdateUniqueId();
-                        database.SaveChanges();
-                    }
-                    return RedirectToAction("AccountSetup", new { Id = appUser.UniqueId });
-                }
-                else
-                {
-                    authentication.SetAuthCookie(appUser.UserName, true);
-                    return RedirectToAction("Index");
-                }
-            }
-            else
-            {
-                return RedirectToAction("OAuthError");
-            }
-        }
+            ViewBag.Message = string.Format("Your username is {0}", user.ScreenName);
+            authentication.SetAuthCookie(user.ScreenName, true);
 
-        [HttpPost]
-        public ActionResult OAuthComplete(string Code)
-        {
-            return new EmptyResult();
+            var appUser = CreateOrUpdateAccountIfNeeded(accessToken, user);
+
+            return RedirectToAction("Index");
         }
 
         [NonAction]
-        private User TwitterCreateOrUpdateAccountIfNeeded(OAuthAccessToken accessToken, TwitterUser user)
+        private User CreateOrUpdateAccountIfNeeded(OAuthAccessToken accessToken, TwitterUser user)
         {
-            var returnUser = (from u in database.Users
-                              where u.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter" && ac.UserName == user.ScreenName) != null
-                              select u).FirstOrDefault();
 
+            var returnUser = database.Users.FirstOrDefault(usr => usr.TwitterUserName == user.ScreenName);
             if (null == returnUser) // CREATE
             {
                 returnUser = new User();
-                //TODO: Move this token somewhere else
-                returnUser.UserName = "";
-                returnUser.EmailAddress = "";
-                UserAuthenticationAccount newTwitterAccount = new UserAuthenticationAccount();
-                newTwitterAccount.AccountProvider = "twitter";
-
-                newTwitterAccount.UserName = user.ScreenName;
-                newTwitterAccount.ProfilePicUrl = user.ProfileImageUrl;
-                if (null == returnUser.AuthenticationAccounts)
-                    returnUser.AuthenticationAccounts = new Collection<UserAuthenticationAccount>();
-                returnUser.AuthenticationAccounts.Add(newTwitterAccount);
-                returnUser.UpdateUniqueId();
+                returnUser.TwitterUserName = user.ScreenName;
+                returnUser.UniqueId = returnUser.TwitterUserName.MD5Hash(accessToken.Token);
                 database.Users.Add(returnUser);
             }
 
             returnUser.UserProfilePicUrl = user.ProfileImageUrl;
-            var twitterAccount = returnUser.AuthenticationAccounts.First(t => t.AccountProvider == "twitter");
-            twitterAccount.OAuthToken = accessToken.Token;
-            twitterAccount.OAuthTokenSecret = accessToken.TokenSecret;
-            twitterAccount.ProfilePicUrl = user.ProfileImageUrl;
-
+            returnUser.OAuthToken = accessToken.Token;
+            returnUser.OAuthTokenSecret = accessToken.TokenSecret;
             try
             {
                 database.SaveChanges();
@@ -221,7 +134,7 @@ namespace TweetHarbor.Controllers
         {
             if (null != HttpContext)
             {
-                var u = database.Users.FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
+                var u = database.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
 
                 if (null != u)
                 {
@@ -254,7 +167,7 @@ namespace TweetHarbor.Controllers
         {
             if (null != HttpContext)
             {
-                var u = database.Users.FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
+                var u = database.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
 
                 if (null != u)
                 {

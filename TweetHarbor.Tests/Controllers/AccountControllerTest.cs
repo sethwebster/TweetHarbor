@@ -101,8 +101,16 @@ namespace TweetHarbor.Tests.Controllers
         {
 
             var db = new TestTweetHarborDbContext();
-            var user = UserHelper.ArrangeNewUserDefault();
-           
+            var user = new User()
+            {
+                EmailAddress = "localtestuser@gmail.com",
+                OAuthToken = "<FakeOauthToken>",
+                OAuthTokenSecret = "<FakeOauthTokenSecret>",
+                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
+                SendPrivateTweet = false,
+                SendPublicTweet = false,
+                TwitterUserName = "localtestuser"
+            };
             db.Users.Add(user);
 
             var proj = new Project()
@@ -133,7 +141,7 @@ namespace TweetHarbor.Tests.Controllers
             Assert.IsTrue(rm.Success);
             Assert.IsTrue(rm.Message == "Value has been updated");
 
-            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName== ident.Name).SendPrivateTweet);
+            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.TwitterUserName == ident.Name).SendPrivateTweet);
 
         }
         [TestMethod]
@@ -141,8 +149,16 @@ namespace TweetHarbor.Tests.Controllers
         {
 
             var db = new TestTweetHarborDbContext();
-            var user = UserHelper.ArrangeNewUserDefault();
-           
+            var user = new User()
+            {
+                EmailAddress = "localtestuser@gmail.com",
+                OAuthToken = "<FakeOauthToken>",
+                OAuthTokenSecret = "<FakeOauthTokenSecret>",
+                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
+                SendPrivateTweet = false,
+                SendPublicTweet = false,
+                TwitterUserName = "localtestuser"
+            };
             db.Users.Add(user);
 
             var proj = new Project()
@@ -174,7 +190,7 @@ namespace TweetHarbor.Tests.Controllers
             Assert.IsTrue(rm.Success);
             Assert.IsTrue(rm.Message == "Value has been updated");
 
-            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName == ident.Name).SendPublicTweet);
+            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.TwitterUserName == ident.Name).SendPublicTweet);
 
         }
         [TestMethod]
@@ -182,8 +198,16 @@ namespace TweetHarbor.Tests.Controllers
         {
 
             var db = new TestTweetHarborDbContext();
-            var user = UserHelper.ArrangeNewUserDefault();
-           
+            var user = new User()
+            {
+                EmailAddress = "localtestuser@gmail.com",
+                OAuthToken = "<FakeOauthToken>",
+                OAuthTokenSecret = "<FakeOauthTokenSecret>",
+                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
+                SendPrivateTweet = true,
+                SendPublicTweet = false,
+                TwitterUserName = "localtestuser"
+            };
             db.Users.Add(user);
 
             var proj = new Project()
@@ -214,7 +238,7 @@ namespace TweetHarbor.Tests.Controllers
             Assert.IsTrue(rm.Success);
             Assert.IsTrue(rm.Message == "Value has been updated");
 
-            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName == ident.Name).SendPrivateTweet);
+            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.TwitterUserName == ident.Name).SendPrivateTweet);
 
         }
         [TestMethod]
@@ -222,8 +246,16 @@ namespace TweetHarbor.Tests.Controllers
         {
 
             var db = new TestTweetHarborDbContext();
-            var user = UserHelper.ArrangeNewUserDefault();
-           
+            var user = new User()
+            {
+                EmailAddress = "localtestuser@gmail.com",
+                OAuthToken = "<FakeOauthToken>",
+                OAuthTokenSecret = "<FakeOauthTokenSecret>",
+                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
+                SendPrivateTweet = true,
+                SendPublicTweet = true,
+                TwitterUserName = "localtestuser"
+            };
             db.Users.Add(user);
 
             var proj = new Project()
@@ -254,7 +286,7 @@ namespace TweetHarbor.Tests.Controllers
             Assert.IsTrue(rm.Success);
             Assert.IsTrue(rm.Message == "Value has been updated");
 
-            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName== ident.Name).SendPublicTweet);
+            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.TwitterUserName == ident.Name).SendPublicTweet);
 
         }
         [TestMethod]
@@ -262,8 +294,16 @@ namespace TweetHarbor.Tests.Controllers
         {
 
             var db = new TestTweetHarborDbContext();
-            var user = UserHelper.ArrangeNewUserDefault();
-           
+            var user = new User()
+            {
+                EmailAddress = "localtestuser@gmail.com",
+                OAuthToken = "<FakeOauthToken>",
+                OAuthTokenSecret = "<FakeOauthTokenSecret>",
+                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
+                SendPrivateTweet = true,
+                SendPublicTweet = true,
+                TwitterUserName = "localtestuser"
+            };
             db.Users.Add(user);
 
             var proj = new Project()
@@ -299,7 +339,16 @@ namespace TweetHarbor.Tests.Controllers
         {
 
             var db = new TestTweetHarborDbContext();
-            var user = UserHelper.ArrangeNewUserDefault();
+            var user = new User()
+            {
+                EmailAddress = "localtestuser@gmail.com",
+                OAuthToken = "<FakeOauthToken>",
+                OAuthTokenSecret = "<FakeOauthTokenSecret>",
+                UniqueId = "db7a3a64156d0b33beae93fe99ca599e",
+                SendPrivateTweet = true,
+                SendPublicTweet = true,
+                TwitterUserName = "localtestuser"
+            };
             db.Users.Add(user);
 
             var proj = new Project()
@@ -342,9 +391,6 @@ namespace TweetHarbor.Tests.Controllers
             string verifier = Guid.NewGuid().ToString();
             string TestUsername = "LocalTestUser";
 
-            var user = UserHelper.ArrangeNewUserDefault();
-           
-
             ts.Setup<OAuthAccessToken>(a => a.GetAccessToken(It.IsAny<OAuthRequestToken>(), It.IsAny<string>())).Returns(new OAuthAccessToken() { Token = token, TokenSecret = verifier });
             ts.Setup<TwitterUser>(a => a.VerifyCredentials()).Returns(new TwitterUser() { ScreenName = TestUsername });
 
@@ -355,9 +401,9 @@ namespace TweetHarbor.Tests.Controllers
             var val = controller.AuthorizeCallback(token, verifier);
 
             Assert.AreNotEqual(0, db.Users.Count());
-            Assert.AreEqual(token, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac=>ac.AccountProvider=="twitter").OAuthToken);
-            Assert.AreEqual(verifier, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").OAuthTokenSecret);
-            Assert.AreEqual(TestUsername, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").UserName);
+            Assert.AreEqual(token, db.Users.First().OAuthToken);
+            Assert.AreEqual(verifier, db.Users.First().OAuthTokenSecret);
+            Assert.AreEqual(TestUsername, db.Users.First().TwitterUserName);
 
         }
 
@@ -368,11 +414,15 @@ namespace TweetHarbor.Tests.Controllers
             var ts = new Mock<ITweetHarborTwitterService>();
             string token = Guid.NewGuid().ToString();
             string verifier = Guid.NewGuid().ToString();
-            string TestUsername = "twitteruser";
+            string TestUsername = "LocalTestUser";
             string imageUrl = "http://test.com/image.jpg";
 
-            var user = UserHelper.ArrangeNewUserDefault();
-            db.Users.Add(user);
+            db.Users.Add(new User()
+            {
+                DateCreated = DateTime.Now.AddDays(-1),
+                TwitterUserName = TestUsername,
+                UserProfilePicUrl = "http://oldurl.com"
+            });
 
             ts.Setup<OAuthAccessToken>(a => a.GetAccessToken(It.IsAny<OAuthRequestToken>(), It.IsAny<string>())).Returns(new OAuthAccessToken() { Token = token, TokenSecret = verifier });
             ts.Setup<TwitterUser>(a => a.VerifyCredentials()).Returns(new TwitterUser() { ScreenName = TestUsername, ProfileImageUrl = imageUrl });
@@ -384,9 +434,9 @@ namespace TweetHarbor.Tests.Controllers
             var val = controller.AuthorizeCallback(token, verifier);
 
             Assert.AreEqual(1, db.Users.Count());
-            Assert.AreEqual(token, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").OAuthToken);
-            Assert.AreEqual(verifier, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").OAuthTokenSecret);
-            Assert.AreEqual(TestUsername, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").UserName);
+            Assert.AreEqual(token, db.Users.First().OAuthToken);
+            Assert.AreEqual(verifier, db.Users.First().OAuthTokenSecret);
+            Assert.AreEqual(TestUsername, db.Users.First().TwitterUserName);
             Assert.AreEqual(imageUrl, db.Users.First().UserProfilePicUrl);
 
         }

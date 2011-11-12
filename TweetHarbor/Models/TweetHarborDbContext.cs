@@ -17,17 +17,15 @@ namespace TweetHarbor.Models
         }
 
         public TweetHarborDbContext() { }
-        public virtual IDbSet<User> Users { get; set; }
-        public virtual IDbSet<Project> Projects { get; set; }
-        public virtual IDbSet<TwitterMessageRecipient> MessageRecipients { get; set; }
-        public virtual IDbSet<TextMessageRecipient> TextMessageRecipients { get; set; }
-        public virtual IDbSet<LogEntry> LogEntries { get; set; }
-        public virtual IDbSet<ProjectNotification> ProjectNotifications { get; set; }
-        public virtual IDbSet<Build> Builds { get; set; }
-        public virtual IDbSet<Commit> Commits { get; set; }
-        public virtual IDbSet<OutboundNotification> OutboundNotifications { get; set; }
-        public virtual IDbSet<UserAuthenticationAccount> UserAuthenticationAccounts { get; set; }
-
+        public IDbSet<User> Users { get; set; }
+        public IDbSet<Project> Projects { get; set; }
+        public IDbSet<TwitterMessageRecipient> MessageRecipients { get; set; }
+        public IDbSet<TextMessageRecipient> TextMessageRecipients { get; set; }
+        public IDbSet<LogEntry> LogEntries { get; set; }
+        public IDbSet<ProjectNotification> ProjectNotifications { get; set; }
+        public IDbSet<Build> Builds { get; set; }
+        public IDbSet<Commit> Commits { get; set; }
+        public IDbSet<OutboundNotification> OutboundNotifications { get; set; }
         public void Dispose()
         {
             base.Dispose();

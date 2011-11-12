@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.ObjectModel;
-using DataAnnotationsExtensions;
 
 namespace TweetHarbor.Models
 {
@@ -13,19 +12,22 @@ namespace TweetHarbor.Models
         public User()
         {
             this.Projects = new Collection<Project>();
-            this.AuthenticationAccounts = new Collection<UserAuthenticationAccount>();
             this.DateCreated = DateTime.Now;
         }
-
         [Required]
         [Key]
-        public int UserId { get; set; }
-        [Display(Name = "User Name")]
-        public string UserName { get; set; }
+        [MinLength(2), MaxLength(255)]
+        public string TwitterUserName { get; set; }
+        [Required]
+        [MinLength(2), MaxLength(255)]
+        public string OAuthToken { get; set; }
+        [Required]
+        [MinLength(2), MaxLength(255)]
+        public string OAuthTokenSecret { get; set; }
+        [Required]
+        [MinLength(2), MaxLength(255)]
         public string UniqueId { get; set; }
         [MaxLength(255)]
-        [Display(Name = "Email Address")]
-        [Email]
         public string EmailAddress { get; set; }
         public string UserProfilePicUrl { get; set; }
         public bool SendPrivateTweet { get; set; }
@@ -34,18 +36,9 @@ namespace TweetHarbor.Models
         public ICollection<Project> Projects { get; set; }
         public bool IsAdmin { get; set; }
         public DateTime DateCreated { get; set; }
-
-        public virtual ICollection<UserAuthenticationAccount> AuthenticationAccounts { get; set; }
-
-        public void UpdateUniqueId()
-        {
-            //TODO: Make this far more random
-            this.UniqueId = this.UserName.MD5Hash(DateTime.Now.Ticks.ToString());
-        }
-
         public string GetServiceHookUrl()
         {
-            return string.Format("http://tweetharbor.apphb.com/notify/new/{0}?token={1}", this.UserName, this.UniqueId);
+            return string.Format("http://tweetharbor.apphb.com/notify/new/{0}?token={1}", this.TwitterUserName, this.UniqueId);
         }
     }
 }

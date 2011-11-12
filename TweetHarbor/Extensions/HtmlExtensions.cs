@@ -18,7 +18,7 @@ namespace System.Web.Mvc
             if (null != HttpContext.Current && null != HttpContext.Current.Request && HttpContext.Current.Request.IsAuthenticated)
             {
                 var k = MvcApplication.SharedKernel.Get<ITweetHarborDbContext>();
-                ret = k.Users.FirstOrDefault(usr => usr.UserName == HttpContext.Current.User.Identity.Name);
+                ret = k.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.Current.User.Identity.Name);
             }
             return ret;
         }

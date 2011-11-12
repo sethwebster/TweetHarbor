@@ -22,7 +22,7 @@ namespace TweetHarbor.Areas.Admin.Controllers
         {
             if (null != HttpContext)
             {
-                var user = database.Users.FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
+                var user = database.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
                 if (user.IsAdmin)
                 {
                     var projects = database.Projects.Include("User").OrderBy(u => u.DateCreated);
@@ -41,7 +41,7 @@ namespace TweetHarbor.Areas.Admin.Controllers
         {
             if (null != HttpContext)
             {
-                var user = database.Users.FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
+                var user = database.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
                 if (user.IsAdmin)
                 {
                     var projectNotifications = database.ProjectNotifications.Include("Build").Include("Project.user").Include("Build.commit").OrderByDescending(pn => pn.NotificationDate);
@@ -59,7 +59,7 @@ namespace TweetHarbor.Areas.Admin.Controllers
         {
             if (null != HttpContext)
             {
-                var user = database.Users.FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
+                var user = database.Users.FirstOrDefault(usr => usr.TwitterUserName == HttpContext.User.Identity.Name);
                 if (user.IsAdmin)
                 {
                     var projectNotifications = database.OutboundNotifications.OrderByDescending(pn => pn.DateCreated).ThenBy(pn => pn.DateSent);

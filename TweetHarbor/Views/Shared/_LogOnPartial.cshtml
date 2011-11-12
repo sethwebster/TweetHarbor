@@ -2,7 +2,7 @@
 { 
     <div id="logon_status">
         <a href="/Account">
-            <img src="@Html.CurrentUser().UserProfilePicUrl" class='user_partial_small_pic' valign="middle" />@Html.CurrentUser().UserName</a>
+            <img src="@Html.CurrentUser().UserProfilePicUrl" class='user_partial_small_pic' valign="middle" />@Html.CurrentUser().TwitterUserName</a>
         @Html.ActionLink("Sign Out", "LogOff", "Account")
     </div>
 }

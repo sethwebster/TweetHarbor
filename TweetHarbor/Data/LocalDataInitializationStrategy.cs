@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using TweetHarbor.Models;
 using System.Data.Entity;
-using System.Collections.ObjectModel;
 
 namespace TweetHarbor.Data
 {
@@ -14,20 +13,11 @@ namespace TweetHarbor.Data
         {
             var user = new User()
             {
-                UserName = "localtestuser",
-                EmailAddress = "local@test.com",
-                UniqueId = Guid.NewGuid().ToString()
-            };
-            user.AuthenticationAccounts = new Collection<UserAuthenticationAccount>();
-            user.AuthenticationAccounts.Add(new UserAuthenticationAccount()
-            {
-                AccountProvider = "twitter",
+                TwitterUserName = "localtestuser",
                 OAuthToken = Guid.NewGuid().ToString(),
                 OAuthTokenSecret = Guid.NewGuid().ToString(),
-                UserName = "twutteruser",
-                ProfilePicUrl = "http://wwww.pic.com"
-            });
-
+                UniqueId = Guid.NewGuid().ToString()
+            };
             user.Projects.Add(new Project() { ProjectName = "Test Project 1" });
             user.Projects.Add(new Project() { ProjectName = "TestProject2" });
             context.Users.Add(user);
