@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using TweetHarbor.OAuth;
 using System.Configuration;
+using System.Net;
 
 namespace TweetHarbor.Controllers
 {
@@ -133,7 +134,8 @@ namespace TweetHarbor.Controllers
                     break;
                 case "appharbor":
                     var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
-                    return new AppHarborClient(clientId).RedirectToAuthorizationResult();
+                    var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
+                    return new AppHarborClient(clientId, secret).RedirectToAuthorizationResult();
                     break;
                 default:
                     throw new ArgumentNullException("Client must be specified");
@@ -188,9 +190,47 @@ namespace TweetHarbor.Controllers
         /// </summary>
         /// <param name="Code"></param>
         /// <returns></returns>
-        public ActionResult OAuthComplete(string Code)
+        public ActionResult OAuthComplete(string Code, string Client)
         {
-            return new EmptyResult();
+            //Workaround for now since AppHb doesn't seem to support passing parameters back
+            //UPDATE: Appends extra ?
+            if (Client == null)
+                Client = Request["?Client"];
+            switch (Client.ToLower())
+            {
+
+                // We will be moving to using this method later
+                case "twitter":
+                    throw new NotImplementedException("This path has not been implemented yet");
+                    break;
+                case "appharbor":
+                    var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
+                    var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
+                    var client = new AppHarborClient(clientId, secret);
+
+                    var token = client.GetAccessToken(Code);
+                    var user = client.GetUserInformation(token);
+
+                    var appUser = AppHarborCreateOrUpdateAccountIfNeeded(token, user);
+                    if (string.IsNullOrEmpty(appUser.UserName) || string.IsNullOrEmpty(appUser.EmailAddress))
+                    {
+                        if (string.IsNullOrEmpty(appUser.UniqueId))
+                        {
+                            appUser.UpdateUniqueId();
+                            database.SaveChanges();
+                        }
+                        return RedirectToAction("AccountSetup", new { Id = appUser.UniqueId });
+                    }
+                    else
+                    {
+                        authentication.SetAuthCookie(appUser.UserName, true);
+                        return RedirectToAction("Index");
+                    }
+                    break;
+                default:
+                    throw new InvalidOperationException("That is not a recognized OAuth client: "+Client);
+                    break;
+            }
         }
 
         [NonAction]
@@ -203,7 +243,6 @@ namespace TweetHarbor.Controllers
             if (null == returnUser) // CREATE
             {
                 returnUser = new User();
-                //TODO: Move this token somewhere else
                 returnUser.UserName = "";
                 returnUser.EmailAddress = "";
                 UserAuthenticationAccount newTwitterAccount = new UserAuthenticationAccount();
@@ -223,6 +262,48 @@ namespace TweetHarbor.Controllers
             twitterAccount.OAuthToken = accessToken.Token;
             twitterAccount.OAuthTokenSecret = accessToken.TokenSecret;
             twitterAccount.ProfilePicUrl = user.ProfileImageUrl;
+
+            try
+            {
+                database.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                Trace.WriteLine("Exception: " + e.Message);
+                throw e;
+            }
+            return returnUser;
+        }
+        [NonAction]
+        private User AppHarborCreateOrUpdateAccountIfNeeded(string AccessToken, AppHarborUser user)
+        {
+            //TODO: must have some kind of AppHb unique id-- username, etc --see twitter approach (screenname) (for now we used emailaddress)
+            var returnUser = (from u in database.Users
+                              where u.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "appharbor" && ac.UserName == user.EmailAddress) != null
+                              select u).FirstOrDefault();
+
+            if (null == returnUser) // CREATE
+            {
+                returnUser = new User();
+                returnUser.UserName = user.UserName;
+                returnUser.EmailAddress = user.EmailAddress;
+                UserAuthenticationAccount newAppHarborAccount = new UserAuthenticationAccount();
+                newAppHarborAccount.AccountProvider = "appharbor";
+                newAppHarborAccount.UserName = user.UserName;
+                newAppHarborAccount.UserName = user.UserName;
+                newAppHarborAccount.ProfilePicUrl = "<not implemented>";
+                if (null == returnUser.AuthenticationAccounts)
+                    returnUser.AuthenticationAccounts = new Collection<UserAuthenticationAccount>();
+                returnUser.AuthenticationAccounts.Add(newAppHarborAccount);
+                returnUser.UpdateUniqueId();
+                database.Users.Add(returnUser);
+            }
+
+            //returnUser.UserProfilePicUrl = user.ProfileImageUrl;
+            var appharborAccount = returnUser.AuthenticationAccounts.First(t => t.AccountProvider == "appharbor");
+            appharborAccount.OAuthToken = AccessToken;
+            //appharborAccount.OAuthTokenSecret = accessToken.TokenSecret;
+            //appharborAccount.ProfilePicUrl = user.ProfileImageUrl;
 
             try
             {
