@@ -12,6 +12,8 @@ using System.Text.RegularExpressions;
 using TweetHarbor.Messaging;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using TweetHarbor.OAuth;
+using System.Configuration;
 
 namespace TweetHarbor.Controllers
 {
@@ -114,19 +116,39 @@ namespace TweetHarbor.Controllers
             }
         }
 
-        public ActionResult Authorize()
+        public ActionResult Authorize(string Client)
         {
-            // Step 1 - Retrieve an OAuth Request Token
+            switch (Client.ToLower())
+            {
+                case "twitter":
+                    // Step 1 - Retrieve an OAuth Request Token
 
 #if DEBUG
-            OAuthRequestToken requestToken = twitter.GetRequestToken("http://localhost:9090/Account/AuthorizeCallback"); // <-- The registered callback URL
+                    OAuthRequestToken requestToken = twitter.GetRequestToken("http://localhost:9090/Account/AuthorizeCallback"); // <-- The registered callback URL
 #else
             OAuthRequestToken requestToken = twitter.GetRequestToken(Properties.Settings.Default.TwitterAuthorizationCallbackUrl); // <-- The registered callback URL
 #endif
-            Uri uri = twitter.GetAuthorizationUri(requestToken);
-            return new RedirectResult(uri.ToString(), false /*permanent*/);
+                    Uri uri = twitter.GetAuthorizationUri(requestToken);
+                    return new RedirectResult(uri.ToString(), false /*permanent*/);
+                    break;
+                case "appharbor":
+                    var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
+                    return new AppHarborClient(clientId).RedirectToAuthorizationResult();
+                    break;
+                default:
+                    throw new ArgumentNullException("Client must be specified");
+                    break;
+
+
+            }
         }
 
+        /// <summary>
+        /// For twitter
+        /// </summary>
+        /// <param name="oauth_token"></param>
+        /// <param name="oauth_verifier"></param>
+        /// <returns></returns>
         public ActionResult AuthorizeCallback(string oauth_token, string oauth_verifier)
         {
             var requestToken = new OAuthRequestToken { Token = oauth_token };
@@ -161,7 +183,11 @@ namespace TweetHarbor.Controllers
             }
         }
 
-        [HttpPost]
+        /// <summary>
+        /// For AppHb
+        /// </summary>
+        /// <param name="Code"></param>
+        /// <returns></returns>
         public ActionResult OAuthComplete(string Code)
         {
             return new EmptyResult();
