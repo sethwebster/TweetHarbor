@@ -184,6 +184,7 @@
   <ItemGroup>
     <Content Include="App_Readme\glimpse.readme.txt" />
     <Content Include="Content\appharbor_logo.png" />
+    <Content Include="Content\appharbor_logo_square.png" />
     <Content Include="Content\backgroundsprite.gif" />
     <Content Include="Content\backgroundsprite.jpg" />
     <Content Include="Content\backgroundsprite.png" />

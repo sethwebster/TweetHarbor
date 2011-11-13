@@ -681,6 +681,7 @@ ul.recipient_list li:hover
     -webkit-box-shadow: 1px 1px 1px #666;
     box-shadow: 1px 1px 1px #666;
     max-width: 300px;
+    min-width: 150px;
 }
 
 #service_accounts .service_account

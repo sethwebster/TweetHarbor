@@ -12,7 +12,14 @@
     @foreach (var ac in Model.AuthenticationAccounts)
     {
         <div class='service_account'>
-            <img src="@ac.ProfilePicUrl" />
+            @if (ac.AccountProvider == "twitter")
+            { 
+                <img src="@ac.ProfilePicUrl" />
+            }
+            else
+            {
+                <img src="@Url.Content("~/Content/appharbor_logo_square.png")" />
+            }
             <div class="service_account_username">
                 @ac.UserName
             </div>
