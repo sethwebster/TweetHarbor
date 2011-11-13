@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="TwitterAuthorizationCallbackUrl" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">http://tweetharbor.apphb.com/Account/AuthorizeCallback</Value>
+      <Value Profile="(Default)">http://tweetharbor.apphb.com/Account/AuthorizeCallback?Client=twitter</Value>
     </Setting>
     <Setting Name="TwitterConsumerKey" Type="System.String" Scope="Application">
       <Value Profile="(Default)">1FyzswseSDa0FZCSPSXLew</Value>

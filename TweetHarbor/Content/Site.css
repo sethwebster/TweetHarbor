@@ -662,3 +662,9 @@ ul.recipient_list li:hover
 {
     display:none;
 }
+
+#service_accounts
+{
+    float:left;
+    width:300px;
+}

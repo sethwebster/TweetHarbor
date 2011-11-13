@@ -50,6 +50,7 @@ namespace TweetHarbor.Controllers
                     .Include("Projects.ProjectNotifications")
                     .Include("Projects.ProjectNotifications.Build")
                     .Include("Projects.ProjectNotifications.Build.commit")
+                    .Include("AuthenticationAccounts")
                     .FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
 
                 if (null != u)
@@ -125,10 +126,20 @@ namespace TweetHarbor.Controllers
                     // Step 1 - Retrieve an OAuth Request Token
 
 #if DEBUG
-                    OAuthRequestToken requestToken = twitter.GetRequestToken("http://localhost:9090/Account/AuthorizeCallback"); // <-- The registered callback URL
+                    var url = "http://localhost:9090/Account/AuthorizeCallback?Client=twitter";
+                    // <-- The registered callback URL
 #else
-            OAuthRequestToken requestToken = twitter.GetRequestToken(Properties.Settings.Default.TwitterAuthorizationCallbackUrl); // <-- The registered callback URL
+                      var url = "Properties.Settings.Default.TwitterAuthorizationCallbackUrl";
 #endif
+                    if (Request.IsAuthenticated)
+                    {
+                        var dbUser = database.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                        if (null != dbUser)
+                        {
+                            url += "&id=" + dbUser.UniqueId;
+                        }
+                    }
+                    OAuthRequestToken requestToken = twitter.GetRequestToken(url);
                     Uri uri = twitter.GetAuthorizationUri(requestToken);
                     return new RedirectResult(uri.ToString(), false /*permanent*/);
                     break;
@@ -155,7 +166,7 @@ namespace TweetHarbor.Controllers
         /// <param name="oauth_token"></param>
         /// <param name="oauth_verifier"></param>
         /// <returns></returns>
-        public ActionResult AuthorizeCallback(string oauth_token, string oauth_verifier)
+        public ActionResult AuthorizeCallback(string Id, string oauth_token, string oauth_verifier)
         {
             var requestToken = new OAuthRequestToken { Token = oauth_token };
 
@@ -167,7 +178,13 @@ namespace TweetHarbor.Controllers
             TwitterUser user = twitter.VerifyCredentials();
             if (null != user)
             {
-                var appUser = TwitterCreateOrUpdateAccountIfNeeded(accessToken, user);
+                // We are adding an account to this user
+                User masterUser = null;
+                if (!string.IsNullOrEmpty(Id))
+                {
+                    masterUser = database.Users.FirstOrDefault(u => u.UniqueId == Id);
+                }
+                var appUser = TwitterCreateOrUpdateAccountIfNeeded(accessToken, user, masterUser);
                 if (string.IsNullOrEmpty(appUser.UserName) || string.IsNullOrEmpty(appUser.EmailAddress))
                 {
                     if (string.IsNullOrEmpty(appUser.UniqueId))
@@ -238,31 +255,46 @@ namespace TweetHarbor.Controllers
         }
 
         [NonAction]
-        private User TwitterCreateOrUpdateAccountIfNeeded(OAuthAccessToken accessToken, TwitterUser user)
+        private User TwitterCreateOrUpdateAccountIfNeeded(OAuthAccessToken accessToken, TwitterUser user, User returnUser)
         {
-            var returnUser = (from u in database.Users
+            // If not passed a user, let's query to find out if
+            // we already have a master user for this twitter user
+            if (null == returnUser)
+            {
+                returnUser = (from u in database.Users
                               where u.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter" && ac.UserName == user.ScreenName) != null
                               select u).FirstOrDefault();
+            }
 
+            // If we're still short a user account, we will create one here
             if (null == returnUser) // CREATE
             {
                 returnUser = new User();
-                returnUser.UserName = "";
+                returnUser.UserName = user.ScreenName;
                 returnUser.EmailAddress = "";
-                UserAuthenticationAccount newTwitterAccount = new UserAuthenticationAccount();
-                newTwitterAccount.AccountProvider = "twitter";
-
-                newTwitterAccount.UserName = user.ScreenName;
-                newTwitterAccount.ProfilePicUrl = user.ProfileImageUrl;
-                if (null == returnUser.AuthenticationAccounts)
-                    returnUser.AuthenticationAccounts = new Collection<UserAuthenticationAccount>();
-                returnUser.AuthenticationAccounts.Add(newTwitterAccount);
                 returnUser.UpdateUniqueId();
                 database.Users.Add(returnUser);
             }
 
+            // Now we will pull our actual twitter account, it if exists
+            // If it doesn't, we will create it
+            UserAuthenticationAccount twitterAccount = returnUser.
+                AuthenticationAccounts.FirstOrDefault(a => a.AccountProvider == "twitter" && a.UserName == user.ScreenName);
+            if (twitterAccount == null)
+            {
+                twitterAccount = new UserAuthenticationAccount();
+                twitterAccount.AccountProvider = "twitter";
+
+                twitterAccount.UserName = user.ScreenName;
+                twitterAccount.ProfilePicUrl = user.ProfileImageUrl;
+                if (null == returnUser.AuthenticationAccounts)
+                    returnUser.AuthenticationAccounts = new Collection<UserAuthenticationAccount>();
+                returnUser.AuthenticationAccounts.Add(twitterAccount);
+
+            }
+
+            // We'll update some information here
             returnUser.UserProfilePicUrl = user.ProfileImageUrl;
-            var twitterAccount = returnUser.AuthenticationAccounts.First(t => t.AccountProvider == "twitter");
             twitterAccount.OAuthToken = accessToken.Token;
             twitterAccount.OAuthTokenSecret = accessToken.TokenSecret;
             twitterAccount.ProfilePicUrl = user.ProfileImageUrl;

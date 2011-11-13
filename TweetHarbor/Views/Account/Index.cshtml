@@ -45,6 +45,17 @@
         <div id="email_status_message">
         </div>
     </div>
+    <div id="service_accounts">
+        @foreach (var ac in Model.AuthenticationAccounts)
+        {
+            <div class='service_account'>
+                <img src="@ac.ProfilePicUrl" />
+                <div class="service_account_username">
+                    @ac.UserName
+                </div>
+            </div>
+        }
+    </div>
     <div id="service_hook">
         <h3 id="">
             Service Hook Url</h3>
