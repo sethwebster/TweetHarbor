@@ -10,6 +10,7 @@ namespace TweetHarbor.Tests.Helpers
     public class TestTweetHarborDbContext : ITweetHarborDbContext
     {
         TestableDbSet<User> users = new TestableDbSet<User>();
+        TestableDbSet<OldUser> oldusers = new TestableDbSet<OldUser>();
         TestableDbSet<Project> projects = new TestableDbSet<Project>();
         TestableDbSet<TwitterMessageRecipient> messageRecipients = new TestableDbSet<TwitterMessageRecipient>();
         TestableDbSet<LogEntry> logEntries = new TestableDbSet<LogEntry>();
@@ -59,6 +60,18 @@ namespace TweetHarbor.Tests.Helpers
             set
             {
                 users = (TestableDbSet<User>)value;
+            }
+        }
+
+        public System.Data.Entity.IDbSet<Models.OldUser> OldUsers
+        {
+            get
+            {
+                return oldusers;
+            }
+            set
+            {
+                oldusers = (TestableDbSet<OldUser>)value;
             }
         }
 

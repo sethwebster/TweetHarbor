@@ -18,6 +18,7 @@ namespace TweetHarbor.Models
 
         public TweetHarborDbContext() { }
         public virtual IDbSet<User> Users { get; set; }
+        public virtual IDbSet<OldUser> OldUsers { get; set; }
         public virtual IDbSet<Project> Projects { get; set; }
         public virtual IDbSet<TwitterMessageRecipient> MessageRecipients { get; set; }
         public virtual IDbSet<TextMessageRecipient> TextMessageRecipients { get; set; }
