@@ -283,7 +283,7 @@ namespace TweetHarbor.Controllers
         {
             //TODO: must have some kind of AppHb unique id-- username, etc --see twitter approach (screenname) (for now we used emailaddress)
             var returnUser = (from u in database.Users
-                              where u.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "appharbor" && ac.UserName == user.EmailAddress) != null
+                              where u.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "appharbor" && ac.UserName == user.UserName) != null
                               select u).FirstOrDefault();
 
             if (null == returnUser) // CREATE
