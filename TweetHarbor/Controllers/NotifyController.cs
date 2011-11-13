@@ -36,6 +36,7 @@ namespace TweetHarbor.Controllers
             // * Token must match *
             var user = database.Users
                 .Include("Projects")
+                .Include("Projects.TwitterAccounts")
                 .Include("Projects.MessageRecipients")
                 .Include("Projects.TextMessageRecipients")
                 .FirstOrDefault(usr => usr.UserName == Id && usr.UniqueId == token);
@@ -49,7 +50,9 @@ namespace TweetHarbor.Controllers
                 {
                     SaveNotification(notification, project);
                     // start our connection to twitter
-                    var twitterAccount = user.AuthenticationAccounts.FirstOrDefault(a => a.AccountProvider.ToLower() == "twitter");
+                    var twitterAccount = project.TwitterAccounts != null ? project.TwitterAccounts.FirstOrDefault() : null;
+                    if (null == twitterAccount)
+                        twitterAccount = user.AuthenticationAccounts.FirstOrDefault(a => a.AccountProvider.ToLower() == "twitter");
                     //TODO: Ensure we HAVE a twitter account
                     twitter.AuthenticateWith(twitterAccount.OAuthToken, twitterAccount.OAuthTokenSecret);
 

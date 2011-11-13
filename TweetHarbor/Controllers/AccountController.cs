@@ -361,6 +361,8 @@ namespace TweetHarbor.Controllers
             return returnUser;
         }
 
+       
+
         public ActionResult LogOff()
         {
             authentication.SignOut();

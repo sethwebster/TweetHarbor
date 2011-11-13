@@ -20,6 +20,8 @@ namespace TweetHarbor.Models
         [Required]
         public string AccountProvider { get; set; } // APPHarbor, OpenId, Twitter, Etc
 
+        public virtual ICollection<Project> Projects { get; set; }
+
         public string OAuthTokenSecret { get; set; }
         public string OAuthToken { get; set; }
         public string ProfilePicUrl { get; set; }

@@ -30,8 +30,9 @@ namespace TweetHarbor.Controllers
         }
 
         [Authorize]
-        public JsonResult UserProjects()
+        public ContentResult UserProjects()
         {
+            Response.ContentType = "application/json";
             if (null != HttpContext)
             {
                 var user = database.Users.Include("Projects")
@@ -64,9 +65,56 @@ namespace TweetHarbor.Controllers
                     }
                     p.ProjectNotifications = new Collection<ProjectNotification>(p.ProjectNotifications.OrderByDescending(n => n.NotificationDate).ToList());
                 }
-                return Json(user.Projects, JsonRequestBehavior.AllowGet);
+
+                var data = from p in user.Projects
+                           select new
+                           {
+                               ProjectName = p.ProjectName,
+                               ProjectId = p.ProjectId,
+                               AppHarborProjectUrl = p.AppHarborProjectUrl,
+                               DateCreated = p.DateCreated,
+                               FailureTemplate = p.FailureTemplate,
+                               MessageRecipients = from m in p.MessageRecipients
+                                                   select new
+                                                   {
+                                                       ScreenName = m.ScreenName,
+                                                       TwitterMessageRecipientId = m.TwitterMessageRecipientId
+                                                   },
+
+                               TextMessageRecipients = from m in p.TextMessageRecipients
+                                                       select new
+                                                       {
+                                                           Name = m.Name,
+                                                           PhoneNumber = m.PhoneNumber
+                                                       },
+                               TwitterAccounts = from t in p.TwitterAccounts
+                                                 select new
+                                                 {
+                                                     ProfilePicUrl = t.ProfilePicUrl,
+                                                     UserName = t.UserName,
+                                                     UserAuthenticationAccountId = t.UserAuthenticationAccountId
+                                                 },
+                               ProjectNotifications = from pn in p.ProjectNotifications
+                                                      select new
+                                                      {
+                                                          Build = pn.Build,
+                                                          NotificationDate = pn.NotificationDate,
+                                                          ProjectNotificationId = pn.ProjectNotificationId
+                                                      },
+                               SendPrivateTweetOnFailure = p.SendPrivateTweetOnFailure,
+                               SendPrivateTweetOnSuccess = p.SendPrivateTweetOnSuccess,
+                               SendPublicTweetOnFailure = p.SendPublicTweetOnFailure,
+                               SendPublicTweetOnSuccess = p.SendPublicTweetOnSuccess,
+                               SendTextOnFailure = p.SendTextOnFailure,
+                               SendTextOnSuccess = p.SendTextOnSuccess
+                           };
+
+                JsonSerializerSettings set = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+                var ret = JsonConvert.SerializeObject(data, Formatting.None, set);
+
+                return Content(ret);
             }
-            return Json(new { Error = "Not and Http Request" });
+            return Content(JsonConvert.SerializeObject(new { Error = "Not an HTTP Request" }));
         }
 
         [Authorize]
