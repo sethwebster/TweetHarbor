@@ -20,10 +20,10 @@
                 <ul id="menu">
                     @if (Html.CurrentUser() != null && Request.IsAuthenticated)
                     { 
-                        <li>@Html.ActionLink("Dashboard", "Index", new { Controller = "Account" })</li>
+                        <li>@Html.ActionLink("Dashboard", "Index", new { Controller = "Account", Area="" })</li>
                     }
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Home", "Index", new { Controller = "Home", Area = "" })</li>
+                    <li>@Html.ActionLink("About", "About", new { Controller = "Home", Area = "" })</li>
                     @if (Html.CurrentUser() != null && Html.CurrentUser().IsAdmin)
                     { 
                         <li>@Html.ActionLink("Admin", "Index", new { Area = "admin", Controller = "Home" })</li>
