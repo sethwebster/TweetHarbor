@@ -50,6 +50,7 @@ ProjectsManager.prototype.RenderProjects = function () {
     this.bindRecipientAddButton();
     this.bindRemoveHandler();
     this.bindTemplateInsertButton();
+    $('.ajax').colorbox();
     //this.bindSetServiceHookButton();
     //this.startServiceHookLookup();
 
@@ -59,7 +60,7 @@ ProjectsManager.prototype.RenderProject = function (project) {
 
     var status = project.ProjectNotifications.length > 0 && project.ProjectNotifications[0].Build.status == "succeeded" ? "build_succeeded" : "build_failed";
     this.appendBuffer("<li class='list_project'>");
-    this.appendBuffer("<h3 class='" + status + "'><div>" + project.ProjectName + "</div><!--<div class='hook_link_wrapper' project='"+project.ProjectName+"'>*</div>--></h3>");
+    this.appendBuffer("<h3 class='" + status + "'><div>" + project.ProjectName + "</div><!--<div class='hook_link_wrapper' project='" + project.ProjectName + "'>*</div>--></h3>");
     this.RenderSwitch("SendPrivateTweetOnSuccess", "ProjectNotificationToggle", project.ProjectName, "SendPrivateTweetOnSuccess", project.SendPrivateTweetOnSuccess);
     this.RenderSwitch("SendPublicTweetOnSuccess", "ProjectNotificationToggle", project.ProjectName, "SendPublicTweetOnSuccess", project.SendPublicTweetOnSuccess);
     this.RenderSwitch("SendPrivateTweetOnFailure", "ProjectNotificationToggle", project.ProjectName, "SendPrivateTweetOnFailure", project.SendPrivateTweetOnFailure);
@@ -71,11 +72,31 @@ ProjectsManager.prototype.RenderProject = function (project) {
     this.RenderTemplateEditor("FailureTemplate", project.ProjectName, project.FailureTemplate);
     this.appendBuffer("<div class='clear'></div><h5>Message Recipients</h5>");
     this.appendBuffer("<div class='messagageRecipientsWrapper'>");
+    this.RenderTwitterAccounts(project);
     this.RenderMessageRecipients("MessageRecipients", project.ProjectName, project.MessageRecipients);
     this.RenderMessageRecipients("TextMessageRecipients", project.ProjectName, project.TextMessageRecipients);
     this.appendBuffer("</div>");
     //TODO: Project Notifications
     this.appendBuffer("</li>");
+}
+
+ProjectsManager.prototype.RenderTwitterAccounts = function (project) {
+    var accounts = project.TwitterAccounts;
+    this.appendBuffer("<div class='twitter_accounts recipients'>");
+
+    this.appendBuffer("<h6>Twitter Account</h6>");
+    this.appendBuffer("<div class='error'></div>");
+    this.appendBuffer("<ul class='recipient_list'>");
+    if (accounts.length > 0) {
+        for (var a in accounts) {
+            this.appendBuffer("<li class='twitter_host_account'>");
+            this.appendBuffer("<img src='" + accounts[a].ProfilePicUrl + "' align='middle' />" + accounts[a].UserName);
+            this.appendBuffer("</li>");
+        }
+    }
+    this.appendBuffer("</ul>");
+    this.appendBuffer("<a href='/UserAuthenticationAccounts/AssignToProject/"+project.ProjectId+"?Type=twitter' class='ajax'>Change...</a>");
+    this.appendBuffer("</div>");
 }
 
 ProjectsManager.prototype.RenderMessageRecipients = function (type, projectName, recipients) {

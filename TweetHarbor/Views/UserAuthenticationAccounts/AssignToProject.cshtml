@@ -1,0 +1,28 @@
+﻿@model TweetHarbor.Models.AssignToProjectModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AssignToProject</title>
+</head>
+<body>
+    <div style="margin: 25px">
+        <h4>
+            Choose a Twitter Account...</h4>
+        @using (Html.BeginForm())
+        {
+            @Html.Hidden("UserAuthenticationAccountId")
+            foreach (var a in Model.Accounts)
+            {
+            @Html.RadioButton("twitteraccount", a.UserAuthenticationAccountId, Model.Project.TwitterAccounts.Count > 0 && Model.Project.TwitterAccounts.FirstOrDefault().UserAuthenticationAccountId == a.UserAuthenticationAccountId)
+            <img src="@a.ProfilePicUrl" valign='middle' />
+            @a.UserName
+            <br />
+            }
+            <input type="submit" value="Save" />
+        }
+    </div>
+</body>
+</html>

@@ -43,6 +43,7 @@ namespace TweetHarbor.Models
         public ICollection<ProjectNotification> ProjectNotifications { get; set; }
         public ICollection<TextMessageRecipient> TextMessageRecipients { get; set; }
         public ICollection<OutboundNotification> OutboundNotifications { get; set; }
+        public virtual ICollection<UserAuthenticationAccount> TwitterAccounts { get; set; }
         public DateTime DateCreated { get; set; }
         [MaxLength(400)]
         public string AppHarborProjectUrl { get; set; }
