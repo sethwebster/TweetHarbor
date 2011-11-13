@@ -17,29 +17,29 @@ namespace TweetHarbor.Areas.Admin.Controllers
         }
 
 
-        public ActionResult FixTwitterAccounts()
-        {
-            int ct = 0;
-            foreach (var u in db.Users.ToArray())
-            {
-                var oldUser = db.OldUsers.FirstOrDefault(o => o.UniqueId == u.UniqueId);
-                if (null != oldUser && u.AuthenticationAccounts.FirstOrDefault(tt => tt.AccountProvider == "twitter") == null)
-                {
-                    UserAuthenticationAccount acc = new UserAuthenticationAccount()
-                    {
-                        AccountProvider = "twitter",
-                        OAuthToken = oldUser.OAuthToken,
-                        OAuthTokenSecret = oldUser.OAuthTokenSecret,
-                        ProfilePicUrl = oldUser.UserProfilePicUrl,
-                        UserName = oldUser.TwitterUserName
-                    };
-                    u.AuthenticationAccounts.Add(acc);
-                    ct++;
-                }
-            }
-            db.SaveChanges();
-            return Content("OK - " + ct);
-        }
+        //public ActionResult FixTwitterAccounts()
+        //{
+        //    int ct = 0;
+        //    foreach (var u in db.Users.ToArray())
+        //    {
+        //        var oldUser = db.OldUsers.FirstOrDefault(o => o.UniqueId == u.UniqueId);
+        //        if (null != oldUser && u.AuthenticationAccounts.FirstOrDefault(tt => tt.AccountProvider == "twitter") == null)
+        //        {
+        //            UserAuthenticationAccount acc = new UserAuthenticationAccount()
+        //            {
+        //                AccountProvider = "twitter",
+        //                OAuthToken = oldUser.OAuthToken,
+        //                OAuthTokenSecret = oldUser.OAuthTokenSecret,
+        //                ProfilePicUrl = oldUser.UserProfilePicUrl,
+        //                UserName = oldUser.TwitterUserName
+        //            };
+        //            u.AuthenticationAccounts.Add(acc);
+        //            ct++;
+        //        }
+        //    }
+        //    db.SaveChanges();
+        //    return Content("OK - " + ct);
+        //}
 
         public ActionResult Index()
         {

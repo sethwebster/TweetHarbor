@@ -11,7 +11,6 @@ namespace TweetHarbor.Data
     public interface ITweetHarborDbContext : IDisposable
     {
         IDbSet<User> Users { get; set; }
-        IDbSet<OldUser> OldUsers { get; set; }
         IDbSet<Project> Projects { get; set; }
         IDbSet<TwitterMessageRecipient> MessageRecipients { get; set; }
         IDbSet<TextMessageRecipient> TextMessageRecipients { get; set; }
