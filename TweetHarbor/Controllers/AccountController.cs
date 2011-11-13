@@ -129,7 +129,7 @@ namespace TweetHarbor.Controllers
                     var url = "http://localhost:9090/Account/AuthorizeCallback?Client=twitter";
                     // <-- The registered callback URL
 #else
-                      var url = "Properties.Settings.Default.TwitterAuthorizationCallbackUrl";
+                      var url = Properties.Settings.Default.TwitterAuthorizationCallbackUrl;
 #endif
                     if (Request.IsAuthenticated)
                     {
