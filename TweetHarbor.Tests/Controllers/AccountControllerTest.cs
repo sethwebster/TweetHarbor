@@ -352,7 +352,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var controller = new AccountController(db, ts.Object, auth.Object);
             controller.SetFakeControllerContext();
-            var val = controller.AuthorizeCallback(null, token, verifier);
+            var val = controller.AuthorizeCallback(null, token, verifier, null);
 
             Assert.AreNotEqual(0, db.Users.Count());
             Assert.AreEqual(token, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac=>ac.AccountProvider=="twitter").OAuthToken);
@@ -381,7 +381,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var controller = new AccountController(db, ts.Object, auth.Object);
             controller.SetFakeControllerContext();
-            var val = controller.AuthorizeCallback(null, token, verifier);
+            var val = controller.AuthorizeCallback(null, token, verifier, null);
 
             Assert.AreEqual(1, db.Users.Count());
             Assert.AreEqual(token, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").OAuthToken);

@@ -157,7 +157,7 @@ ul#menu
     position: relative;
     margin: 0;
     text-align: left;
-    width:500px;
+    width: 500px;
 }
 
 ul#menu li
@@ -462,6 +462,7 @@ div#title
 #tweet_options
 {
     float: right;
+    margin-right: 25px;
 }
 
 .section
@@ -639,11 +640,12 @@ ul.recipient_list li:hover
 
 #project_instructions ol li
 {
-    margin:0px;
-    padding:0px;
+    margin: 0px;
+    padding: 0px;
     background-color: #E7E7E7;
-    margin:5px;
-    padding:4px; border-radius: 4px;
+    margin: 5px;
+    padding: 4px;
+    border-radius: 4px;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
 }
@@ -660,11 +662,49 @@ ul.recipient_list li:hover
 
 #appharbor_credentials
 {
-    display:none;
+    display: none;
 }
 
 #service_accounts
 {
-    float:left;
-    width:300px;
+    float: right;
+    display: block;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -moz-box-shadow: 1px 1px 1px #666;
+    -webkit-box-shadow: 1px 1px 1px #666;
+    box-shadow: 1px 1px 1px #666;
+    max-width: 300px;
+}
+
+#service_accounts .service_account
+{
+    float: left;
+    width: 75px;
+    text-align: center;
+}
+#service_accounts img
+{
+    width: 55px;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -moz-box-shadow: 1px 1px 1px #666;
+    -webkit-box-shadow: 1px 1px 1px #666;
+    box-shadow: 1px 1px 1px #666;
+}
+#service_accounts .service_account .service_account_username
+{
+    font-size: .8em;
+}
+
+#service_accounts .service_account.new_account
+{
+    border: 1px dotted #ccc;
+    background-color:#eee;
+    font-size:.8em;
+    height:55px;
+    width:55px;
+    margin-left:8px;
 }

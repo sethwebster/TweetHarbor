@@ -6,31 +6,46 @@
 <script src="@Url.Content("~/scripts/iphone-style-checkboxes.js")" type="text/javascript"></script>
 <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.insertAtCaret.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/Scripts/account_home.js")"></script>
+<fieldset id="service_accounts">
+    <legend>Sign-in Accounts</legend>
+    @foreach (var ac in Model.AuthenticationAccounts)
+    {
+        <div class='service_account'>
+            <img src="@ac.ProfilePicUrl" />
+            <div class="service_account_username">
+                @ac.UserName
+            </div>
+        </div>  
+    }
+    <div class='service_account new_account'>
+        <a href="/Account/Authorize?Client=Twitter">Add Twitter Account</a>
+    </div>
+</fieldset>
+<div id="tweet_options">
+    <div id="toggle_status_message">
+    </div>
+    <input type="checkbox" id="SendPrivateTweet" notification="SendPrivateTweet" 
+             toggleType="GlobalNotificationToggle" class='notification_toggle switch'  @(Model.SendPrivateTweet ? "Checked" : "") />
+    <label for="SendPrivateTweet" title="(Disable to prevent any direct messages for all
+                applications)">
+        Direct Messages Enabled
+    </label>
+    <input type="checkbox" id="SendPublicTweet" notification="SendPublicTweet"  
+              toggleType="GlobalNotificationToggle" class='notification_toggle switch'  @(Model.SendPublicTweet ? "Checked" : "")/>
+    <label for="SendPublicTweet" title=" (Disable to prevent any public messages
+                for all applications)">
+        Public Tweets Enabled</label>
+    <input type="checkbox" id="SendSMS" notification="SendSMS"  
+              toggleType="GlobalNotificationToggle" class='notification_toggle switch'  @(Model.SendSMS ? "Checked" : "")/>
+    <label for="SendSMS" title=" (Disable to prevent any SMS messages
+                for all applications)">
+        SMS Enabled</label>
+    <div id="global_toggle_status_message" class="error">
+    </div>
+</div>
 <h2>
     Your Account</h2>
 <div id="account">
-    <div id="tweet_options">
-        <div id="toggle_status_message">
-        </div>
-        <input type="checkbox" id="SendPrivateTweet" notification="SendPrivateTweet" 
-             toggleType="GlobalNotificationToggle" class='notification_toggle switch'  @(Model.SendPrivateTweet ? "Checked" : "") />
-        <label for="SendPrivateTweet" title="(Disable to prevent any direct messages for all
-                applications)">
-            Direct Messages Enabled
-        </label>
-        <input type="checkbox" id="SendPublicTweet" notification="SendPublicTweet"  
-              toggleType="GlobalNotificationToggle" class='notification_toggle switch'  @(Model.SendPublicTweet ? "Checked" : "")/>
-        <label for="SendPublicTweet" title=" (Disable to prevent any public messages
-                for all applications)">
-            Public Tweets Enabled</label>
-        <input type="checkbox" id="SendSMS" notification="SendSMS"  
-              toggleType="GlobalNotificationToggle" class='notification_toggle switch'  @(Model.SendSMS ? "Checked" : "")/>
-        <label for="SendSMS" title=" (Disable to prevent any SMS messages
-                for all applications)">
-            SMS Enabled</label>
-        <div id="global_toggle_status_message" class="error">
-        </div>
-    </div>
     <img src="@Model.UserProfilePicUrl" id="img_profile" />
     <h3>@Model.UserName</h3>
     <div id="email_address_display">
@@ -44,17 +59,6 @@
             <img src="@Url.Content("~/Content/disc.png")" width="25" /></a>
         <div id="email_status_message">
         </div>
-    </div>
-    <div id="service_accounts">
-        @foreach (var ac in Model.AuthenticationAccounts)
-        {
-            <div class='service_account'>
-                <img src="@ac.ProfilePicUrl" />
-                <div class="service_account_username">
-                    @ac.UserName
-                </div>
-            </div>
-        }
     </div>
     <div id="service_hook">
         <h3 id="">
