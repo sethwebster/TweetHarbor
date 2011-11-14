@@ -1,5 +1,6 @@
 ﻿var ProjectsManager = function (targetContainerId, labelsBefore) {
-    this._targetUrl = "/Projects/UserProjects";
+    var randomnumber = Math.floor(Math.random() * 11)
+    this._targetUrl = "/Projects/UserProjects?cc=" + randomnumber;
     this._containerClass = "projects_list";
     this._targetContainerId = targetContainerId;
     this._labels = Array();
@@ -95,7 +96,7 @@ ProjectsManager.prototype.RenderTwitterAccounts = function (project) {
         }
     }
     this.appendBuffer("</ul>");
-    this.appendBuffer("<a href='/UserAuthenticationAccounts/AssignToProject/"+project.ProjectId+"?Type=twitter' class='ajax'>Change...</a>");
+    this.appendBuffer("<a href='/UserAuthenticationAccounts/AssignToProject/" + project.ProjectId + "?Type=twitter' class='ajax'>Change...</a>");
     this.appendBuffer("</div>");
 }
 
