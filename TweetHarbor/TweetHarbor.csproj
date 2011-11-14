@@ -303,6 +303,7 @@
     <Content Include="Views\Account\_TemplateEditor.cshtml" />
     <Content Include="Views\Account\AccountSetup.cshtml" />
     <Content Include="Views\UserAuthenticationAccounts\AssignToProject.cshtml" />
+    <Content Include="Views\Shared\_UserAuthenticationAccount.cshtml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

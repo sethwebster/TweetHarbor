@@ -25,7 +25,10 @@ namespace TweetHarbor.Areas.Admin.Controllers
                 var user = database.Users.FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
                 if (user.IsAdmin)
                 {
-                    var users = database.Users.Include("Projects").OrderBy(u => u.UserName).OrderByDescending(y => y.DateCreated);
+                    var users = database.Users
+                        .Include("Projects")
+                        .Include("UserAuthenticationAccounts")
+                        .OrderBy(u => u.UserName).OrderByDescending(y => y.DateCreated);
                     return View(users);
                 }
                 else

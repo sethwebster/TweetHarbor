@@ -1,0 +1,14 @@
+﻿@model TweetHarbor.Models.UserAuthenticationAccount
+<div class='service_account'>
+    @if (Model.AccountProvider == "twitter")
+    { 
+        <img src="@Model.ProfilePicUrl" />
+    }
+    else
+    {
+        <img src="@Url.Content("~/Content/appharbor_logo_square.png")" />
+    }
+    <div class="service_account_username">
+        @Model.UserName
+    </div>
+</div>
