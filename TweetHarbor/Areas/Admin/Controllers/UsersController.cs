@@ -27,7 +27,7 @@ namespace TweetHarbor.Areas.Admin.Controllers
                 {
                     var users = database.Users
                         .Include("Projects")
-                        .Include("UserAuthenticationAccounts")
+                        .Include("AuthenticationAccounts")
                         .OrderBy(u => u.UserName).OrderByDescending(y => y.DateCreated);
                     return View(users);
                 }

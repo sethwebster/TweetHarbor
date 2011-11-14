@@ -28,6 +28,9 @@
             Projects
         </th>
         <th>
+            Projects
+        </th>
+        <th>
             Date Joined
         </th>
     </tr>
@@ -45,14 +48,14 @@
                 @item.EmailAddress
             </td>
             <td>
-            @if (!string.IsNullOrEmpty(item.UserProfilePicUrl))
-            { 
-                <img src="@item.UserProfilePicUrl" />
-            }
-            else
-            { 
-                <text>[none]</text>
-            }
+                @if (!string.IsNullOrEmpty(item.UserProfilePicUrl))
+                { 
+                    <img src="@item.UserProfilePicUrl" />
+                }
+                else
+                { 
+                    <text>[none]</text>
+                }
             </td>
             <td>
                 @item.SendPrivateTweet
@@ -61,13 +64,19 @@
                 @item.SendPublicTweet
             </td>
             <td>
-                @foreach(var p in item.Projects)
+                @foreach (var p in item.Projects)
                 {
                     <text>@p.ProjectName<br /></text>
                 }
-
             </td>
-            <td>@item.DateCreated</td>
+            <td>
+                @foreach (var u in item.AuthenticationAccounts)
+                {
+                    @Html.Partial("_UserAuthenticationAccount", u) 
+                }
+            </td>
+            <td>@item.DateCreated
+            </td>
         </tr>
     }
 </table>
