@@ -120,6 +120,8 @@ namespace TweetHarbor.Controllers
 
         public ActionResult Authorize(string Client)
         {
+            if (string.IsNullOrEmpty(Client))
+                Client = "";
             switch (Client.ToLower())
             {
                 case "twitter":
@@ -361,7 +363,11 @@ namespace TweetHarbor.Controllers
             return returnUser;
         }
 
-       
+        public ActionResult LogIn()
+        {
+            return View();
+        }
+
 
         public ActionResult LogOff()
         {
