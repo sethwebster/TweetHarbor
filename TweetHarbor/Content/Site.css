@@ -518,7 +518,7 @@ div#title
 
 .build_succeeded
 {
-    background-color: #8AFF8A;
+    background-color: #E6FFE6;
 }
 .build_failed
 {
@@ -562,12 +562,6 @@ ul.projects_list li.list_project h3
 {
     border: 1px solid #ccc;
     padding: 12px !important;
-    border-radius: 4px;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    -moz-box-shadow: 1px 1px 1px #666;
-    -webkit-box-shadow: 1px 1px 1px #666;
-    box-shadow: 1px 1px 1px #666;
 }
 
 ul.projects_list li.list_project h5
