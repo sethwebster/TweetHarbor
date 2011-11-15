@@ -44,7 +44,11 @@ namespace TweetHarbor.Areas.Admin.Controllers
                 var user = database.Users.FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
                 if (user.IsAdmin)
                 {
-                    var projectNotifications = database.ProjectNotifications.Include("Build").Include("Project.user").Include("Build.commit").OrderByDescending(pn => pn.NotificationDate);
+                    var projectNotifications = database.ProjectNotifications
+                        .Include("Build")
+                        .Include("Project.user")
+                        .Include("Build.commit")
+                        .OrderByDescending(pn => pn.NotificationDate).Take(50);
                     return View(projectNotifications);
                 }
                 else
@@ -62,7 +66,10 @@ namespace TweetHarbor.Areas.Admin.Controllers
                 var user = database.Users.FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
                 if (user.IsAdmin)
                 {
-                    var projectNotifications = database.OutboundNotifications.OrderByDescending(pn => pn.DateCreated).ThenBy(pn => pn.DateSent);
+                    var projectNotifications = database
+                        .OutboundNotifications
+                        .OrderByDescending(pn => pn.DateCreated)
+                        .ThenBy(pn => pn.DateSent).Take(50);
                     return View(projectNotifications);
                 }
                 else
