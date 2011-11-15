@@ -18,9 +18,9 @@ namespace TweetHarbor.Areas.Admin.Controllers
             this.database = database;
         }
 
-        public ActionResult Impersonate(string UserId)
+        public ActionResult Impersonate(string Id)
         {
-            var user = database.Users.FirstOrDefault(u => u.UniqueId == UserId);
+            var user = database.Users.FirstOrDefault(u => u.UniqueId == Id);
             FormsAuthentication.SetAuthCookie(user.UserName, false);
             return RedirectToAction("Index", new { Controller = "Account", Area = "" });
         }
