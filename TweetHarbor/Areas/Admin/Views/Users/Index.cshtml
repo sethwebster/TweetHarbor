@@ -10,6 +10,9 @@
 <table>
     <tr>
         <th>
+            Action
+        </th>
+        <th>
             User Name
         </th>
         <th>
@@ -37,6 +40,9 @@
     @foreach (var item in Model)
     {
         <tr>
+            <td>
+                <a href="/Admin/Users/Impersonate/@item.UniqueId">Impersonate</a>
+            </td>
             @*<td>
             @Html.ActionLink("Edit", "Edit", new { id=item.TwitterUserName }) |
             @Html.ActionLink("Details", "Details", new { id=item.TwitterUserName }) |
