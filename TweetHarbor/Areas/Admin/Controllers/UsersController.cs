@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using TweetHarbor.Data;
+using System.Web.Security;
 
 namespace TweetHarbor.Areas.Admin.Controllers
 {
@@ -17,6 +18,12 @@ namespace TweetHarbor.Areas.Admin.Controllers
             this.database = database;
         }
 
+        public ActionResult Impersonate(string UserId)
+        {
+            var user = database.Users.FirstOrDefault(u => u.UniqueId == UserId);
+            FormsAuthentication.SetAuthCookie(user.UserName, false);
+            return RedirectToAction("Index", new { Controller = "Account", Area = "" });
+        }
 
         public ActionResult Index()
         {
