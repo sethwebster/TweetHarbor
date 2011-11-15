@@ -9,6 +9,9 @@ using Newtonsoft.Json;
 using System.Data.Entity.Validation;
 using System.Collections.ObjectModel;
 using System.Security;
+using System.Net;
+using System.IO;
+using TweetHarbor.Messaging;
 
 namespace TweetHarbor.Controllers
 {
@@ -16,10 +19,14 @@ namespace TweetHarbor.Controllers
     {
 
         ITweetHarborDbContext database = null;
+        ITweetHarborTwitterService twitterService;
+        ITweetHarborTextMessageService textMessageService;
 
-        public ProjectsController(ITweetHarborDbContext database)
+        public ProjectsController(ITweetHarborDbContext database, ITweetHarborTwitterService twitterService, ITweetHarborTextMessageService textMessageService)
         {
             this.database = database;
+            this.twitterService = twitterService;
+            this.textMessageService = textMessageService;
         }
         //
         // GET: /Projects/
@@ -181,6 +188,116 @@ namespace TweetHarbor.Controllers
                 }
             }
             return Json(new { Error = "Something", Success = false });
+        }
+
+        [Authorize]
+        public ActionResult TestSuccessfulBuild(int Id)
+        {
+            var user = database.Users.First(u => u.UserName == User.Identity.Name);
+            var project = database.Projects.FirstOrDefault(p => p.ProjectId == Id && user.UserId == p.User.UserId);
+
+            Notification n = new Notification()
+            {
+                application = new Application()
+                {
+                    name = project.ProjectName
+
+                },
+                build = new Build()
+                {
+                    commit = new Commit()
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        message = "A successful build test from TweetHarbor"
+                    },
+                    status = "succeeded"
+                }
+            };
+
+            NotifyController c = new NotifyController(database, twitterService, textMessageService);
+            var res = c.New(user.UserName, user.UniqueId, n);
+
+            //TODO: Make a real post work
+            //var notificationValue = JsonConvert.SerializeObject(n);
+            //string url = Request.Url.Scheme + "://"
+            //    + Request.Url.Host
+            //    + (Request.Url.Host.ToLower() == "localhost" ? ":" + Request.Url.Port : "")
+            //    + "/notify/new/" + user.UserName + "?token=" + user.UniqueId;
+
+            //WebRequest wr = WebRequest.Create(url);
+            //string parms = "notification=" + notificationValue;
+            //wr.Method = "POST";
+            //byte[] data = System.Text.Encoding.UTF8.GetBytes(parms);
+            //wr.ContentLength = data.Length;
+            //wr.ContentType = "application/json";
+
+            //var sw = wr.GetRequestStream();
+            //sw.Write(data, 0, data.Length);
+            //sw.Close();
+
+            //var response = wr.GetResponse();
+            //StreamReader sr = new StreamReader(response.GetResponseStream());
+            //var val = sr.ReadToEnd();
+            //sr.Close();
+
+            return RedirectToAction("Index", new { Controller = "Account" });
+
+
+        }
+
+        [Authorize]
+        public ActionResult TestFailedBuild(int Id)
+        {
+            var user = database.Users.First(u => u.UserName == User.Identity.Name);
+            var project = database.Projects.FirstOrDefault(p => p.ProjectId == Id && user.UserId == p.User.UserId);
+
+            Notification n = new Notification()
+            {
+                application = new Application()
+                {
+                    name = project.ProjectName
+
+                },
+                build = new Build()
+                {
+                    commit = new Commit()
+                    {
+                        id = Guid.NewGuid().ToString(),
+                        message = "A successful build test from TweetHarbor"
+                    },
+                    status = "failed"
+                }
+            };
+
+            NotifyController c = new NotifyController(database, twitterService, textMessageService);
+            var res = c.New(user.UserName, user.UniqueId, n);
+
+            //TODO: Make a real post work
+            //var notificationValue = JsonConvert.SerializeObject(n);
+            //string url = Request.Url.Scheme + "://"
+            //    + Request.Url.Host
+            //    + (Request.Url.Host.ToLower() == "localhost" ? ":" + Request.Url.Port : "")
+            //    + "/notify/new/" + user.UserName + "?token=" + user.UniqueId;
+
+            //WebRequest wr = WebRequest.Create(url);
+            //string parms = "notification=" + notificationValue;
+            //wr.Method = "POST";
+            //byte[] data = System.Text.Encoding.UTF8.GetBytes(parms);
+            //wr.ContentLength = data.Length;
+            //wr.ContentType = "application/json";
+
+            //var sw = wr.GetRequestStream();
+            //sw.Write(data, 0, data.Length);
+            //sw.Close();
+
+            //var response = wr.GetResponse();
+            //StreamReader sr = new StreamReader(response.GetResponseStream());
+            //var val = sr.ReadToEnd();
+            //sr.Close();
+
+            return RedirectToAction("Index", new { Controller = "Account" });
+
+
         }
 
         [HttpPost]

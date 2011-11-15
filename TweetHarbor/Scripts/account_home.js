@@ -62,6 +62,9 @@ ProjectsManager.prototype.RenderProject = function (project) {
     var status = project.ProjectNotifications.length > 0 && project.ProjectNotifications[0].Build.status == "succeeded" ? "build_succeeded" : "build_failed";
     this.appendBuffer("<li class='list_project'>");
     this.appendBuffer("<h3 class='" + status + "'><div>" + project.ProjectName + "</div><!--<div class='hook_link_wrapper' project='" + project.ProjectName + "'>*</div>--></h3>");
+    this.appendBuffer("<a href='/Projects/TestSuccessfulBuild/" + project.ProjectId + "'>Test Successful Build</a>");
+    this.appendBuffer(" | ");
+    this.appendBuffer("<a href='/Projects/TestFailedBuild/" + project.ProjectId + "'>Test Failed Build</a>");
     this.RenderSwitch("SendPrivateTweetOnSuccess", "ProjectNotificationToggle", project.ProjectName, "SendPrivateTweetOnSuccess", project.SendPrivateTweetOnSuccess);
     this.RenderSwitch("SendPublicTweetOnSuccess", "ProjectNotificationToggle", project.ProjectName, "SendPublicTweetOnSuccess", project.SendPublicTweetOnSuccess);
     this.RenderSwitch("SendPrivateTweetOnFailure", "ProjectNotificationToggle", project.ProjectName, "SendPrivateTweetOnFailure", project.SendPrivateTweetOnFailure);
