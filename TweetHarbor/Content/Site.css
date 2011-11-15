@@ -718,7 +718,12 @@ ul.recipient_list li:hover
     margin-left: 8px;
 }
 
-
+#donatedisplay
+{
+    float:right;
+    background:white;
+    padding:5px;
+}
 
 
 
