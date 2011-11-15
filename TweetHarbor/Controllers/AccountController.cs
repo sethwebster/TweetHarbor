@@ -89,7 +89,7 @@ namespace TweetHarbor.Controllers
         public ActionResult AccountSetup(string Id, User user)
         {
             var dbUser = database.Users.FirstOrDefault(u => u.UniqueId == Id);
-            if (null != user)
+            if (null != dbUser && null != user)
             {
                 user.UserName = user.UserName != null ? user.UserName.Trim() : null;
                 user.EmailAddress = user.EmailAddress != null ? user.EmailAddress.Trim() : null;
@@ -97,6 +97,12 @@ namespace TweetHarbor.Controllers
                     ModelState.AddModelError("UserName", "UserName must not be empty");
                 if (string.IsNullOrEmpty(user.EmailAddress))
                     ModelState.AddModelError("EmailAddress", "Please enter an email address");
+
+                var usernameTaken = database.Users.FirstOrDefault(u => u.UserName.ToLower() == user.UserName.ToLower()) != null;
+                if (usernameTaken)
+                {
+                    ModelState.AddModelError("UserName", "That username is already in use");
+                }
                 if (ModelState.IsValid)
                 {
                     dbUser.UserName = user.UserName;
