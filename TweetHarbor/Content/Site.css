@@ -95,7 +95,7 @@ h5, h6
 page width. Or, you can specify an exact pixel width. */
 .page
 {
-    width: 1024px;
+    width: 100%;
     margin-left: auto;
     margin-right: auto;
 }
@@ -104,9 +104,34 @@ header, #header
 {
     position: relative;
     margin-bottom: 0px;
-    color: #000;
+    color: white;
     padding: 0;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background: black;
 }
+
+#top_bar
+{
+    width: 100%;
+    max-width: 1096px;
+    margin-left: auto;
+    margin-right: auto;
+    color: White;
+    padding: 10px;
+}
+
+#logo
+{
+    width: 200px;
+    float: left;
+    margin: 0px;
+    padding: 0px;
+    font-size: 2em;
+    color: #eee;
+}
+
 
 header h1, #header h1
 {
@@ -122,6 +147,10 @@ header h1, #header h1
 
 #main
 {
+    width: 100%;
+    max-width: 1096px;
+    margin-left: auto;
+    margin-right: auto;
     padding: 30px 30px 15px 30px;
     background-color: #fff;
     border-radius: 4px 0 0 0;
@@ -142,6 +171,15 @@ footer, #footer
     -webkit-border-radius: 0 0 4px 4px;
     -moz-border-radius: 0 0 4px 4px;
 }
+
+#navigation
+{
+    float: left;
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 /* LOGIN PARTIAL */
 
 #logon_status
@@ -178,19 +216,13 @@ ul#menu li#greeting
 ul#menu li a
 {
     padding: 10px 20px;
-    font-weight: bold;
     text-decoration: none;
     line-height: 2.8em;
-    background-color: #e8eef4;
-    color: #444;
-    border-radius: 4px 4px 0 0;
-    -webkit-border-radius: 4px 4px 0 0;
-    -moz-border-radius: 4px 4px 0 0;
+    color: #FFFFE6;
 }
 
 ul#menu li a:hover
 {
-    background-color: #fff;
     text-decoration: none;
 }
 
@@ -287,7 +319,6 @@ table th
 
 nav, #menucontainer
 {
-    margin-top: 10px;
 }
 
 div#title
@@ -307,19 +338,18 @@ div#title
     border-radius: 0 0 4px 4px;
     -webkit-border-radius: 0 0 4px 4px;
     -moz-border-radius: 0 0 4px 4px;
-    background-color: #fff;
-    color: #111;
-}
+ 
+  }
 
 #logindisplay a:link
 {
-    color: #111;
+    color: #fff;
     text-decoration: underline;
 }
 
 #logindisplay a:visited
 {
-    color: #111;
+    color: #fff;
     text-decoration: underline;
 }
 
@@ -720,9 +750,8 @@ ul.recipient_list li:hover
 
 #donatedisplay
 {
-    float:right;
-    background:white;
-    padding:10px;
+    float: right;
+    padding: 10px;
 }
 
 
