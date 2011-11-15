@@ -80,6 +80,7 @@ namespace TweetHarbor.Controllers
                                ProjectId = p.ProjectId,
                                AppHarborProjectUrl = p.AppHarborProjectUrl,
                                DateCreated = p.DateCreated,
+                               SuccessTemplate = p.SuccessTemplate,
                                FailureTemplate = p.FailureTemplate,
                                MessageRecipients = from m in p.MessageRecipients
                                                    select new
@@ -113,7 +114,8 @@ namespace TweetHarbor.Controllers
                                SendPublicTweetOnFailure = p.SendPublicTweetOnFailure,
                                SendPublicTweetOnSuccess = p.SendPublicTweetOnSuccess,
                                SendTextOnFailure = p.SendTextOnFailure,
-                               SendTextOnSuccess = p.SendTextOnSuccess
+                               SendTextOnSuccess = p.SendTextOnSuccess,
+                               
                            };
 
                 JsonSerializerSettings set = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
