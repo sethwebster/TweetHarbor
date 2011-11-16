@@ -86,7 +86,7 @@ namespace TweetHarbor.Controllers
         }
 
         [HttpPost]
-        public ActionResult AccountSetup(string Id, User user)
+        public ActionResult AccountSetup(string Id, User user, string ReturnUrl)
         {
             var dbUser = database.Users.FirstOrDefault(u => u.UniqueId == Id);
             if (null != dbUser && null != user)
@@ -110,6 +110,10 @@ namespace TweetHarbor.Controllers
                     database.SaveChanges();
                     //TODO: Add a status update
                     FormsAuthentication.SetAuthCookie(user.UserName, true);
+                    if (!string.IsNullOrEmpty(ReturnUrl))
+                    {
+                        return Redirect(ReturnUrl);
+                    }
                     return RedirectToAction("Index");
                 }
                 else
@@ -155,11 +159,12 @@ namespace TweetHarbor.Controllers
                 case "appharbor":
                     var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
                     var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
+                    string returnUrl = Request["ReturnUrl"] != null ? "&ReturnUrl=" + Request["ReturnUrl"] : "";
                     string redirect = Request.Url.Scheme + "://" +
                         Request.Url.Host +
                         (Request.Url.Host == "localhost" ? ":" + Request.Url.Port : "") + "/Account/OAuthComplete/"
                         + (dbUser != null ? dbUser.UniqueId : "")
-                        + "?Client=appharbor";
+                        + "?Client=appharbor" + returnUrl;
 
                     return new AppHarborClient(clientId, secret).RedirectToAuthorizationResult(redirect);
                     break;
@@ -264,11 +269,15 @@ namespace TweetHarbor.Controllers
                             appUser.UpdateUniqueId();
                             database.SaveChanges();
                         }
-                        return RedirectToAction("AccountSetup", new { Id = appUser.UniqueId });
+                        return RedirectToAction("AccountSetup", new { Id = appUser.UniqueId, ReturnUrl = Request["ReturnUrl"] });
                     }
                     else
                     {
                         authentication.SetAuthCookie(appUser.UserName, true);
+                        if (!string.IsNullOrEmpty(Request["ReturnUrl"]))
+                        {
+                            return Redirect(Request["ReturnUrl"]);
+                        }
                         return RedirectToAction("Index");
                     }
                     break;

@@ -27,12 +27,12 @@ namespace TweetHarbor.OAuth
 
         public Uri GetAuthorizationUrl(string RedirectUri)
         {
-            return new Uri(string.Format("https://appharbor.com/user/authorizations/new?client_id={0}&redirect_uri={1}", clientId, RedirectUri));
+            return new Uri(string.Format("https://appharbor.com/user/authorizations/new?client_id={0}&redirect_uri={1}", clientId, HttpUtility.UrlEncode(RedirectUri)));
         }
 
         public RedirectResult RedirectToAuthorizationResult(string redirectUri)
         {
-            return new RedirectResult(GetAuthorizationUrl(redirectUri).ToString());
+            return new RedirectResult(GetAuthorizationUrl(redirectUri).AbsoluteUri);
         }
 
         public RedirectResult RedirectToAuthorizationResult()
