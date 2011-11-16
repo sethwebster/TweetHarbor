@@ -7,6 +7,7 @@
 <h3>
     Users: @Model.Count()
 </h3>
+<div class='error'>@Request["error"]</div>
 <table>
     <tr>
         <th>
@@ -42,7 +43,7 @@
         <tr>
             <td>
                 <a href="/Admin/Users/Impersonate/@item.UniqueId">Impersonate</a> <a href="/Admin/Users/Edit/@item.UniqueId">
-                    Edit</a>
+                    Edit</a> <a href="/Admin/Users/Delete/@item.UniqueId">Delete</a>
             </td>
             @*<td>
             @Html.ActionLink("Edit", "Edit", new { id=item.TwitterUserName }) |

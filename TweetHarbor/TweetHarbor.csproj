@@ -187,7 +187,6 @@
     <Content Include="Content\appharbor_logo_square.png" />
     <Content Include="Content\backgroundsprite.gif" />
     <Content Include="Content\backgroundsprite.jpg" />
-    <Content Include="Content\backgroundsprite.png" />
     <Content Include="Content\disc.png" />
     <Content Include="Content\images\border.png" />
     <Content Include="Content\images\controls.png" />

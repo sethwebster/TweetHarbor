@@ -72,6 +72,18 @@ namespace TweetHarbor.Areas.Admin.Controllers
             return View();
         }
 
+        public ActionResult Delete(string Id)
+        {
+            var user = database.Users.FirstOrDefault(u => u.UniqueId == Id);
+            if (user.Projects.Count == 0)
+            {
+                database.Users.Remove(user);
+                database.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("index", new { error = "Users has projects attached.  Those must be deleted first." });
+        }
+
 
         protected override void Dispose(bool disposing)
         {
