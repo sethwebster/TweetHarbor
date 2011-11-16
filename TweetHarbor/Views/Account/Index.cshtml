@@ -67,6 +67,14 @@
             </div>
         </div>
     </div>
+    @if (Model.Projects.Count > 0)
+    { 
+        <a href="/Projects/ImportFromAppHarbor" id="">Synchronize Applications</a>
+    }
+    else
+    {
+        <a href="/Projects/ImportFromAppHarbor" id="">Import Applications</a>
+    }
     <div id="projects" class="section">
         Loading...
     </div>
@@ -78,8 +86,8 @@
                 The easy way</h4>
             <p>
                 Already have apps? <a href="/Projects/ImportFromAppHarbor" id="app_import">Import</a>
-                them.
-                <strong>Note:</strong> you will need to link your AppHarbor account if you have not already done so.
+                them. <strong>Note:</strong> you will need to link your AppHarbor account if you
+                have not already done so.
             </p>
         </div>
         <div class="section">
