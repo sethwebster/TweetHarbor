@@ -70,7 +70,6 @@
     <div id="projects" class="section">
         Loading...
     </div>
-    <a href="/Projects/ImportFromAppHarbor">Import from AppHarbor</a>
     <div id="project_instructions">
         <h3>
             Getting Started</h3>
@@ -78,22 +77,9 @@
             <h4>
                 The easy way</h4>
             <p>
-                Already have apps? <a href="#" id="app_import">Import</a> them.
-                <div id="appharbor_credentials" style="@(ViewBag.import_error != null ? "display:block" : "")">
-                    <div class='notice'>
-                        <em>This will automate the setup process -- service hooks and all.</em>
-                    </div>
-                    <div id="import_error" class='error'>@ViewBag.import_error</div>
-                    @using (Html.BeginForm(new { Controller = "Projects", Action = "ImportFromAppHarbor" }))
-                    { 
-                        @Html.Label("Username", "AppHarbor Username")
-                        @Html.TextBox("Username")
-                        @Html.Label("Password", "AppHarbor Password")
-                        @Html.Password("Password")
-                        <input type="submit" value="Import" />
-                    }
-                    *Note - we do <strong>not</strong> store any of your AppHarbor credential information.
-                </div>
+                Already have apps? <a href="/Projects/ImportFromAppHarbor" id="app_import">Import</a>
+                them.
+                <strong>Note:</strong> you will need to link your AppHarbor account if you have not already done so.
             </p>
         </div>
         <div class="section">
