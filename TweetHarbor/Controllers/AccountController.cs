@@ -98,7 +98,7 @@ namespace TweetHarbor.Controllers
                 if (string.IsNullOrEmpty(user.EmailAddress))
                     ModelState.AddModelError("EmailAddress", "Please enter an email address");
 
-                var usernameTaken = database.Users.FirstOrDefault(u => u.UserName.ToLower() == user.UserName.ToLower()) != null;
+                var usernameTaken = database.Users.FirstOrDefault(u => u.UserName.ToLower() == user.UserName.ToLower() && u.UserId != dbUser.UserId) != null;
                 if (usernameTaken)
                 {
                     ModelState.AddModelError("UserName", "That username is already in use");

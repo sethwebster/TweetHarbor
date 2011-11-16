@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Net;
 using System.Configuration;
 using Newtonsoft.Json;
+using TweetHarbor.Models;
 
 namespace TweetHarbor.OAuth
 {
@@ -18,6 +19,7 @@ namespace TweetHarbor.OAuth
             this.clientId = clientId;
             this.secret = secret;
         }
+
         public Uri GetAuthorizationUrl()
         {
             return new Uri(string.Format("https://appharbor.com/user/authorizations/new?client_id={0}", clientId));
@@ -27,10 +29,12 @@ namespace TweetHarbor.OAuth
         {
             return new Uri(string.Format("https://appharbor.com/user/authorizations/new?client_id={0}&redirect_uri={1}", clientId, RedirectUri));
         }
+
         public RedirectResult RedirectToAuthorizationResult(string redirectUri)
         {
             return new RedirectResult(GetAuthorizationUrl(redirectUri).ToString());
         }
+
         public RedirectResult RedirectToAuthorizationResult()
         {
             return new RedirectResult(GetAuthorizationUrl().ToString());
@@ -41,8 +45,6 @@ namespace TweetHarbor.OAuth
             WebRequest req = WebRequest.Create("https://appharbor.com/tokens");
             req.ContentType = "application/x-www-form-urlencoded";
             req.Method = "POST";
-
-
 
             string parameters = string.Format("client_id={0}&client_secret={1}&code={2}", clientId, secret, HttpUtility.UrlEncode(Code));
             byte[] bytes = System.Text.Encoding.ASCII.GetBytes(parameters);
@@ -59,11 +61,8 @@ namespace TweetHarbor.OAuth
             return nvc["access_token"];
         }
 
-
-
         public AppHarborUser GetUserInformation(string token)
         {
-            WebClient req = new WebClient();
             WebClient wc = new WebClient();
             wc.Headers.Add("Authorization", "BEARER " + token);
             wc.Headers.Add("Accept", "application/json");
@@ -75,6 +74,27 @@ namespace TweetHarbor.OAuth
                 UserName = obj.username,
                 UniqueId = obj.id
             };
+            return ret;
+        }
+
+        public IEnumerable<Project> GetUserProjects(string token)
+        {
+            WebClient cl = new WebClient();
+            cl.Headers.Add("Accept", "application/json");
+            cl.Headers.Add("Authorization", "BEARER " + token);
+            var str = cl.DownloadString("https://appharbor.com/application");
+
+            dynamic obj = JsonConvert.DeserializeObject(str);
+            List<Project> ret = new List<Project>();
+            foreach (var o in obj)
+            {
+                ret.Add(new Project()
+                    {
+                        ProjectName = o.name,
+                        AppHarborProjectUrl = o.url
+                    });
+            }
+
             return ret;
 
         }

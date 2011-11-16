@@ -12,6 +12,8 @@ using System.Security;
 using System.Net;
 using System.IO;
 using TweetHarbor.Messaging;
+using TweetHarbor.OAuth;
+using System.Configuration;
 
 namespace TweetHarbor.Controllers
 {
@@ -115,7 +117,7 @@ namespace TweetHarbor.Controllers
                                SendPublicTweetOnSuccess = p.SendPublicTweetOnSuccess,
                                SendTextOnFailure = p.SendTextOnFailure,
                                SendTextOnSuccess = p.SendTextOnSuccess,
-                               
+
                            };
 
                 JsonSerializerSettings set = new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
@@ -465,6 +467,45 @@ namespace TweetHarbor.Controllers
                 }
             }
             return Json(new { Error = "Something", Success = false });
+        }
+
+        [Authorize]
+        public ActionResult ImportFromAppHarbor()
+        {
+            var user = database.Users.First(u => u.UserName == HttpContext.User.Identity.Name);
+            var appHarborAccount = user.AuthenticationAccounts.FirstOrDefault(a => a.AccountProvider == "appharbor");
+            if (appHarborAccount != null)
+            {
+                var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
+                var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
+
+                AppHarborClient cli = new AppHarborClient(clientId, secret);
+                var projects = cli.GetUserProjects(appHarborAccount.OAuthToken);
+
+                foreach (var p in projects)
+                {
+                    //TODO: Use a UniqueID rather than name because name can change
+                    var userProject = user.Projects.FirstOrDefault(pr => pr.ProjectName == p.ProjectName);
+                    if (null == userProject)
+                    {
+                        userProject = p;
+                        user.Projects.Add(userProject);
+                    }
+                    else
+                    {
+                        // Update Url
+                        userProject.AppHarborProjectUrl = p.AppHarborProjectUrl;
+                    }
+                }
+
+                database.SaveChanges();
+
+                return RedirectToAction("Index", new { COntroller = "Account" });
+            }
+            else
+            {
+                return RedirectToAction("Authorize", new { Controller = "Account", Client = "AppHarbor", ReturnUrl = "/Projects/ImportFromAppHarbor" });
+            }
         }
 
         [Authorize]
