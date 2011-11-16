@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using TweetHarbor.Data;
 using System.Web.Security;
+using TweetHarbor.Models;
 
 namespace TweetHarbor.Areas.Admin.Controllers
 {
@@ -46,6 +47,31 @@ namespace TweetHarbor.Areas.Admin.Controllers
             }
             return new EmptyResult();
         }
+
+        public ActionResult Edit(string Id)
+        {
+            var user = database.Users.FirstOrDefault(u => u.UniqueId == Id);
+            if (null != user)
+            {
+                return View(user);
+            }
+            return RedirectToAction("NotFound");
+        }
+
+        [HttpPost]
+        public ActionResult Edit(string Id, User user)
+        {
+            database.Users.Attach(user);
+            (database as System.Data.Entity.DbContext).Entry(user).State = System.Data.EntityState.Modified;
+            database.SaveChanges();
+            return View(user);
+        }
+
+        public ActionResult NotFound()
+        {
+            return View();
+        }
+
 
         protected override void Dispose(bool disposing)
         {

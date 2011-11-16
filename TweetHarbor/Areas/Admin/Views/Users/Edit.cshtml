@@ -1,0 +1,99 @@
+﻿@model TweetHarbor.Models.User
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>User</legend>
+
+        @Html.HiddenFor(model => model.UserId)
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserName)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserName)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UniqueId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UniqueId)
+            @Html.ValidationMessageFor(model => model.UniqueId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EmailAddress)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.EmailAddress)
+            @Html.ValidationMessageFor(model => model.EmailAddress)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserProfilePicUrl)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UserProfilePicUrl)
+            @Html.ValidationMessageFor(model => model.UserProfilePicUrl)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SendPrivateTweet)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SendPrivateTweet)
+            @Html.ValidationMessageFor(model => model.SendPrivateTweet)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SendPublicTweet)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SendPublicTweet)
+            @Html.ValidationMessageFor(model => model.SendPublicTweet)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.SendSMS)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.SendSMS)
+            @Html.ValidationMessageFor(model => model.SendSMS)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.IsAdmin)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.IsAdmin)
+            @Html.ValidationMessageFor(model => model.IsAdmin)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DateCreated)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DateCreated)
+            @Html.ValidationMessageFor(model => model.DateCreated)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>

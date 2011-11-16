@@ -189,6 +189,11 @@
     <Content Include="Content\backgroundsprite.jpg" />
     <Content Include="Content\backgroundsprite.png" />
     <Content Include="Content\disc.png" />
+    <Content Include="Content\images\border.png" />
+    <Content Include="Content\images\controls.png" />
+    <Content Include="Content\images\loading.gif" />
+    <Content Include="Content\images\loading_background.png" />
+    <Content Include="Content\images\overlay.png" />
     <Content Include="Content\iphone-style-checkboxes.css" />
     <Content Include="Content\iphone-style-checkboxes\off.png" />
     <Content Include="Content\iphone-style-checkboxes\on.png" />
@@ -296,6 +301,8 @@
     <Content Include="Areas\Admin\Views\Home\Index.cshtml" />
     <Content Include="Areas\Admin\Views\Projects\ProjectNotifications.cshtml" />
     <Content Include="Areas\Admin\Views\Projects\OutboundNotifications.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\NotFound.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Edit.cshtml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
