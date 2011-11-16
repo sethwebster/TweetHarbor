@@ -269,6 +269,19 @@ namespace TweetHarbor.Controllers
             }
         }
 
+        private void MergeUsers(User destinationUser, User fromUser, TwitterUser user)
+        {
+            var authAccount = fromUser.AuthenticationAccounts.FirstOrDefault(t => t.AccountProvider == "twitter" && t.UserName == user.ScreenName);
+            destinationUser.AuthenticationAccounts.Add(authAccount);
+            fromUser.AuthenticationAccounts.Remove(authAccount);
+
+            foreach (var p in fromUser.Projects)
+            {
+                destinationUser.Projects.Add(p);
+               
+            }
+            fromUser.Projects.Clear();
+        }
         [NonAction]
         private User TwitterCreateOrUpdateAccountIfNeeded(OAuthAccessToken accessToken, TwitterUser user, User returnUser)
         {
@@ -279,6 +292,20 @@ namespace TweetHarbor.Controllers
                 returnUser = (from u in database.Users
                               where u.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter" && ac.UserName == user.ScreenName) != null
                               select u).FirstOrDefault();
+            }
+            else
+            {
+                var otherUser = (from u in database.Users
+                                 where u.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter" && ac.UserName == user.ScreenName) != null
+                                 && u.UserId != returnUser.UserId
+                                 select u).FirstOrDefault();
+
+                if (null != otherUser)
+                {
+                    // This twitter account is owned by another user
+                    // we need to merge the data
+                    MergeUsers(returnUser, otherUser, user);
+                }
             }
 
             // If we're still short a user account, we will create one here
@@ -336,8 +363,9 @@ namespace TweetHarbor.Controllers
 
             if (null == returnUser) // CREATE
             {
+                var existingUser = (from u in database.Users where u.UserName.ToLower() == user.UserName.ToLower() select u).FirstOrDefault();
                 returnUser = new User();
-                returnUser.UserName = user.UserName;
+                returnUser.UserName = null == existingUser ? user.UserName : "";
                 returnUser.EmailAddress = user.EmailAddress;
                 UserAuthenticationAccount newAppHarborAccount = new UserAuthenticationAccount();
                 newAppHarborAccount.AccountProvider = "appharbor";
