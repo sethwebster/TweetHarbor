@@ -65,7 +65,7 @@ namespace TweetHarbor.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("LogOn");
+                    return RedirectToAction("LogIn");
                 }
             }
             return new EmptyResult();
@@ -128,6 +128,11 @@ namespace TweetHarbor.Controllers
         {
             if (string.IsNullOrEmpty(Client))
                 Client = "";
+            User dbUser = null;
+            if (Request.IsAuthenticated)
+            {
+                dbUser = database.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            }
             switch (Client.ToLower())
             {
                 case "twitter":
@@ -139,13 +144,9 @@ namespace TweetHarbor.Controllers
 #else
                       var url = Properties.Settings.Default.TwitterAuthorizationCallbackUrl;
 #endif
-                    if (Request.IsAuthenticated)
+                    if (null != dbUser)
                     {
-                        var dbUser = database.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                        if (null != dbUser)
-                        {
-                            url += "&id=" + dbUser.UniqueId;
-                        }
+                        url += "&id=" + dbUser.UniqueId;
                     }
                     OAuthRequestToken requestToken = twitter.GetRequestToken(url);
                     Uri uri = twitter.GetAuthorizationUri(requestToken);
@@ -156,7 +157,9 @@ namespace TweetHarbor.Controllers
                     var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
                     string redirect = Request.Url.Scheme + "://" +
                         Request.Url.Host +
-                        (Request.Url.Host == "localhost" ? ":" + Request.Url.Port : "") + "/Account/OAuthComplete?Client=appharbor";
+                        (Request.Url.Host == "localhost" ? ":" + Request.Url.Port : "") + "/Account/OAuthComplete/"
+                        + (dbUser != null ? dbUser.UniqueId : "")
+                        + "?Client=appharbor";
 
                     return new AppHarborClient(clientId, secret).RedirectToAuthorizationResult(redirect);
                     break;
@@ -226,7 +229,7 @@ namespace TweetHarbor.Controllers
         /// </summary>
         /// <param name="Code"></param>
         /// <returns></returns>
-        public ActionResult OAuthComplete(string Code, string Client)
+        public ActionResult OAuthComplete(string Id, string Code, string Client)
         {
             //Workaround for now since AppHb doesn't seem to support passing parameters back
             //UPDATE: Appends extra ?
@@ -247,7 +250,13 @@ namespace TweetHarbor.Controllers
                     var token = client.GetAccessToken(Code);
                     var user = client.GetUserInformation(token);
 
-                    var appUser = AppHarborCreateOrUpdateAccountIfNeeded(token, user);
+                    User masterUser = null;
+                    if (!string.IsNullOrEmpty(Id))
+                    {
+                        masterUser = database.Users.FirstOrDefault(u => u.UniqueId == Id);
+                    }
+
+                    var appUser = AppHarborCreateOrUpdateAccountIfNeeded(token, user, masterUser);
                     if (string.IsNullOrEmpty(appUser.UserName) || string.IsNullOrEmpty(appUser.EmailAddress))
                     {
                         if (string.IsNullOrEmpty(appUser.UniqueId))
@@ -269,6 +278,7 @@ namespace TweetHarbor.Controllers
             }
         }
 
+        [NonAction]
         private void MergeUsers(User destinationUser, User fromUser, TwitterUser user)
         {
             var authAccount = fromUser.AuthenticationAccounts.FirstOrDefault(t => t.AccountProvider == "twitter" && t.UserName == user.ScreenName);
@@ -278,10 +288,11 @@ namespace TweetHarbor.Controllers
             foreach (var p in fromUser.Projects)
             {
                 destinationUser.Projects.Add(p);
-               
+
             }
             fromUser.Projects.Clear();
         }
+
         [NonAction]
         private User TwitterCreateOrUpdateAccountIfNeeded(OAuthAccessToken accessToken, TwitterUser user, User returnUser)
         {
@@ -354,20 +365,31 @@ namespace TweetHarbor.Controllers
             return returnUser;
         }
         [NonAction]
-        private User AppHarborCreateOrUpdateAccountIfNeeded(string AccessToken, AppHarborUser user)
+        private User AppHarborCreateOrUpdateAccountIfNeeded(string AccessToken, AppHarborUser user, User returnUser)
         {
             //TODO: must have some kind of AppHb unique id-- username, etc --see twitter approach (screenname) (for now we used emailaddress)
-            var returnUser = (from u in database.Users
+            if (null == returnUser)
+            {
+                returnUser = (from u in database.Users
                               where u.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "appharbor" && ac.UserName == user.UserName) != null
                               select u).FirstOrDefault();
-
+            }
             if (null == returnUser) // CREATE
             {
                 var existingUser = (from u in database.Users where u.UserName.ToLower() == user.UserName.ToLower() select u).FirstOrDefault();
                 returnUser = new User();
                 returnUser.UserName = null == existingUser ? user.UserName : "";
                 returnUser.EmailAddress = user.EmailAddress;
-                UserAuthenticationAccount newAppHarborAccount = new UserAuthenticationAccount();
+                returnUser.UpdateUniqueId();
+                database.Users.Add(returnUser);
+            }
+
+            var newAppHarborAccount = returnUser.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "appharbor" &&
+                ac.UserName == user.UserName);
+
+            if (newAppHarborAccount == null)
+            {
+                newAppHarborAccount = new UserAuthenticationAccount();
                 newAppHarborAccount.AccountProvider = "appharbor";
                 newAppHarborAccount.UserName = user.UserName;
                 newAppHarborAccount.UserName = user.UserName;
@@ -375,8 +397,6 @@ namespace TweetHarbor.Controllers
                 if (null == returnUser.AuthenticationAccounts)
                     returnUser.AuthenticationAccounts = new Collection<UserAuthenticationAccount>();
                 returnUser.AuthenticationAccounts.Add(newAppHarborAccount);
-                returnUser.UpdateUniqueId();
-                database.Users.Add(returnUser);
             }
 
             //returnUser.UserProfilePicUrl = user.ProfileImageUrl;
