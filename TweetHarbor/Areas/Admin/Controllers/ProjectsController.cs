@@ -7,7 +7,7 @@ using TweetHarbor.Data;
 
 namespace TweetHarbor.Areas.Admin.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class ProjectsController : Controller
     {
         ITweetHarborDbContext database = null;

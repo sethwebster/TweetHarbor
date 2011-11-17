@@ -8,6 +8,7 @@ using TweetHarbor.Models;
 
 namespace TweetHarbor.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class HomeController : Controller
     {
         ITweetHarborDbContext db;

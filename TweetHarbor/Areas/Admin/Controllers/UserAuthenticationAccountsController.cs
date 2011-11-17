@@ -7,6 +7,8 @@ using TweetHarbor.Data;
 
 namespace TweetHarbor.Areas.Admin.Controllers
 {
+
+    [Authorize(Roles = "Admin")]
     public class UserAuthenticationAccountsController : Controller
     {
         ITweetHarborDbContext database;

@@ -9,7 +9,7 @@ using TweetHarbor.Models;
 
 namespace TweetHarbor.Areas.Admin.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         ITweetHarborDbContext database = null;
