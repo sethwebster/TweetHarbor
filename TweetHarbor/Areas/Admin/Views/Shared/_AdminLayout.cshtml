@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "_AdminLayout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section SubMenu
+{<ul>
+    <li>@Html.ActionLink("Users", "Index", "Users")</li>
+    <li>@Html.ActionLink("Projects", "Index", "Projects")</li>
+    <li>@Html.ActionLink("User Authentication Accounts", "Index", "UserAuthenticationAccounts")</li>
+    <li>@Html.ActionLink("Incoming Notifications", "ProjectNotifications", "Projects")</li>
+    <li>@Html.ActionLink("Outgoing Notifications", "OutboundNotifications", "Projects")</li>
+    </ul>
+}
+@RenderBody()

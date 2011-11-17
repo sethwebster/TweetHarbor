@@ -7,6 +7,22 @@
 <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.insertAtCaret.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/Scripts/jquery.colorbox.js")"></script>
 <script type="text/javascript" src="@Url.Content("~/Scripts/account_home.js")"></script>
+@section SubMenu
+{
+    <ul>
+        <li>
+            @if (Model.Projects.Count > 0)
+            { 
+                <a href="/Projects/ImportFromAppHarbor" id="">Synchronize Applications</a>
+            }
+            else
+            {
+                <a href="/Projects/ImportFromAppHarbor" id="">Import Applications</a>
+            }
+        </li>
+        @* <li><a href="/Projects/InboundNotifications">Inbound Notifications</a> </li>*@
+    </ul>
+}
 <fieldset id="service_accounts">
     <legend>Sign-in Accounts</legend>
     @foreach (var ac in Model.AuthenticationAccounts)
@@ -67,13 +83,9 @@
             </div>
         </div>
     </div>
-    @if (Model.Projects.Count > 0)
+    @if (Model.Projects.Count == 0)
     { 
-        <a href="/Projects/ImportFromAppHarbor" id="">Synchronize Applications</a>
-    }
-    else
-    {
-        <a href="/Projects/ImportFromAppHarbor" id="">Import Applications</a>
+        <a href="/Projects/ImportFromAppHarbor" id="">Import Applications from AppHarbor</a>
     }
     <div id="projects" class="section">
         Loading...
