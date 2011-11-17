@@ -110,6 +110,13 @@ header, #header
     margin-left: auto;
     margin-right: auto;
     background: black;
+    background-color: #1c262b;
+    background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#243239), to(#151D21));
+    background: -moz-linear-gradient(top,  #243239,  #151D21);
+    box-shadow: 0 0 3px black;
+    -webkit-box-shadow: 0 0 3px black;
+    -moz-box-shadow: -3px 0 3px black;
+    min-width: 865px;
 }
 
 #top_bar
@@ -246,12 +253,13 @@ ul#menu li.selected a
     height: 45px;
     vertical-align: middle;
     color: #444;
-    overflow:hidden;
-    display:none;
+    overflow: hidden;
+    display: none;
 }
 #submenu ul
 {
     width: 80%;
+    min-width: 865px;
     margin: 0px;
     padding: 0px;
     margin-left: auto;
@@ -263,25 +271,25 @@ ul#menu li.selected a
 {
     vertical-align: middle;
     padding-top: 12px;
-    border-left:1px dotted #eee;
-    border-right:1px dotted #eee;
-    height:45px;
-    padding-left:5px;
-    padding-right:5px;
-    float:left;
+    border-left: 1px dotted #eee;
+    border-right: 1px dotted #eee;
+    height: 45px;
+    padding-left: 5px;
+    padding-right: 5px;
+    float: left;
 }
 
 #submenu ul li:hover
 {
-    background-color:#F0F0F0;
+    background-color: #F0F0F0;
 }
 
 
 
 #submenu li a
 {
-    text-decoration:none;
-    color:#444;
+    text-decoration: none;
+    color: #444;
 }
 /* FORM LAYOUT ELEMENTS   
 ----------------------------------------------------------*/
@@ -373,45 +381,6 @@ div#title
     text-align: left;
 }
 
-#logindisplay
-{
-    width: 250px;
-    float: right;
-    font-size: 1.1em;
-    display: block;
-    padding: 2px 5px 2px 5px;
-    border-radius: 0 0 4px 4px;
-    -webkit-border-radius: 0 0 4px 4px;
-    -moz-border-radius: 0 0 4px 4px;
-}
-
-#logindisplay a:link
-{
-    color: #fff;
-    text-decoration: underline;
-}
-
-#logindisplay a:visited
-{
-    color: #fff;
-    text-decoration: underline;
-}
-
-#logindisplay a:hover
-{
-    color: #111;
-    text-decoration: none;
-}
-
-#logindisplay img
-{
-    margin-right: 10px;
-    height: 35px;
-    border: 1px solid #eee;
-    border-radius: 2px;
-    -webkit-border-radius: 2px;
-    -moz-border-radius: 2px;
-}
 
 
 /* Styles for validation helpers
@@ -1059,4 +1028,128 @@ ul.recipient_list li:hover
 .cboxIE6 #cboxTopLeft, .cboxIE6 #cboxTopCenter, .cboxIE6 #cboxTopRight, .cboxIE6 #cboxBottomLeft, .cboxIE6 #cboxBottomCenter, .cboxIE6 #cboxBottomRight, .cboxIE6 #cboxMiddleLeft, .cboxIE6 #cboxMiddleRight
 {
     _behavior: expression(this.src = this.src ? this.src : this.currentStyle.backgroundImage.split('"')[1], this.style.background = "none", this.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(src=" + this.src + ", sizingMethod='scale')");
+}
+
+
+#logindisplay
+{
+    width: 250px;
+    float: right;
+    font-size: 1.1em;
+    display: block;
+    padding: 2px 5px 2px 5px;
+    border-radius: 0 0 4px 4px;
+    -webkit-border-radius: 0 0 4px 4px;
+    -moz-border-radius: 0 0 4px 4px;
+}
+
+#logindisplay a:link
+{
+    color: #fff;
+}
+
+#logindisplay a:visited
+{
+    color: #fff;
+}
+
+#logindisplay a:hover
+{
+    text-decoration: none;
+}
+#logindisplay img
+{
+    height: 25px;
+}
+#logindisplay img.account_picture
+{
+    margin-right: 10px;
+    height: 35px;
+    border: 1px solid #eee;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+}
+
+ul.topnav
+{
+    font-family: 'Bitter' , serif;
+    list-style: none;
+    padding: 0 0px;
+    margin: 0;
+    float: left;
+    background-color: #1c262b;
+    font-size: .9em;
+    background: url(topnav_bg.gif) repeat-x;
+}
+ul.topnav li
+{
+    float: left;
+    margin: 0;
+    padding: 0 5px 0 0;
+    position: relative; /*--Declare X and Y axis base for sub navigation--*/
+}
+ul.topnav li a
+{
+    color: #fff;
+    display: block;
+    text-decoration: none;
+    float: left;
+}
+ul.topnav li a:hover
+{
+}
+ul.topnav li span
+{
+    /*--Drop down trigger styles--*/
+    width: 17px;
+    height: 35px;
+    float: left;
+    background: url(subnav_btn.gif) no-repeat center top;
+}
+ul.topnav li span.subhover
+{
+    background-position: center bottom;
+    cursor: pointer;
+}
+/*--Hover effect for trigger--*/
+ul.topnav li.signedout a
+{
+   padding-top: 6px;
+}
+ul.topnav li ul.subnav
+{
+    list-style: none;
+    position: absolute; /*--Important - Keeps subnav from affecting main navigation flow--*/
+    left: 0;
+    top: 35px;
+    background-color: #1c262b;
+    margin: 0;
+    padding: 0;
+    display: none;
+    float: left;
+    width: 180px;
+    border: 1px solid #111;
+}
+ul.topnav li ul.subnav li
+{
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid #252525; /*--Create bevel effect--*/
+    border-bottom: 1px solid #444; /*--Create bevel effect--*/
+    clear: both;
+    width: 180px;
+}
+html ul.topnav li ul.subnav li a
+{
+    float: left;
+    width: 170px;
+    background: #333 url(dropdown_linkbg.gif) no-repeat 10px center;
+    padding-left: 10px;
+    
+}
+html ul.topnav li ul.subnav li a:hover
+{
+    /*--Hover effect for subnav links--*/
+    background: #222 url(dropdown_linkbg.gif) no-repeat 10px center;
 }
