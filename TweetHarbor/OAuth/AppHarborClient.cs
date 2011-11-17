@@ -7,6 +7,8 @@ using System.Net;
 using System.Configuration;
 using Newtonsoft.Json;
 using TweetHarbor.Models;
+using System.Text;
+using System.IO;
 
 namespace TweetHarbor.OAuth
 {
@@ -79,9 +81,7 @@ namespace TweetHarbor.OAuth
 
         public IEnumerable<Project> GetUserProjects(string token)
         {
-            WebClient cl = new WebClient();
-            cl.Headers.Add("Accept", "application/json");
-            cl.Headers.Add("Authorization", "BEARER " + token);
+            WebClient cl = GetAuthenticatedWebClient(token);
             var str = cl.DownloadString("https://appharbor.com/application");
 
             dynamic obj = JsonConvert.DeserializeObject(str);
@@ -96,6 +96,33 @@ namespace TweetHarbor.OAuth
             }
 
             return ret;
+        }
+
+        private static WebClient GetAuthenticatedWebClient(string token)
+        {
+            WebClient cl = new WebClient();
+            cl.Headers.Add("Accept", "application/json");
+            cl.Headers.Add("Authorization", "BEARER " + token);
+
+            return cl;
+        }
+        public HttpWebRequest GetAuthenticatedWebRequest(string token, string url)
+        {
+            HttpWebRequest ret = (HttpWebRequest)HttpWebRequest.Create(url);
+            ret.Headers.Add("Authorization", "BEARER " + token);
+            return ret;
+        }
+        public void SetServiceHookUrl(string token, string projectName, string projectId)
+        {
+            var url = string.Format("https://appharbor.com/application/{0}/servicehook", projectName);
+            var cli = GetAuthenticatedWebRequest(token, url);
+            cli.Accept = "application/json";
+            var sr = new StreamReader(cli.GetResponse().GetResponseStream());
+
+            var resp = sr.ReadToEnd();
+
+            dynamic obj = JsonConvert.DeserializeObject(resp);
+
 
         }
     }

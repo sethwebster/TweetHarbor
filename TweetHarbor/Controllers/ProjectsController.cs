@@ -496,11 +496,12 @@ namespace TweetHarbor.Controllers
                         // Update Url
                         userProject.AppHarborProjectUrl = p.AppHarborProjectUrl;
                     }
+                    cli.SetServiceHookUrl(appHarborAccount.OAuthToken, p.ProjectName, "");
                 }
 
                 database.SaveChanges();
 
-                return RedirectToAction("Index", new { COntroller = "Account" });
+                return RedirectToAction("Index", new { Controller = "Account" });
             }
             else
             {
