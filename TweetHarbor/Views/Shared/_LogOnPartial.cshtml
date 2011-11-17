@@ -28,7 +28,7 @@
     <div id="logon_status">
         <ul class='topnav'>
             <li><a href="#">
-                <img src="@Html.CurrentUser().UserProfilePicUrl" class='user_partial_small_pic' valign="middle" class='account_picture' />@Html.CurrentUser().UserName</a>
+                <img src="@Html.CurrentUser().UserProfilePicUrl" class='user_partial_small_pic account_picture' valign="middle" />@Html.CurrentUser().UserName</a>
                 <ul class='subnav'>
                     <li>@Html.ActionLink("Sign Out", "LogOff", new { Controller = "Account", Area = "" })</li>
                 </ul>
