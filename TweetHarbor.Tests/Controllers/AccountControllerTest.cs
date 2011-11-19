@@ -102,7 +102,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var db = new TestTweetHarborDbContext();
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
             db.Users.Add(user);
 
             var proj = new Project()
@@ -133,7 +133,7 @@ namespace TweetHarbor.Tests.Controllers
             Assert.IsTrue(rm.Success);
             Assert.IsTrue(rm.Message == "Value has been updated");
 
-            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName== ident.Name).SendPrivateTweet);
+            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName == ident.Name).SendPrivateTweet);
 
         }
         [TestMethod]
@@ -142,7 +142,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var db = new TestTweetHarborDbContext();
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
             db.Users.Add(user);
 
             var proj = new Project()
@@ -183,7 +183,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var db = new TestTweetHarborDbContext();
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
             db.Users.Add(user);
 
             var proj = new Project()
@@ -223,7 +223,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var db = new TestTweetHarborDbContext();
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
             db.Users.Add(user);
 
             var proj = new Project()
@@ -254,7 +254,7 @@ namespace TweetHarbor.Tests.Controllers
             Assert.IsTrue(rm.Success);
             Assert.IsTrue(rm.Message == "Value has been updated");
 
-            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName== ident.Name).SendPublicTweet);
+            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName == ident.Name).SendPublicTweet);
 
         }
         [TestMethod]
@@ -263,7 +263,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var db = new TestTweetHarborDbContext();
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
             db.Users.Add(user);
 
             var proj = new Project()
@@ -343,7 +343,7 @@ namespace TweetHarbor.Tests.Controllers
             string TestUsername = "LocalTestUser";
 
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
 
             ts.Setup<OAuthAccessToken>(a => a.GetAccessToken(It.IsAny<OAuthRequestToken>(), It.IsAny<string>())).Returns(new OAuthAccessToken() { Token = token, TokenSecret = verifier });
             ts.Setup<TwitterUser>(a => a.VerifyCredentials()).Returns(new TwitterUser() { ScreenName = TestUsername });
@@ -352,10 +352,10 @@ namespace TweetHarbor.Tests.Controllers
 
             var controller = new AccountController(db, ts.Object, auth.Object);
             controller.SetFakeControllerContext();
-            var val = controller.AuthorizeCallback(null, token, verifier, null);
+            var val = controller.OAuthComplete(null, "twitter", null);
 
             Assert.AreNotEqual(0, db.Users.Count());
-            Assert.AreEqual(token, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac=>ac.AccountProvider=="twitter").OAuthToken);
+            Assert.AreEqual(token, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").OAuthToken);
             Assert.AreEqual(verifier, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").OAuthTokenSecret);
             Assert.AreEqual(TestUsername, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").UserName);
 
@@ -381,7 +381,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var controller = new AccountController(db, ts.Object, auth.Object);
             controller.SetFakeControllerContext();
-            var val = controller.AuthorizeCallback(null, token, verifier, null);
+            var val = controller.OAuthComplete(null, "Twitter", null);
 
             Assert.AreEqual(1, db.Users.Count());
             Assert.AreEqual(token, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").OAuthToken);
