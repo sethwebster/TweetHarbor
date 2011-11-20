@@ -51,30 +51,7 @@ namespace TweetHarbor.Controllers
                  .Include("Projects.ProjectNotifications.Build")
                  .Include("Projects.ProjectNotifications.Build.commit")
                  .FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
-                foreach (var p in user.Projects)
-                {
-                    foreach (var m in p.MessageRecipients)
-                    {
-                        m.Projects = null;
-                    }
-                    foreach (var m in p.ProjectNotifications)
-                    {
-                        m.Project = null;
-                    }
-                    foreach (var m in p.TextMessageRecipients)
-                    {
-                        m.Projects = null;
-                    }
-                    if (null != p.User)
-                    {
-                        foreach (var j in p.User.Projects)
-                        {
-                            j.User = null;
-                        }
-                    }
-                    p.ProjectNotifications = new Collection<ProjectNotification>(p.ProjectNotifications.OrderByDescending(n => n.NotificationDate).ToList());
-                }
-
+                
                 var data = from p in user.Projects
                            select new
                            {
