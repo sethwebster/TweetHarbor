@@ -26,6 +26,7 @@ namespace TweetHarbor.Tests.Helpers
             context.Setup(ctx => ctx.Session).Returns(session.Object);
             context.Setup(ctx => ctx.Server).Returns(server.Object);
             context.Setup(ctx => ctx.Response.Cache).Returns(CreateCachePolicy());
+            context.Setup(ctx => ctx.Request.Url).Returns(new Uri("http://localhost:9090/"));
             return context.Object;
         }
         public static HttpCachePolicyBase CreateCachePolicy()

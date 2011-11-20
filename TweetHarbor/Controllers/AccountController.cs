@@ -27,11 +27,21 @@ namespace TweetHarbor.Controllers
         ITweetHarborTwitterService twitter;
         IFormsAuthenticationWrapper authentication;
 
+        Dictionary<string, IOAuthSignInClient> clients = new Dictionary<string, IOAuthSignInClient>();
+
         public AccountController(ITweetHarborDbContext database, ITweetHarborTwitterService twitter, IFormsAuthenticationWrapper Authentication)
         {
             this.database = database;
             this.twitter = twitter;
             this.authentication = Authentication;
+
+
+            var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
+            var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
+
+            clients.Add("appharbor", new AppHarborOAuthClient(clientId, secret, database));
+            clients.Add("twitter", new TwitterOAuthClient(twitter, database));
+
         }
 
         [Authorize]
@@ -130,112 +140,82 @@ namespace TweetHarbor.Controllers
 
         public ActionResult Authorize(string Client)
         {
-            if (string.IsNullOrEmpty(Client))
-                Client = "";
             User dbUser = null;
             if (Request.IsAuthenticated)
             {
                 dbUser = database.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
             }
-            switch (Client.ToLower())
-            {
-                case "twitter":
-                    // Step 1 - Retrieve an OAuth Request Token
 
-#if DEBUG
-                    var url = "http://localhost:9090/Account/AuthorizeCallback?Client=twitter";
-                    // <-- The registered callback URL
-#else
-                      var url = Properties.Settings.Default.TwitterAuthorizationCallbackUrl;
-#endif
-                    if (null != dbUser)
-                    {
-                        url += "&id=" + dbUser.UniqueId;
-                    }
-                    OAuthRequestToken requestToken = twitter.GetRequestToken(url);
-                    Uri uri = twitter.GetAuthorizationUri(requestToken);
-                    return new RedirectResult(uri.ToString(), false /*permanent*/);
-                    break;
-                case "appharbor":
-                    var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
-                    var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
-                    string returnUrl = Request["ReturnUrl"] != null ? "&ReturnUrl=" + Request["ReturnUrl"] : "";
-                    string redirect = Request.Url.Scheme + "://" +
-                        Request.Url.Host +
-                        (Request.Url.Host == "localhost" ? ":" + Request.Url.Port : "") + "/Account/OAuthComplete/"
-                        + (dbUser != null ? dbUser.UniqueId : "")
-                        + "?Client=appharbor" + returnUrl;
+            Client = Client ?? "";
 
-                    return new AppHarborClient(clientId, secret).RedirectToAuthorizationResult(redirect);
-                    break;
-                default:
-                    throw new ArgumentNullException("Client must be specified");
-                    break;
+            string returnUrl = Request["ReturnUrl"] != null ? "&ReturnUrl=" + Request["ReturnUrl"] : "";
+            string redirect = Request.Url.Scheme + "://" +
+                Request.Url.Host +
+                (Request.Url.Host == "localhost" ? ":" + Request.Url.Port : "") + "/Account/OAuthComplete/"
+                + (dbUser != null ? dbUser.UniqueId : "")
+                + "?Client=" + Client + "" + returnUrl;
 
-
-            }
+            return Redirect(clients[Client.ToLower()].GetAuthenticationEndpoint(redirect).AbsoluteUri);
         }
 
-        /// <summary>
-        /// For twitter
-        /// </summary>
-        /// <param name="oauth_token"></param>
-        /// <param name="oauth_verifier"></param>
-        /// <returns></returns>
-        public ActionResult AuthorizeCallback(string Id, string oauth_token, string oauth_verifier, string denied)
-        {
-            if (string.IsNullOrEmpty(denied))
-            {
-                var requestToken = new OAuthRequestToken { Token = oauth_token };
+        ///// <summary>
+        ///// For twitter
+        ///// </summary>
+        ///// <param name="oauth_token"></param>
+        ///// <param name="oauth_verifier"></param>
+        ///// <returns></returns>
+        //public ActionResult AuthorizeCallback(string Id, string oauth_token, string oauth_verifier, string denied)
+        //{
 
-                // Step 3 - Exchange the Request Token for an Access Token
-                OAuthAccessToken accessToken = twitter.GetAccessToken(requestToken, oauth_verifier);
-                // Step 4 - User authenticates using the Access Token
-                twitter.AuthenticateWith(accessToken.Token, accessToken.TokenSecret);
 
-                TwitterUser user = twitter.VerifyCredentials();
-                if (null != user)
-                {
-                    // We are adding an account to this user
-                    User masterUser = null;
-                    if (!string.IsNullOrEmpty(Id))
-                    {
-                        masterUser = database.Users.FirstOrDefault(u => u.UniqueId == Id);
-                    }
-                    var appUser = TwitterCreateOrUpdateAccountIfNeeded(accessToken, user, masterUser);
-                    if (string.IsNullOrEmpty(appUser.UserName) || string.IsNullOrEmpty(appUser.EmailAddress))
-                    {
-                        if (string.IsNullOrEmpty(appUser.UniqueId))
-                        {
-                            appUser.UpdateUniqueId();
-                            database.SaveChanges();
-                        }
-                        return RedirectToAction("AccountSetup", new { Id = appUser.UniqueId });
-                    }
-                    else
-                    {
-                        authentication.SetAuthCookie(appUser.UserName, true);
-                        return RedirectToAction("Index");
-                    }
-                }
-                else
-                {
-                    return RedirectToAction("OAuthError");
-                }
-            }
-            else
-            {
-                return RedirectToAction("Index");
-            }
-        }
+        //}
 
         /// <summary>
         /// For AppHb
         /// </summary>
         /// <param name="Code"></param>
         /// <returns></returns>
-        public ActionResult OAuthComplete(string Id, string Code, string Client)
+        public ActionResult OAuthComplete(string Id, string Client, string ReturnUrl)
         {
+
+            var user = clients[Client.ToLower()].OAuthCallback(Request);
+            ActionResult result = null;
+            if (null != user)
+            {
+                // Log the user in
+                authentication.SetAuthCookie(user.UserName, true);
+
+                // ensure the unique id has been set
+                if (string.IsNullOrEmpty(user.UniqueId))
+                {
+                    user.UpdateUniqueId();
+                    database.SaveChanges();
+                }
+
+                // make sure we have a username and email set -- if not, require account setup
+                // TODO: Add this check somewhere else -- here they can nav away and we'll only
+                // get them when they try again
+                if (string.IsNullOrEmpty(user.UserName) || string.IsNullOrEmpty(user.EmailAddress))
+                {
+                    result = RedirectToAction("AccountSetup", new { Id = user.UniqueId, ReturnUrl = ReturnUrl });
+                }
+                else
+                {
+                    if (string.IsNullOrEmpty(ReturnUrl))
+                    {
+                        result = RedirectToAction("Index", new { Controller = "Account" });
+                    }
+                    else
+                    {
+                        result = Redirect(ReturnUrl);
+                    }
+                }
+            }
+
+            return result;
+
+            string Code = Request["Code"];
+
             //Workaround for now since AppHb doesn't seem to support passing parameters back
             //UPDATE: Appends extra ?
             if (Client == null)
@@ -250,36 +230,7 @@ namespace TweetHarbor.Controllers
                 case "appharbor":
                     var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
                     var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
-                    var client = new AppHarborClient(clientId, secret);
 
-                    var token = client.GetAccessToken(Code);
-                    var user = client.GetUserInformation(token);
-
-                    User masterUser = null;
-                    if (!string.IsNullOrEmpty(Id))
-                    {
-                        masterUser = database.Users.FirstOrDefault(u => u.UniqueId == Id);
-                    }
-
-                    var appUser = AppHarborCreateOrUpdateAccountIfNeeded(token, user, masterUser);
-                    if (string.IsNullOrEmpty(appUser.UserName) || string.IsNullOrEmpty(appUser.EmailAddress))
-                    {
-                        if (string.IsNullOrEmpty(appUser.UniqueId))
-                        {
-                            appUser.UpdateUniqueId();
-                            database.SaveChanges();
-                        }
-                        return RedirectToAction("AccountSetup", new { Id = appUser.UniqueId, ReturnUrl = Request["ReturnUrl"] });
-                    }
-                    else
-                    {
-                        authentication.SetAuthCookie(appUser.UserName, true);
-                        if (!string.IsNullOrEmpty(Request["ReturnUrl"]))
-                        {
-                            return Redirect(Request["ReturnUrl"]);
-                        }
-                        return RedirectToAction("Index");
-                    }
                     break;
                 default:
                     throw new InvalidOperationException("That is not a recognized OAuth client: " + Client);
@@ -287,144 +238,6 @@ namespace TweetHarbor.Controllers
             }
         }
 
-        [NonAction]
-        private void MergeUsers(User destinationUser, User fromUser, TwitterUser user)
-        {
-            var authAccount = fromUser.AuthenticationAccounts.FirstOrDefault(t => t.AccountProvider == "twitter" && t.UserName == user.ScreenName);
-            destinationUser.AuthenticationAccounts.Add(authAccount);
-            fromUser.AuthenticationAccounts.Remove(authAccount);
-
-            foreach (var p in fromUser.Projects)
-            {
-                destinationUser.Projects.Add(p);
-
-            }
-            fromUser.Projects.Clear();
-        }
-
-        [NonAction]
-        private User TwitterCreateOrUpdateAccountIfNeeded(OAuthAccessToken accessToken, TwitterUser user, User returnUser)
-        {
-            // If not passed a user, let's query to find out if
-            // we already have a master user for this twitter user
-            if (null == returnUser)
-            {
-                returnUser = (from u in database.Users
-                              where u.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter" && ac.UserName == user.ScreenName) != null
-                              select u).FirstOrDefault();
-            }
-            else
-            {
-                var otherUser = (from u in database.Users
-                                 where u.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter" && ac.UserName == user.ScreenName) != null
-                                 && u.UserId != returnUser.UserId
-                                 select u).FirstOrDefault();
-
-                if (null != otherUser)
-                {
-                    // This twitter account is owned by another user
-                    // we need to merge the data
-                    MergeUsers(returnUser, otherUser, user);
-                }
-            }
-
-            // If we're still short a user account, we will create one here
-            if (null == returnUser) // CREATE
-            {
-                returnUser = new User();
-                returnUser.UserName = user.ScreenName;
-                returnUser.EmailAddress = "";
-                returnUser.UpdateUniqueId();
-                database.Users.Add(returnUser);
-            }
-
-            // Now we will pull our actual twitter account, it if exists
-            // If it doesn't, we will create it
-            UserAuthenticationAccount twitterAccount = returnUser.
-                AuthenticationAccounts.FirstOrDefault(a => a.AccountProvider == "twitter" && a.UserName == user.ScreenName);
-            if (twitterAccount == null)
-            {
-                twitterAccount = new UserAuthenticationAccount();
-                twitterAccount.AccountProvider = "twitter";
-
-                twitterAccount.UserName = user.ScreenName;
-                twitterAccount.ProfilePicUrl = user.ProfileImageUrl;
-                if (null == returnUser.AuthenticationAccounts)
-                    returnUser.AuthenticationAccounts = new Collection<UserAuthenticationAccount>();
-                returnUser.AuthenticationAccounts.Add(twitterAccount);
-
-            }
-
-            // We'll update some information here
-            if (string.IsNullOrEmpty(returnUser.UserProfilePicUrl))
-                returnUser.UserProfilePicUrl = user.ProfileImageUrl;
-            twitterAccount.OAuthToken = accessToken.Token;
-            twitterAccount.OAuthTokenSecret = accessToken.TokenSecret;
-            twitterAccount.ProfilePicUrl = user.ProfileImageUrl;
-
-            try
-            {
-                database.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception: " + e.Message);
-                throw e;
-            }
-            return returnUser;
-        }
-        [NonAction]
-        private User AppHarborCreateOrUpdateAccountIfNeeded(string AccessToken, AppHarborUser user, User returnUser)
-        {
-            //TODO: must have some kind of AppHb unique id-- username, etc --see twitter approach (screenname) (for now we used emailaddress)
-            if (null == returnUser)
-            {
-                returnUser = (from u in database.Users
-                              where u.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "appharbor" && ac.UserName == user.UserName) != null
-                              select u).FirstOrDefault();
-            }
-            if (null == returnUser) // CREATE
-            {
-                var existingUser = (from u in database.Users where u.UserName.ToLower() == user.UserName.ToLower() select u).FirstOrDefault();
-                returnUser = new User();
-                returnUser.UserName = null == existingUser ? user.UserName : "";
-                returnUser.EmailAddress = user.EmailAddress;
-                returnUser.UpdateUniqueId();
-                database.Users.Add(returnUser);
-            }
-
-            var newAppHarborAccount = returnUser.AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "appharbor" &&
-                ac.UserName == user.UserName);
-
-            if (newAppHarborAccount == null)
-            {
-                newAppHarborAccount = new UserAuthenticationAccount();
-                newAppHarborAccount.AccountProvider = "appharbor";
-                newAppHarborAccount.UserName = user.UserName;
-                newAppHarborAccount.UserName = user.UserName;
-                newAppHarborAccount.ProfilePicUrl = "<not implemented>";
-                if (null == returnUser.AuthenticationAccounts)
-                    returnUser.AuthenticationAccounts = new Collection<UserAuthenticationAccount>();
-                returnUser.AuthenticationAccounts.Add(newAppHarborAccount);
-            }
-
-            //returnUser.UserProfilePicUrl = user.ProfileImageUrl;
-            var appharborAccount = returnUser.AuthenticationAccounts.First(t => t.AccountProvider == "appharbor");
-            appharborAccount.OAuthToken = AccessToken;
-            //appharborAccount.OAuthTokenSecret = accessToken.TokenSecret;
-            //appharborAccount.ProfilePicUrl = user.ProfileImageUrl;
-
-            try
-            {
-                database.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Trace.WriteLine("Exception: " + e.Message);
-                throw e;
-            }
-            return returnUser;
-        }
 
         public ActionResult LogIn()
         {

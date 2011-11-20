@@ -11,6 +11,7 @@ using TweetHarbor.Models;
 using System.Web.Security;
 using Moq;
 using TweetSharp;
+using System.Web;
 
 namespace TweetHarbor.Tests.Controllers
 {
@@ -102,7 +103,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var db = new TestTweetHarborDbContext();
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
             db.Users.Add(user);
 
             var proj = new Project()
@@ -133,7 +134,7 @@ namespace TweetHarbor.Tests.Controllers
             Assert.IsTrue(rm.Success);
             Assert.IsTrue(rm.Message == "Value has been updated");
 
-            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName== ident.Name).SendPrivateTweet);
+            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName == ident.Name).SendPrivateTweet);
 
         }
         [TestMethod]
@@ -142,7 +143,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var db = new TestTweetHarborDbContext();
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
             db.Users.Add(user);
 
             var proj = new Project()
@@ -183,7 +184,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var db = new TestTweetHarborDbContext();
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
             db.Users.Add(user);
 
             var proj = new Project()
@@ -223,7 +224,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var db = new TestTweetHarborDbContext();
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
             db.Users.Add(user);
 
             var proj = new Project()
@@ -254,7 +255,7 @@ namespace TweetHarbor.Tests.Controllers
             Assert.IsTrue(rm.Success);
             Assert.IsTrue(rm.Message == "Value has been updated");
 
-            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName== ident.Name).SendPublicTweet);
+            Assert.AreEqual(true, db.Users.FirstOrDefault(u => u.UserName == ident.Name).SendPublicTweet);
 
         }
         [TestMethod]
@@ -263,7 +264,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var db = new TestTweetHarborDbContext();
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
             db.Users.Add(user);
 
             var proj = new Project()
@@ -333,6 +334,62 @@ namespace TweetHarbor.Tests.Controllers
         }
 
         [TestMethod]
+        public void AuthorizeAppHarbor_TestAuthorizeReturnsCorretRedirectResult()
+        {
+            var db = new TestTweetHarborDbContext();
+            var ts = new Mock<ITweetHarborTwitterService>();
+            var auth = new Mock<IFormsAuthenticationWrapper>();
+
+            var c = new AccountController(db, ts.Object, auth.Object);
+            c.SetFakeControllerContext();
+            var authResponse = c.Authorize("appharbor");
+
+            Assert.IsInstanceOfType(authResponse, typeof(RedirectResult));
+            RedirectResult redirRes = (authResponse as RedirectResult);
+
+            var data = HttpUtility.ParseQueryString(redirRes.Url.ToString().Substring(redirRes.Url.ToString().IndexOf('?')));
+            Assert.AreNotEqual(0, data.Count, "No query string parameters found");
+            Assert.AreNotEqual(0, data["redirect_uri"].Length, "redirect_uri not found in url");
+
+
+            var data2 = HttpUtility.ParseQueryString(new Uri(data["redirect_uri"]).Query);
+
+            Assert.IsTrue(data2.Keys[0].ToLower() == "client");
+            Assert.IsTrue(data2["client"].ToLower() == "appharbor");
+        }
+
+        [TestMethod]
+        public void AuthorizeTwitter_TestAuthorizeReturnsCorretTwitterRedirectResult()
+        {
+            var db = new TestTweetHarborDbContext();
+            var ts = new Mock<ITweetHarborTwitterService>();
+
+            var token = new OAuthRequestToken() { Token = Guid.NewGuid().ToString(), TokenSecret = Guid.NewGuid().ToString() };
+            ts.Setup(m => m.GetRequestToken("http://localhost:9090/Account/OAuthComplete/?Client=twitter")).Returns(token);
+            ts.Setup(m => m.GetAuthorizationUri(token)).Returns(new Uri("http://twitter.com/OAuth"));
+
+            var auth = new Mock<IFormsAuthenticationWrapper>();
+
+            var c = new AccountController(db, ts.Object, auth.Object);
+            c.SetFakeControllerContext();
+            var authResponse = c.Authorize("twitter");
+
+            Assert.IsInstanceOfType(authResponse, typeof(RedirectResult));
+            RedirectResult redirRes = (authResponse as RedirectResult);
+
+            //var data = HttpUtility.ParseQueryString(redirRes.Url.ToString().Substring(redirRes.Url.ToString()   .IndexOf('?')));
+            //Assert.AreNotEqual(0, data.Count, "No query string parameters found");
+            //Assert.AreNotEqual(0, data["redirect_uri"].Length, "redirect_uri not found in url");
+
+
+            //var data2 = HttpUtility.ParseQueryString(new Uri(data["redirect_uri"]).Query);
+
+            //Assert.IsTrue(data2.Keys[0].ToLower() == "client");
+            //Assert.IsTrue(data2["client"].ToLower() == "appharbor");
+        }
+
+
+        [TestMethod]
         public void AuthorizeCallback_NewUser()
         {
             var db = new TestTweetHarborDbContext();
@@ -343,7 +400,7 @@ namespace TweetHarbor.Tests.Controllers
             string TestUsername = "LocalTestUser";
 
             var user = UserHelper.ArrangeNewUserDefault();
-           
+
 
             ts.Setup<OAuthAccessToken>(a => a.GetAccessToken(It.IsAny<OAuthRequestToken>(), It.IsAny<string>())).Returns(new OAuthAccessToken() { Token = token, TokenSecret = verifier });
             ts.Setup<TwitterUser>(a => a.VerifyCredentials()).Returns(new TwitterUser() { ScreenName = TestUsername });
@@ -352,10 +409,10 @@ namespace TweetHarbor.Tests.Controllers
 
             var controller = new AccountController(db, ts.Object, auth.Object);
             controller.SetFakeControllerContext();
-            var val = controller.AuthorizeCallback(null, token, verifier, null);
+            var val = controller.OAuthComplete(null, "twitter", null);
 
             Assert.AreNotEqual(0, db.Users.Count());
-            Assert.AreEqual(token, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac=>ac.AccountProvider=="twitter").OAuthToken);
+            Assert.AreEqual(token, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").OAuthToken);
             Assert.AreEqual(verifier, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").OAuthTokenSecret);
             Assert.AreEqual(TestUsername, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").UserName);
 
@@ -381,7 +438,7 @@ namespace TweetHarbor.Tests.Controllers
 
             var controller = new AccountController(db, ts.Object, auth.Object);
             controller.SetFakeControllerContext();
-            var val = controller.AuthorizeCallback(null, token, verifier, null);
+            var val = controller.OAuthComplete(null, "Twitter", null);
 
             Assert.AreEqual(1, db.Users.Count());
             Assert.AreEqual(token, db.Users.First().AuthenticationAccounts.FirstOrDefault(ac => ac.AccountProvider == "twitter").OAuthToken);
