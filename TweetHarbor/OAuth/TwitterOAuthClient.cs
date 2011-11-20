@@ -29,7 +29,7 @@ namespace TweetHarbor.OAuth
 
         public Uri GetAuthenticationEndpoint(string returnToUrl)
         {
-            OAuthRequestToken token = twitterService.GetRequestToken(returnToUrl);
+           OAuthRequestToken token = twitterService.GetRequestToken(returnToUrl);
             return twitterService.GetAuthorizationUri(token);
         }
 
