@@ -176,6 +176,7 @@
     <Compile Include="OAuth\AppHarborClient.cs" />
     <Compile Include="OAuth\AppHarborOAuthClient.cs" />
     <Compile Include="OAuth\AppHarborUser.cs" />
+    <Compile Include="OAuth\IAppHarborClient.cs" />
     <Compile Include="OAuth\TwitterOAuthClient.cs" />
     <Compile Include="OAuth\IOAuthSignInClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

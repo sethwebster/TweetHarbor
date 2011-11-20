@@ -12,7 +12,7 @@ using System.IO;
 
 namespace TweetHarbor.OAuth
 {
-    public class AppHarborClient
+    public class AppHarborClient : TweetHarbor.OAuth.IAppHarborClient
     {
         string clientId = string.Empty;
         string secret = string.Empty;

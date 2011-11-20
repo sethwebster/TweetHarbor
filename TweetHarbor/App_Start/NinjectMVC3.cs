@@ -11,6 +11,8 @@ namespace TweetHarbor.App_Start
     using TweetHarbor.Models;
     using TweetSharp;
     using TweetHarbor.Messaging;
+    using TweetHarbor.OAuth;
+    using System.Configuration;
 
     public static class NinjectMVC3
     {
@@ -55,11 +57,15 @@ namespace TweetHarbor.App_Start
             kernel.Bind<ITweetHarborDbContext>().To<TweetHarborDbContext>();
             kernel.Bind<ITweetHarborTextMessageService>().To<TweetHarborTextMessageService>();
             kernel.Bind<IFormsAuthenticationWrapper>().To<TweetHarborFormsAuthentication>();
-#if OFFLINE
+            var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
+            var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
+
+            kernel.Bind<IAppHarborClient>().To<AppHarborClient>().WithConstructorArgument("clientId", clientId).WithConstructorArgument("secret", secret);
+#if DEBUG
             kernel.Bind<ITweetHarborTwitterService>().To<TweetHarborTwitterServiceOffline>().WithConstructorArgument("ConsumerKey", TwitterHelper.ConsumerKey).WithConstructorArgument("ConsumerSecret", TwitterHelper.ConsumerSecret);
 #else
-                   kernel.Bind<ITweetHarborTwitterService>().To<TweetHarborTwitterService>().WithConstructorArgument("ConsumerKey", TwitterHelper.ConsumerKey).WithConstructorArgument("ConsumerSecret", TwitterHelper.ConsumerSecret);
-    
+            kernel.Bind<ITweetHarborTwitterService>().To<TweetHarborTwitterService>().WithConstructorArgument("ConsumerKey", TwitterHelper.ConsumerKey).WithConstructorArgument("ConsumerSecret", TwitterHelper.ConsumerSecret);
+
 #endif
         }
     }

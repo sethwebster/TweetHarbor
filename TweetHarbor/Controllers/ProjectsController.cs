@@ -23,12 +23,14 @@ namespace TweetHarbor.Controllers
         ITweetHarborDbContext database = null;
         ITweetHarborTwitterService twitterService;
         ITweetHarborTextMessageService textMessageService;
+        IAppHarborClient appHarborClient;
 
-        public ProjectsController(ITweetHarborDbContext database, ITweetHarborTwitterService twitterService, ITweetHarborTextMessageService textMessageService)
+        public ProjectsController(ITweetHarborDbContext database, ITweetHarborTwitterService twitterService, ITweetHarborTextMessageService textMessageService, IAppHarborClient appHarborClient)
         {
             this.database = database;
             this.twitterService = twitterService;
             this.textMessageService = textMessageService;
+            this.appHarborClient = appHarborClient;
         }
         //
         // GET: /Projects/
@@ -453,11 +455,8 @@ namespace TweetHarbor.Controllers
             var appHarborAccount = user.AuthenticationAccounts.FirstOrDefault(a => a.AccountProvider == "appharbor");
             if (appHarborAccount != null)
             {
-                var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
-                var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
-
-                AppHarborClient cli = new AppHarborClient(clientId, secret);
-                var projects = cli.GetUserProjects(appHarborAccount.OAuthToken);
+          
+                var projects = appHarborClient.GetUserProjects(appHarborAccount.OAuthToken);
 
                 foreach (var p in projects)
                 {
@@ -473,7 +472,7 @@ namespace TweetHarbor.Controllers
                         // Update Url
                         userProject.AppHarborProjectUrl = p.AppHarborProjectUrl;
                     }
-                    cli.SetServiceHookUrl(appHarborAccount.OAuthToken, p.ProjectName, "");
+                    appHarborClient.SetServiceHookUrl(appHarborAccount.OAuthToken, p.ProjectName, "");
                 }
 
                 database.SaveChanges();
