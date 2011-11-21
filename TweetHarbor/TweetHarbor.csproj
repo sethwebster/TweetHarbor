@@ -71,9 +71,9 @@
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=4.0.3.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+    <Reference Include="Newtonsoft.Json, Version=4.0.4.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.4.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.4.0.4\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.2.2.1.4\lib\net40-Full\Ninject.dll</HintPath>
@@ -173,10 +173,7 @@
     <Compile Include="Models\TwitterMessageRecipient.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserAuthenticationAccounts.cs" />
-    <Compile Include="OAuth\AppHarborClient.cs" />
     <Compile Include="OAuth\AppHarborOAuthClient.cs" />
-    <Compile Include="OAuth\AppHarborUser.cs" />
-    <Compile Include="OAuth\IAppHarborClient.cs" />
     <Compile Include="OAuth\TwitterOAuthClient.cs" />
     <Compile Include="OAuth\IOAuthSignInClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -320,6 +317,12 @@
     <Content Include="Views\Shared\_UserAuthenticationAccount.cshtml" />
     <Content Include="Views\Account\LogIn.cshtml" />
     <Content Include="Views\Shared\_SignInOptions.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AppHarbor.Client\AppHarbor.Client.csproj">
+      <Project>{679F1D0F-C446-4D1D-ADA6-863B673868F3}</Project>
+      <Name>AppHarbor.Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />

@@ -5,7 +5,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TweetHarbor", "TweetHarbor\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TweetHarbor.Tests", "TweetHarbor.Tests\TweetHarbor.Tests.csproj", "{1CA08D2B-8648-4FDD-B837-16499B028B88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppHarbor.Client", "AppHarbor.Client\AppHarbor.Client.csproj", "{679F1D0F-C446-4D1D-ADA6-863B673868F3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E4B40EE2-4840-433A-AF43-893C22563056}"
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = TweetHarbor.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -19,6 +26,10 @@ Global
 		{1CA08D2B-8648-4FDD-B837-16499B028B88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1CA08D2B-8648-4FDD-B837-16499B028B88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1CA08D2B-8648-4FDD-B837-16499B028B88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{679F1D0F-C446-4D1D-ADA6-863B673868F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{679F1D0F-C446-4D1D-ADA6-863B673868F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{679F1D0F-C446-4D1D-ADA6-863B673868F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{679F1D0F-C446-4D1D-ADA6-863B673868F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
