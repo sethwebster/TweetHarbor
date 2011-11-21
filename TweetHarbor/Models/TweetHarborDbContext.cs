@@ -27,9 +27,5 @@ namespace TweetHarbor.Models
         public virtual IDbSet<OutboundNotification> OutboundNotifications { get; set; }
         public virtual IDbSet<UserAuthenticationAccount> UserAuthenticationAccounts { get; set; }
 
-        public void Dispose()
-        {
-            base.Dispose();
-        }
     }
 }

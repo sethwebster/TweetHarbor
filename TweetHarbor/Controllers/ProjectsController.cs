@@ -23,9 +23,12 @@ namespace TweetHarbor.Controllers
         ITweetHarborDbContext database = null;
         ITweetHarborTwitterService twitterService;
         ITweetHarborTextMessageService textMessageService;
-        IAppHarborClient appHarborClient;
+        AppHarbor.Client.IAppHarborClient appHarborClient;
 
-        public ProjectsController(ITweetHarborDbContext database, ITweetHarborTwitterService twitterService, ITweetHarborTextMessageService textMessageService, IAppHarborClient appHarborClient)
+        public ProjectsController(ITweetHarborDbContext database,
+            ITweetHarborTwitterService twitterService,
+            ITweetHarborTextMessageService textMessageService,
+            AppHarbor.Client.IAppHarborClient appHarborClient)
         {
             this.database = database;
             this.twitterService = twitterService;
@@ -53,7 +56,7 @@ namespace TweetHarbor.Controllers
                  .Include("Projects.ProjectNotifications.Build")
                  .Include("Projects.ProjectNotifications.Build.commit")
                  .FirstOrDefault(usr => usr.UserName == HttpContext.User.Identity.Name);
-                
+
                 var data = from p in user.Projects
                            select new
                            {
@@ -455,7 +458,7 @@ namespace TweetHarbor.Controllers
             var appHarborAccount = user.AuthenticationAccounts.FirstOrDefault(a => a.AccountProvider == "appharbor");
             if (appHarborAccount != null)
             {
-          
+
                 var projects = appHarborClient.GetUserProjects(appHarborAccount.OAuthToken);
 
                 foreach (var p in projects)
@@ -464,13 +467,18 @@ namespace TweetHarbor.Controllers
                     var userProject = user.Projects.FirstOrDefault(pr => pr.ProjectName == p.ProjectName);
                     if (null == userProject)
                     {
-                        userProject = p;
+                        userProject = new Project()
+                            {
+                                AppHarborProjectUrl = p.ProjectUrl,
+                                ProjectName = p.ProjectName,
+                                DateCreated = DateTime.Now
+                            };
                         user.Projects.Add(userProject);
                     }
                     else
                     {
                         // Update Url
-                        userProject.AppHarborProjectUrl = p.AppHarborProjectUrl;
+                        userProject.AppHarborProjectUrl = p.ProjectUrl;
                     }
                     appHarborClient.SetServiceHookUrl(appHarborAccount.OAuthToken, p.ProjectName, "", user.GetServiceHookUrl());
                 }
