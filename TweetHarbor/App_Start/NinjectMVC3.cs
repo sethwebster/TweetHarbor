@@ -60,7 +60,7 @@ namespace TweetHarbor.App_Start
             var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
             var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
 
-            kernel.Bind<IAppHarborClient>().To<AppHarborClient>().WithConstructorArgument("clientId", clientId).WithConstructorArgument("secret", secret);
+            kernel.Bind<AppHarbor.Client.IAppHarborClient>().To<AppHarbor.Client.AppHarborClient>().WithConstructorArgument("clientId", clientId).WithConstructorArgument("secret", secret);
 #if DEBUG
             kernel.Bind<ITweetHarborTwitterService>().To<TweetHarborTwitterServiceOffline>().WithConstructorArgument("ConsumerKey", TwitterHelper.ConsumerKey).WithConstructorArgument("ConsumerSecret", TwitterHelper.ConsumerSecret);
 #else

@@ -29,13 +29,13 @@ namespace TweetHarbor.OAuth
         public Uri GetAuthenticationEndpoint(string returnToUrl)
         {
 
-            return new Uri(new AppHarborClient(clientId, secret).GetAuthorizationUrl(returnToUrl).AbsoluteUri);
+            return new Uri(new AppHarbor.Client.AppHarborClient(clientId, secret).GetAuthorizationUrl(returnToUrl).AbsoluteUri);
         }
 
 
         public User OAuthCallback(HttpRequestBase Request)
         {
-            var client = new AppHarborClient(clientId, secret);
+            var client = new AppHarbor.Client.AppHarborClient(clientId, secret);
 
             var token = client.GetAccessToken(Request["Code"]);
             var user = client.GetUserInformation(token);
@@ -50,7 +50,7 @@ namespace TweetHarbor.OAuth
             return appUser;
         }
 
-        private User AppHarborCreateOrUpdateAccountIfNeeded(string AccessToken, AppHarborUser user, User returnUser)
+        private User AppHarborCreateOrUpdateAccountIfNeeded(string AccessToken, AppHarbor.Client.User user, User returnUser)
         {
             //TODO: must have some kind of AppHb unique id-- username, etc --see twitter approach (screenname) (for now we used emailaddress)
             if (null == returnUser)
