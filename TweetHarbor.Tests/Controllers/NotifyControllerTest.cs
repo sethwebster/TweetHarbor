@@ -96,14 +96,14 @@ namespace TweetHarbor.Tests.Controllers
             db.Users.Add(user);
 
             var proj = new Project()
-                {
-                    ProjectName = "The Test Project",
-                    SendPrivateTweetOnFailure = true,
-                    SendPrivateTweetOnSuccess = true,
-                    SendPublicTweetOnFailure = false,
-                    SendPublicTweetOnSuccess = true,
-                    User = user
-                };
+            {
+                ProjectName = "The Test Project",
+                SendPrivateTweetOnFailure = true,
+                SendPrivateTweetOnSuccess = true,
+                SendPublicTweetOnFailure = false,
+                SendPublicTweetOnSuccess = true,
+                User = user
+            };
 
             db.Projects.Add(proj);
 
@@ -123,6 +123,53 @@ namespace TweetHarbor.Tests.Controllers
 
             Assert.IsInstanceOfType(res, typeof(JsonResult));
             Assert.IsInstanceOfType((res as JsonResult).Data, typeof(JsonResultModel));
+
+            Assert.AreEqual(true, ((res as JsonResult).Data as JsonResultModel).Success);
+        }
+
+        [TestMethod]
+        public void TestBuildSuccess_MutedMessage()
+        {
+            string testStr = "{\"application\": { \"name\": \"Test Project 1\" },   \"build\": {    \"commit\": {      \"id\": \"" + Guid.NewGuid() + "\", \"message\": \"Implement foo-\"  }, \"status\": \"succeeded\" } }";
+            var deserializedJsonObject = JsonConvert.DeserializeObject<Notification>(testStr);
+
+            var db = new TestTweetHarborDbContext();
+            var user = UserHelper.ArrangeNewUserDefault();
+            db.Users.Add(user);
+
+            var proj = new Project()
+            {
+                ProjectName = "The Test Project",
+                SendPrivateTweetOnFailure = true,
+                SendPrivateTweetOnSuccess = true,
+                SendPublicTweetOnFailure = false,
+                SendPublicTweetOnSuccess = true,
+                User = user
+            };
+
+            db.Projects.Add(proj);
+
+            proj.MessageRecipients.Add(new TwitterMessageRecipient() { ScreenName = "sethwebster" });
+
+            user.Projects = new Collection<Project>();
+            user.Projects.Add(proj);
+
+            var m = new Mock<ITweetHarborTextMessageService>();
+
+            m.Setup(a => a.SendText("", ""));
+
+            var controller = new NotifyController(db, new TestTweetHarborTwitterService(), m.Object);
+            MvcMockHelpers.SetFakeControllerContext(controller);
+
+            var res = controller.New(user.UserName, user.UniqueId, deserializedJsonObject);
+
+            proj = user.Projects.FirstOrDefault(p => p.ProjectName == deserializedJsonObject.application.name);
+
+            Assert.IsInstanceOfType(res, typeof(JsonResult));
+            Assert.IsInstanceOfType((res as JsonResult).Data, typeof(JsonResultModel));
+
+            Assert.AreNotEqual(0, proj.ProjectNotifications.Count());
+            Assert.AreEqual(0, proj.OutboundNotifications.Count());
 
             Assert.AreEqual(true, ((res as JsonResult).Data as JsonResultModel).Success);
         }
