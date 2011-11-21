@@ -1,4 +1,5 @@
 ﻿using System;
+using TweetHarbor.Models;
 namespace TweetHarbor.OAuth
 {
     public interface IAppHarborClient
@@ -11,6 +12,6 @@ namespace TweetHarbor.OAuth
         System.Collections.Generic.IEnumerable<TweetHarbor.Models.Project> GetUserProjects(string token);
         System.Web.Mvc.RedirectResult RedirectToAuthorizationResult();
         System.Web.Mvc.RedirectResult RedirectToAuthorizationResult(string redirectUri);
-        void SetServiceHookUrl(string token, string projectName, string projectId);
+        void SetServiceHookUrl(string token, string projectName, string projectId, string serviceHookUrl);
     }
 }

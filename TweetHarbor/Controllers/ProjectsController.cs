@@ -472,7 +472,7 @@ namespace TweetHarbor.Controllers
                         // Update Url
                         userProject.AppHarborProjectUrl = p.AppHarborProjectUrl;
                     }
-                    appHarborClient.SetServiceHookUrl(appHarborAccount.OAuthToken, p.ProjectName, "");
+                    appHarborClient.SetServiceHookUrl(appHarborAccount.OAuthToken, p.ProjectName, "", user.GetServiceHookUrl());
                 }
 
                 database.SaveChanges();
