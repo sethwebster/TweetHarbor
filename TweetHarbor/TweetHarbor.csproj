@@ -191,6 +191,7 @@
     <Content Include="Content\backgroundsprite.gif" />
     <Content Include="Content\backgroundsprite.jpg" />
     <Content Include="Content\disc.png" />
+    <Content Include="Content\external_link_icon.gif" />
     <Content Include="Content\images\border.png" />
     <Content Include="Content\images\controls.png" />
     <Content Include="Content\images\loading.gif" />

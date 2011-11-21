@@ -1153,3 +1153,19 @@ html ul.topnav li ul.subnav li a:hover
     /*--Hover effect for subnav links--*/
     background: #222 url(dropdown_linkbg.gif) no-repeat 10px center;
 }
+
+.project_name
+{
+    height:25px;   
+}
+
+.project_name a
+{
+    display:block;
+    float:left;
+}
+
+.project_name_wrapper
+{
+    float:left;
+}
