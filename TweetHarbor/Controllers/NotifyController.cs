@@ -49,66 +49,72 @@ namespace TweetHarbor.Controllers
                 if (null != project)
                 {
                     SaveNotification(notification, project);
-                    // start our connection to twitter
-                    var twitterAccount = project.TwitterAccounts != null ? project.TwitterAccounts.FirstOrDefault() : null;
-                    if (null == twitterAccount)
-                        twitterAccount = user.AuthenticationAccounts.FirstOrDefault(a => a.AccountProvider.ToLower() == "twitter");
-                    //TODO: Ensure we HAVE a twitter account
-                    twitter.AuthenticateWith(twitterAccount.OAuthToken, twitterAccount.OAuthTokenSecret);
 
-                    // Format and send appropriate messages
-                    if (notification.build.status == "succeeded")
+                    // If the message ends with a dash, we are NOT notifying anyone of the push
+                    if (notification.build.commit.message.Trim().EndsWith("-") == false)
                     {
-                        // Get the Success Template (or default)
-                        var strSuccessUpdate = string.IsNullOrEmpty(project.SuccessTemplate) ?
-                            Properties.Settings.Default.DefaultSuccessTemplate : project.SuccessTemplate;
+                        // start our connection to twitter
+                        var twitterAccount = project.TwitterAccounts != null ? project.TwitterAccounts.FirstOrDefault() : null;
+                        if (null == twitterAccount)
+                            twitterAccount = user.AuthenticationAccounts.FirstOrDefault(a => a.AccountProvider.ToLower() == "twitter");
+                        //TODO: Ensure we HAVE a twitter account
+                        twitter.AuthenticateWith(twitterAccount.OAuthToken, twitterAccount.OAuthTokenSecret);
 
-                        // Replace tokens
-                        strSuccessUpdate = DeTokenizeString(strSuccessUpdate, project, notification);
-
-                        if (strSuccessUpdate.Length > 140)
-                            strSuccessUpdate = strSuccessUpdate.Substring(0, 136) + "...";
-
-                        // ensure we're 'authorized' to send the tweet
-                        if (project.SendPrivateTweetOnSuccess && user.SendPrivateTweet)
+                        // Format and send appropriate messages
+                        if (notification.build.status == "succeeded")
                         {
-                            SendDirectMessages(project, strSuccessUpdate);
+                            // Get the Success Template (or default)
+                            var strSuccessUpdate = string.IsNullOrEmpty(project.SuccessTemplate) ?
+                                Properties.Settings.Default.DefaultSuccessTemplate : project.SuccessTemplate;
+
+                            // Replace tokens
+                            strSuccessUpdate = DeTokenizeString(strSuccessUpdate, project, notification);
+
+                            if (strSuccessUpdate.Length > 140)
+                                strSuccessUpdate = strSuccessUpdate.Substring(0, 136) + "...";
+
+                            // ensure we're 'authorized' to send the tweet
+                            if (project.SendPrivateTweetOnSuccess && user.SendPrivateTweet)
+                            {
+                                SendDirectMessages(project, strSuccessUpdate);
+                            }
+                            if (project.SendPublicTweetOnSuccess && user.SendPublicTweet)
+                            {
+                                TwitterStatus pubRes = twitter.SendTweet(strSuccessUpdate);
+                            }
+                            if (project.SendTextOnSuccess && user.SendSMS)
+                            {
+                                SendSmsMessages(project, strSuccessUpdate);
+                            }
                         }
-                        if (project.SendPublicTweetOnSuccess && user.SendPublicTweet)
+                        else
                         {
-                            TwitterStatus pubRes = twitter.SendTweet(strSuccessUpdate);
-                        }
-                        if (project.SendTextOnSuccess && user.SendSMS)
-                        {
-                            SendSmsMessages(project, strSuccessUpdate);
+                            // Get the Failure Template (or default)
+                            var strFailureUpdate = string.IsNullOrEmpty(project.FailureTemplate) ?
+                                Properties.Settings.Default.DefaultFailureTemplate : project.FailureTemplate;
+
+                            // Replace tokens & clean up 
+                            strFailureUpdate = DeTokenizeString(strFailureUpdate, project, notification);
+
+                            if (strFailureUpdate.Length > 140)
+                                strFailureUpdate = strFailureUpdate.Substring(0, 136) + "...";
+
+                            // ensure we're 'authorized' to send the tweet
+                            if (project.SendPrivateTweetOnFailure && user.SendPrivateTweet)
+                            {
+                                SendDirectMessages(project, strFailureUpdate);
+                            }
+                            if (project.SendPublicTweetOnFailure && user.SendPublicTweet)
+                            {
+                                var pubRes = twitter.SendTweet(strFailureUpdate);
+                            }
+                            if (project.SendTextOnFailure && user.SendSMS)
+                            {
+                                SendSmsMessages(project, strFailureUpdate);
+                            }
                         }
                     }
-                    else
-                    {
-                        // Get the Failure Template (or default)
-                        var strFailureUpdate = string.IsNullOrEmpty(project.FailureTemplate) ?
-                            Properties.Settings.Default.DefaultFailureTemplate : project.FailureTemplate;
-
-                        // Replace tokens & clean up 
-                        strFailureUpdate = DeTokenizeString(strFailureUpdate, project, notification);
-
-                        if (strFailureUpdate.Length > 140)
-                            strFailureUpdate = strFailureUpdate.Substring(0, 136) + "...";
-
-                        // ensure we're 'authorized' to send the tweet
-                        if (project.SendPrivateTweetOnFailure && user.SendPrivateTweet)
-                        {
-                            SendDirectMessages(project, strFailureUpdate);
-                        }
-                        if (project.SendPublicTweetOnFailure && user.SendPublicTweet)
-                        {
-                            var pubRes = twitter.SendTweet(strFailureUpdate);
-                        }
-                        if (project.SendTextOnFailure && user.SendSMS)
-                        {
-                            SendSmsMessages(project, strFailureUpdate);
-                        }
-                    }
+                    
                     return Json(new JsonResultModel() { Success = true });
                 }
                 else
