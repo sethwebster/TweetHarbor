@@ -48,7 +48,7 @@ namespace TweetHarbor.Controllers
 
                     string clientIdConfigKey = Request.Url.Host.ToLower() != "tweetharbor.com" ? "AppHarborOAuthClientId" : "AppHarborOAuthClientId.TweetHarbor.com";
                     string secretConfigKey = Request.Url.Host.ToLower() != "tweetharbor.com" ? "AppHarborOAuthSecret" : "AppHarborOAuthSecret.TweetHarbor.com";
-
+                     
                     var clientId = ConfigurationManager.AppSettings[clientIdConfigKey];
                     var secret = ConfigurationManager.AppSettings[secretConfigKey];
 
