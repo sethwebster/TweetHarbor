@@ -1080,7 +1080,7 @@ ul.topnav
     float: left;
     background-color: #1c262b;
     font-size: .9em;
-    background: url(topnav_bg.gif) repeat-x;
+   /* background: url(topnav_bg.gif) repeat-x; */
 }
 ul.topnav li
 {
