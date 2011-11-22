@@ -27,7 +27,7 @@ namespace TweetHarbor.Controllers
         ITweetHarborTwitterService twitter;
         IFormsAuthenticationWrapper authentication;
 
-        Dictionary<string, IOAuthSignInClient> clients = new Dictionary<string, IOAuthSignInClient>();
+        Dictionary<string, IOAuthSignInClient> clients;// = new Dictionary<string, IOAuthSignInClient>();
 
         public AccountController(ITweetHarborDbContext database, ITweetHarborTwitterService twitter, IFormsAuthenticationWrapper Authentication)
         {
@@ -36,12 +36,29 @@ namespace TweetHarbor.Controllers
             this.authentication = Authentication;
 
 
-            var clientId = ConfigurationManager.AppSettings["AppHarborOAuthClientId"];
-            var secret = ConfigurationManager.AppSettings["AppHarborOAuthSecret"];
+        }
 
-            clients.Add("appharbor", new AppHarborOAuthClient(clientId, secret, database));
-            clients.Add("twitter", new TwitterOAuthClient(twitter, database));
+        public Dictionary<string, IOAuthSignInClient> Clients
+        {
+            get
+            {
+                if (null == clients)
+                {
+                    clients = new Dictionary<string, IOAuthSignInClient>();
 
+                    string clientIdConfigKey = Request.Url.Host.ToLower() != "tweetharbor.com" ? "AppHarborOAuthClientId" : "AppHarborOAuthClientId.TweetHarbor.com";
+                    string secretConfigKey = Request.Url.Host.ToLower() != "tweetharbor.com" ? "AppHarborOAuthSecret" : "AppHarborOAuthSecret.TweetHarbor.com";
+
+                    var clientId = ConfigurationManager.AppSettings[clientIdConfigKey];
+                    var secret = ConfigurationManager.AppSettings[secretConfigKey];
+
+                    clients.Add("appharbor", new AppHarborOAuthClient(clientId, secret, database));
+                    clients.Add("twitter", new TwitterOAuthClient(twitter, database));
+
+                }
+                return clients;
+
+            }
         }
 
         [Authorize]
@@ -155,7 +172,7 @@ namespace TweetHarbor.Controllers
                 + (dbUser != null ? dbUser.UniqueId : "")
                 + "?Client=" + Client + "" + returnUrl;
 
-            return Redirect(clients[Client.ToLower()].GetAuthenticationEndpoint(redirect).AbsoluteUri);
+            return Redirect(Clients[Client.ToLower()].GetAuthenticationEndpoint(redirect).AbsoluteUri);
         }
 
         ///// <summary>
@@ -178,7 +195,7 @@ namespace TweetHarbor.Controllers
         public ActionResult OAuthComplete(string Id, string Client, string ReturnUrl)
         {
 
-            var user = clients[Client.ToLower()].OAuthCallback(Request);
+            var user = Clients[Client.ToLower()].OAuthCallback(Request);
             ActionResult result = null;
             if (null != user)
             {
