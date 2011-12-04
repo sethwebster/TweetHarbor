@@ -221,19 +221,23 @@ namespace AppHarbor.Client
         private string TransformToJSON(string resp)
         {
             var str = resp.Substring(resp.IndexOf("<h2>Your hooks</h2>") + "<h2>Your hooks</h2>".Length);
-            str = str.Substring(0, str.IndexOf("</table>"));
-            HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
-            doc.LoadHtml(str);
-            var data = doc.DocumentNode.Descendants("td");
-            List<Object> l = new List<Object>();
-            foreach (var e in data)
+            if (str.Length > 0 && str.IndexOf("</table>") > 0)
             {
-                l.Add(new
+                str = str.Substring(0, str.IndexOf("</table>"));
+                HtmlAgilityPack.HtmlDocument doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(str);
+                var data = doc.DocumentNode.Descendants("td");
+                List<Object> l = new List<Object>();
+                foreach (var e in data)
                 {
-                    ServiceHook = e.InnerText
-                });
+                    l.Add(new
+                    {
+                        ServiceHook = e.InnerText
+                    });
+                }
+                return JsonConvert.SerializeObject(l);
             }
-            return JsonConvert.SerializeObject(l);
+            return "{}";
         }
 
     }
