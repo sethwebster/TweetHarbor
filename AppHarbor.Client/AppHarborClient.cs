@@ -82,7 +82,7 @@ namespace AppHarbor.Client
         public IEnumerable<Project> GetUserProjects(string token)
         {
             WebClient cl = GetAuthenticatedWebClient(token);
-            var str = cl.DownloadString("https://appharbor.com/application");
+            var str = cl.DownloadString("https://appharbor.com/applications");
 
             dynamic obj = JsonConvert.DeserializeObject(str);
             List<Project> ret = new List<Project>();
@@ -133,21 +133,18 @@ namespace AppHarbor.Client
         {
             try
             {
-                var url = string.Format(GetProject(token, projectName).ProjectUrl + "/servicehook", projectName);
+                var url = string.Format(GetProject(token, projectName).ProjectUrl + "/servicehooks", projectName);
                 var cli = GetAuthenticatedWebRequest(token, url);
                 cli.Accept = "application/json";
                 var sr = new StreamReader(cli.GetResponse().GetResponseStream());
 
                 var resp = sr.ReadToEnd();
 
-                //TODO: Remove this later
-                var jsonData = TransformToJSON(resp);
-
-                dynamic obj = JsonConvert.DeserializeObject(jsonData);
+                dynamic obj = JsonConvert.DeserializeObject(resp);
 
                 foreach (var o in obj)
                 {
-                    if (o.ServiceHook == serviceHookUrl)
+                    if (o.url == serviceHookUrl)
                         return true;
                 }
             }
